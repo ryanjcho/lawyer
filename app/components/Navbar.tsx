@@ -1,202 +1,135 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react'
+import { MenuIcon, XIcon, UserIcon, UserAddIcon } from '@heroicons/react/solid'
 
-export function Navbar() {
+const navLinks = [
+  { href: '/services', label: '서비스', ariaLabel: '서비스 페이지로 이동' },
+  { href: '/demo', label: '데모', ariaLabel: '제품 데모 페이지로 이동' },
+  { href: '/industries', label: '산업별 솔루션', ariaLabel: '산업별 솔루션 페이지로 이동' },
+  { href: '/pricing', label: '요금제', ariaLabel: '요금제 페이지로 이동' },
+  { href: '/about', label: '회사소개', ariaLabel: '회사소개 페이지로 이동' },
+  { href: '/security', label: '보안', ariaLabel: '보안 페이지로 이동' },
+  { href: '/faq', label: 'FAQ', ariaLabel: '자주 묻는 질문 페이지로 이동' },
+  { href: '/support', label: '고객지원', ariaLabel: '고객지원 페이지로 이동' },
+  { href: '/contact', label: '문의하기', ariaLabel: '문의하기 페이지로 이동' },
+]
+
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { data: session } = useSession()
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen((prev) => !prev)
+  }, [])
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-white shadow-sm" role="navigation" aria-label="메인 네비게이션">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900">
-                LawScan
-              </Link>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link
-                href="/"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                홈
-              </Link>
-              <Link
-                href="/services"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                서비스
-              </Link>
-              <Link
-                href="/pricing"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                가격
-              </Link>
-              <Link
-                href="/cases"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                사례
-              </Link>
-              <Link
-                href="/contact"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                문의하기
-              </Link>
+            <Link href="/" className="flex-shrink-0 flex items-center" aria-label="홈으로 이동">
+              <span className="text-2xl font-bold text-indigo-600">LawScan</span>
+            </Link>
+            <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
+              {navLinks.map(({ href, label, ariaLabel }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-indigo-600 focus:outline-none focus:text-indigo-600"
+                  aria-label={ariaLabel}
+                >
+                  {label}
+                </Link>
+              ))}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            {session ? (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/dashboard"
-                  className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  대시보드
-                </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700"
-                >
-                  로그아웃
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/login"
-                  className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  로그인
-                </Link>
-                <Link
-                  href="/register"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
-                >
-                  회원가입
-                </Link>
-              </div>
-            )}
+
+          <div className="hidden sm:flex sm:items-center sm:space-x-4">
+            <Link
+              href="/login"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 hover:text-indigo-600 focus:outline-none focus:text-indigo-600"
+              aria-label="로그인"
+            >
+              <UserIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+              로그인
+            </Link>
+            <Link
+              href="/register"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              aria-label="회원가입"
+            >
+              <UserAddIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+              회원가입
+            </Link>
           </div>
-          <div className="-mr-2 flex items-center sm:hidden">
+
+          <div className="flex items-center sm:hidden">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              type="button"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              aria-controls="mobile-menu"
+              aria-expanded={isMenuOpen}
+              onClick={toggleMenu}
             >
               <span className="sr-only">메뉴 열기</span>
-              {!isMenuOpen ? (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
+              {isMenuOpen ? (
+                <XIcon className="block h-6 w-6" aria-hidden="true" />
               ) : (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <MenuIcon className="block h-6 w-6" aria-hidden="true" />
               )}
             </button>
           </div>
         </div>
       </div>
 
-      {isMenuOpen && (
-        <div className="sm:hidden">
-          <div className="pt-2 pb-3 space-y-1">
+      <div
+        className={`sm:hidden ${isMenuOpen ? 'block' : 'hidden'}`}
+        id="mobile-menu"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="mobile-menu-button"
+      >
+        <div className="pt-2 pb-3 space-y-1">
+          {navLinks.map(({ href, label, ariaLabel }) => (
             <Link
-              href="/"
-              className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
+              key={href}
+              href={href}
+              className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+              role="menuitem"
+              aria-label={ariaLabel}
             >
-              홈
+              {label}
             </Link>
-            <Link
-              href="/services"
-              className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-            >
-              서비스
-            </Link>
-            <Link
-              href="/pricing"
-              className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-            >
-              가격
-            </Link>
-            <Link
-              href="/cases"
-              className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-            >
-              사례
-            </Link>
-            <Link
-              href="/contact"
-              className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-            >
-              문의하기
-            </Link>
-          </div>
+          ))}
           <div className="pt-4 pb-3 border-t border-gray-200">
-            {session ? (
-              <div className="space-y-1">
-                <Link
-                  href="/dashboard"
-                  className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-                >
-                  대시보드
-                </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-red-600 hover:bg-gray-50 hover:border-gray-300 hover:text-red-800"
-                >
-                  로그아웃
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-1">
-                <Link
-                  href="/login"
-                  className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-                >
+            <div className="space-y-1">
+              <Link
+                href="/login"
+                className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+                role="menuitem"
+                aria-label="로그인"
+              >
+                <div className="flex items-center">
+                  <UserIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                   로그인
-                </Link>
-                <Link
-                  href="/register"
-                  className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-blue-600 hover:bg-gray-50 hover:border-gray-300 hover:text-blue-800"
-                >
+                </div>
+              </Link>
+              <Link
+                href="/register"
+                className="block pl-3 pr-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                role="menuitem"
+                aria-label="회원가입"
+              >
+                <div className="flex items-center">
+                  <UserAddIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                   회원가입
-                </Link>
-              </div>
-            )}
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </nav>
   )
 } 

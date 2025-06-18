@@ -1,19 +1,23 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import "./globals.css";
-import { Providers } from "./providers";
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
+import Navbar from './components/Navbar'
+import { Footer } from './components/Footer'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { Providers } from './providers'
+import './globals.css'
 
-const inter = Inter({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+export const metadata = {
+  title: 'AI 계약서 검토 서비스',
+  description: '인공지능 기반 계약서 검토 서비스로 법률 리스크를 사전에 예방하세요.',
+  icons: {
+    icon: '/favicon.ico',
+  },
+}
 
-export const metadata: Metadata = {
-  title: "AI Contract Review",
-  description: "AI-powered contract review service",
-};
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 
 export default function RootLayout({
   children,
@@ -21,10 +25,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body className="antialiased">
-        <Providers>{children}</Providers>
+    <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className="min-h-screen flex flex-col">
+        <Providers>
+          <ErrorBoundary>
+            <Navbar />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </ErrorBoundary>
+        </Providers>
       </body>
     </html>
-  );
+  )
 }

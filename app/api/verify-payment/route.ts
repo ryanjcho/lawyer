@@ -85,18 +85,18 @@ export async function POST(request: Request) {
           planId,
           amount: paymentData.amount,
           status: 'completed',
-          impUid,
-          merchantUid,
         },
       })
 
       // Calculate subscription dates
       const startDate = new Date()
       const endDate = new Date()
-      if (plan.type === 'monthly') {
+      if (plan.type === 'BASIC') {
         endDate.setMonth(endDate.getMonth() + 1)
-      } else if (plan.type === 'yearly') {
+      } else if (plan.type === 'PROFESSIONAL') {
         endDate.setFullYear(endDate.getFullYear() + 1)
+      } else if (plan.type === 'ENTERPRISE') {
+        endDate.setFullYear(endDate.getFullYear() + 2)
       }
 
       // Update or create subscription
@@ -110,12 +110,12 @@ export async function POST(request: Request) {
         create: {
           userId,
           planId,
-          status: 'active',
+          status: 'ACTIVE',
           startDate,
           endDate,
         },
         update: {
-          status: 'active',
+          status: 'ACTIVE',
           startDate,
           endDate,
         },

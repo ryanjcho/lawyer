@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/db'
-import { authOptions } from '../auth/[...nextauth]/route'
+import { authOptions } from '../auth/[...nextauth]/authOptions'
 
 export async function GET() {
   try {
@@ -17,7 +17,7 @@ export async function GET() {
     const subscription = await prisma.subscription.findFirst({
       where: {
         userId: session.user.id,
-        status: 'active',
+        status: 'ACTIVE',
       },
       include: {
         plan: {

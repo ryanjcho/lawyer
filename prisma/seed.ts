@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, PlanType } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -8,13 +8,13 @@ async function main() {
     {
       name: 'Basic Plan',
       price: 10000,
-      type: 'monthly',
+      type: 'BASIC' as PlanType,
       features: ['5 contracts per month', 'Basic contract review', 'Email support'],
     },
     {
       name: 'Professional Plan',
       price: 50000,
-      type: 'monthly',
+      type: 'PROFESSIONAL' as PlanType,
       features: [
         '20 contracts per month',
         'Advanced contract review',
@@ -25,7 +25,7 @@ async function main() {
     {
       name: 'Enterprise Plan',
       price: 100000,
-      type: 'monthly',
+      type: 'ENTERPRISE' as PlanType,
       features: [
         'Unlimited contracts',
         'Premium contract review',
@@ -38,13 +38,13 @@ async function main() {
     {
       name: 'Basic Plan (Yearly)',
       price: 100000,
-      type: 'yearly',
+      type: 'BASIC' as PlanType,
       features: ['5 contracts per month', 'Basic contract review', 'Email support'],
     },
     {
       name: 'Professional Plan (Yearly)',
       price: 500000,
-      type: 'yearly',
+      type: 'PROFESSIONAL' as PlanType,
       features: [
         '20 contracts per month',
         'Advanced contract review',
@@ -55,7 +55,7 @@ async function main() {
     {
       name: 'Enterprise Plan (Yearly)',
       price: 1000000,
-      type: 'yearly',
+      type: 'ENTERPRISE' as PlanType,
       features: [
         'Unlimited contracts',
         'Premium contract review',

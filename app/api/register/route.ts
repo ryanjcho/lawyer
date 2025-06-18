@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { hash } from 'bcrypt'
-import { prisma } from '@/lib/db'
+import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
 const registerSchema = z.object({
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
         name,
         email,
         password: hashedPassword,
+        emailVerified: new Date(),
       },
     })
 

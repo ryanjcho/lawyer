@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, PlanType } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -21,7 +21,7 @@ async function main() {
   const plans = [
     {
       name: 'Basic',
-      type: 'subscription',
+      type: 'BASIC' as PlanType,
       price: 9900,
       features: [
         '기본 계약 검토',
@@ -31,7 +31,7 @@ async function main() {
     },
     {
       name: 'Professional',
-      type: 'subscription',
+      type: 'PROFESSIONAL' as PlanType,
       price: 29900,
       features: [
         '전문 계약 검토',
@@ -42,7 +42,7 @@ async function main() {
     },
     {
       name: 'Enterprise',
-      type: 'subscription',
+      type: 'ENTERPRISE' as PlanType,
       price: 99000,
       features: [
         '프리미엄 계약 검토',
