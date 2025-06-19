@@ -1,6 +1,10 @@
+"use client";
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 export function Footer() {
+  const { data: session } = useSession() || {};
+  const isAdmin = session?.user?.role === 'ADMIN';
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -41,11 +45,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/demo" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  제품 데모
-                </Link>
-              </li>
-              <li>
                 <Link href="/industries" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
                   산업별 솔루션
                 </Link>
@@ -60,6 +59,30 @@ export function Footer() {
                   무료 체험
                 </Link>
               </li>
+              <li>
+                <Link href="/dashboard" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  내 대시보드
+                </Link>
+              </li>
+              <li>
+                <Link href="/notifications" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  알림 (예정)
+                </Link>
+              </li>
+              {isAdmin && (
+                <li>
+                  <Link href="/admin" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                    관리자 대시보드
+                  </Link>
+                </li>
+              )}
+              {isAdmin && (
+                <li>
+                  <Link href="/admin/auditlog" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                    감사 로그
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -92,11 +115,6 @@ export function Footer() {
               <li>
                 <Link href="/faq" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
                   자주 묻는 질문
-                </Link>
-              </li>
-              <li>
-                <Link href="/support" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  고객지원
                 </Link>
               </li>
               <li>

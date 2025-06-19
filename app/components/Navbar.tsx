@@ -2,26 +2,51 @@
 
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
+import { useSession, signOut } from 'next-auth/react'
 import { MenuIcon, XIcon, UserIcon, UserAddIcon } from '@heroicons/react/solid'
+import Notifications from './Notifications'
 
 const navLinks = [
   { href: '/services', label: '서비스', ariaLabel: '서비스 페이지로 이동' },
-  { href: '/demo', label: '데모', ariaLabel: '제품 데모 페이지로 이동' },
   { href: '/industries', label: '산업별 솔루션', ariaLabel: '산업별 솔루션 페이지로 이동' },
   { href: '/pricing', label: '요금제', ariaLabel: '요금제 페이지로 이동' },
   { href: '/about', label: '회사소개', ariaLabel: '회사소개 페이지로 이동' },
+  { href: '/resources', label: '리소스', ariaLabel: '법무 리소스 페이지로 이동' },
   { href: '/security', label: '보안', ariaLabel: '보안 페이지로 이동' },
-  { href: '/faq', label: 'FAQ', ariaLabel: '자주 묻는 질문 페이지로 이동' },
-  { href: '/support', label: '고객지원', ariaLabel: '고객지원 페이지로 이동' },
+  { href: '/faq', label: 'FAQ & 지원', ariaLabel: '자주 묻는 질문 및 고객지원 페이지로 이동' },
   { href: '/contact', label: '문의하기', ariaLabel: '문의하기 페이지로 이동' },
 ]
 
 export default function Navbar() {
+  const { data: session, status } = useSession()
+  console.log('Navbar useSession status:', status, 'session:', session)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev)
   }, [])
+
+  const toggleUserMenu = useCallback(() => {
+    setIsUserMenuOpen((prev) => !prev)
+  }, [])
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: '/' })
+  }
+
+  if (status === 'loading') {
+    return (
+      <nav className="bg-white shadow-sm" role="navigation" aria-label="메인 네비게이션">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <span className="text-2xl font-bold text-indigo-600">LawScan</span>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+          </div>
+        </div>
+      </nav>
+    )
+  }
 
   return (
     <nav className="bg-white shadow-sm" role="navigation" aria-label="메인 네비게이션">
@@ -46,25 +71,80 @@ export default function Navbar() {
           </div>
 
           <div className="hidden sm:flex sm:items-center sm:space-x-4">
-            <Link
-              href="/login"
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 hover:text-indigo-600 focus:outline-none focus:text-indigo-600"
-              aria-label="로그인"
-            >
-              <UserIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              로그인
-            </Link>
-            <Link
-              href="/register"
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              aria-label="회원가입"
-            >
-              <UserAddIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              회원가입
-            </Link>
+            {session && session.user ? (
+              <>
+                {/* Notifications */}
+                <Notifications />
+                
+                {/* User Menu */}
+                <div className="relative">
+                  <button
+                    onClick={toggleUserMenu}
+                    className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
+                      <span className="text-sm font-medium text-white">
+                        {session.user.name?.charAt(0) || 'U'}
+                      </span>
+                    </div>
+                    <span className="ml-2 text-gray-700">{session.user.name}</span>
+                  </button>
+
+                  {isUserMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+                      <div className="py-1">
+                        <Link
+                          href="/dashboard"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          대시보드
+                        </Link>
+                        <Link
+                          href="/profile"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          프로필
+                        </Link>
+                        <hr className="my-1" />
+                        <button
+                          onClick={handleSignOut}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          로그아웃
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 hover:text-indigo-600 focus:outline-none focus:text-indigo-600"
+                  aria-label="로그인"
+                >
+                  <UserIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+                  로그인
+                </Link>
+                <Link
+                  href="/register"
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  aria-label="회원가입"
+                >
+                  <UserAddIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+                  회원가입
+                </Link>
+              </>
+            )}
           </div>
 
           <div className="flex items-center sm:hidden">
+            {session && (
+              <div className="mr-2">
+                <Notifications />
+              </div>
+            )}
             <button
               type="button"
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
@@ -103,33 +183,71 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="pt-4 pb-3 border-t border-gray-200">
-            <div className="space-y-1">
-              <Link
-                href="/login"
-                className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
-                role="menuitem"
-                aria-label="로그인"
-              >
-                <div className="flex items-center">
-                  <UserIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-                  로그인
+            {session && session.user ? (
+              <div className="space-y-1">
+                <div className="px-4 py-2">
+                  <p className="text-sm font-medium text-gray-900">{session.user.name}</p>
+                  <p className="text-sm text-gray-500">{session.user.email}</p>
                 </div>
-              </Link>
-              <Link
-                href="/register"
-                className="block pl-3 pr-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                role="menuitem"
-                aria-label="회원가입"
-              >
-                <div className="flex items-center">
-                  <UserAddIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-                  회원가입
-                </div>
-              </Link>
-            </div>
+                <Link
+                  href="/dashboard"
+                  className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+                  role="menuitem"
+                >
+                  대시보드
+                </Link>
+                <Link
+                  href="/profile"
+                  className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+                  role="menuitem"
+                >
+                  프로필
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+                  role="menuitem"
+                >
+                  로그아웃
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-1">
+                <Link
+                  href="/login"
+                  className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+                  role="menuitem"
+                  aria-label="로그인"
+                >
+                  <div className="flex items-center">
+                    <UserIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                    로그인
+                  </div>
+                </Link>
+                <Link
+                  href="/register"
+                  className="block pl-3 pr-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  role="menuitem"
+                  aria-label="회원가입"
+                >
+                  <div className="flex items-center">
+                    <UserAddIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                    회원가입
+                  </div>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Backdrop for user menu */}
+      {isUserMenuOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setIsUserMenuOpen(false)}
+        />
+      )}
     </nav>
   )
 } 

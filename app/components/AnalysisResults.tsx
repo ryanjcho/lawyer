@@ -232,6 +232,11 @@ export default function AnalysisResults({ result, className = '' }: AnalysisResu
                 <p className="text-lg text-gray-700">{result.legalReviewer || 'AI 시스템'}</p>
               </div>
             </div>
+
+            {/* New note or badge */}
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-700">복잡한 법률 용어도 쉽게 풀어 설명합니다. 누구나 이해할 수 있는 리포트 제공!</p>
+            </div>
           </div>
         )}
 

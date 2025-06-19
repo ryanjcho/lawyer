@@ -84,7 +84,7 @@ export default function RegisterPage() {
                 id="name"
                 name="name"
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />
             </div>
             <div className="mb-4">
@@ -99,7 +99,7 @@ export default function RegisterPage() {
                 id="email"
                 name="email"
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />
             </div>
             <div className="mb-4">
@@ -115,7 +115,7 @@ export default function RegisterPage() {
                 name="password"
                 required
                 minLength={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />
             </div>
             <div className="mb-6">
@@ -131,7 +131,7 @@ export default function RegisterPage() {
                 name="confirmPassword"
                 required
                 minLength={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />
             </div>
             <button

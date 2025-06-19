@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Script from 'next/script';
-import Navbar from '../components/Navbar';
+import { useSearchParams } from 'next/navigation';
 
 // Import types
 declare global {
@@ -148,15 +148,11 @@ const plans: Record<string, Plan> = {
   }
 };
 
-interface PaymentPageProps {
-  searchParams: {
-    planId?: string
-  }
-}
-
-export default function PaymentPage({ searchParams }: PaymentPageProps) {
+export default function PaymentPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+  const planId = searchParams.get('planId');
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -168,74 +164,31 @@ export default function PaymentPage({ searchParams }: PaymentPageProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [iamportLoaded, setIamportLoaded] = useState(false);
+
+  // Set selectedPlan from planId in query params
+  useEffect(() => {
+    if (planId && plans[planId]) {
+      setSelectedPlan(plans[planId]);
+    }
+  }, [planId]);
 
   useEffect(() => {
-    if (status === 'loading') return;
+    if (status === 'loading' || !iamportLoaded) return;
 
     if (!session?.user) {
       router.push('/login?callbackUrl=/payment');
       return;
     }
 
-    if (!searchParams.planId) {
+    if (!planId) {
       router.push('/pricing');
       return;
     }
+  }, [router, planId, session, status, iamportLoaded]);
 
-    // Initialize I'mport
-    const { IMP } = window as any;
-    IMP.init(process.env.NEXT_PUBLIC_IMP_KEY);
-
-    // Handle payment callback
-    IMP.request_pay({
-      pg: 'html5_inicis',
-      pay_method: 'card',
-      merchant_uid: `ORD_${Date.now()}`,
-      name: 'AI 계약 검토 서비스',
-      amount: 1000, // This should be dynamic based on the plan
-      buyer_email: session.user.email,
-      buyer_name: session.user.name,
-      buyer_tel: '010-0000-0000',
-    }, async (rsp: any) => {
-      if (rsp.success) {
-        setIsLoading(true);
-        try {
-          // Verify payment
-          const response = await fetch('/api/verify-payment', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              impUid: rsp.imp_uid,
-              merchantUid: rsp.merchant_uid,
-              userId: session.user.id,
-              planId: searchParams.planId,
-            }),
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.error || 'Payment verification failed');
-          }
-
-          // Redirect to success page
-          router.push('/payment/success');
-        } catch (err) {
-          setError(err instanceof Error ? err.message : 'Payment failed');
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        setError(rsp.error_msg || 'Payment failed');
-      }
-    });
-  }, [router, searchParams.planId, session, status]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     setIsProcessing(true);
 
     if (!selectedPlan) {
@@ -265,8 +218,13 @@ export default function PaymentPage({ searchParams }: PaymentPageProps) {
       window.IMP.request_pay(paymentData, async (response: IamportRequestPayResponse) => {
         if (response.success) {
           try {
-            // Get current user ID from session or auth context
-            const userId = 'current-user-id'; // TODO: Replace with actual user ID from auth
+            // Use the real user ID from session
+            const userId = session?.user?.id;
+            if (!userId) {
+              setError('로그인 정보가 올바르지 않습니다.');
+              setIsProcessing(false);
+              return;
+            }
 
             // Verify payment with backend
             const verificationResponse = await fetch('/api/verify-payment', {
@@ -364,8 +322,8 @@ export default function PaymentPage({ searchParams }: PaymentPageProps) {
       <Script
         src="https://cdn.iamport.kr/v1/iamport.js"
         strategy="beforeInteractive"
+        onLoad={() => setIamportLoaded(true)}
       />
-      <Navbar />
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-indigo-900 to-blue-800 text-white pt-24">
@@ -399,14 +357,6 @@ export default function PaymentPage({ searchParams }: PaymentPageProps) {
                       {selectedPlan?.type === 'one-time' ? '일회성 검토' : '구독형 검토'}
                     </p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-gray-900">
-                      {selectedPlan?.price}원
-                    </p>
-                    {selectedPlan?.type === 'subscription' && (
-                      <p className="text-sm text-gray-600">/월</p>
-                    )}
-                  </div>
                 </div>
               </div>
 
@@ -431,7 +381,7 @@ export default function PaymentPage({ searchParams }: PaymentPageProps) {
                       required
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-500"
                     />
                   </div>
 
@@ -446,7 +396,7 @@ export default function PaymentPage({ searchParams }: PaymentPageProps) {
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-500"
                     />
                   </div>
 
@@ -461,7 +411,7 @@ export default function PaymentPage({ searchParams }: PaymentPageProps) {
                       required
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-500"
                     />
                   </div>
 
@@ -475,9 +425,15 @@ export default function PaymentPage({ searchParams }: PaymentPageProps) {
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-500"
                     />
                   </div>
+                </div>
+
+                {/* 결제 금액 section */}
+                <div className="mb-4 p-4 bg-indigo-50 rounded-lg flex justify-between items-center">
+                  <span className="text-lg font-semibold text-gray-900">결제 금액</span>
+                  <span className="text-2xl font-bold text-indigo-700">{selectedPlan?.price}원</span>
                 </div>
 
                 <div>

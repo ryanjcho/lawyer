@@ -15,6 +15,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log(`[${new Date().toISOString()}] Login attempt: missing credentials`);
           throw new Error("이메일과 비밀번호를 입력해주세요.");
         }
 
@@ -23,6 +24,7 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user || !user.password) {
+          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - user not found`);
           throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
 
@@ -32,6 +34,7 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isPasswordValid) {
+          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - invalid password`);
           throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
 
@@ -40,6 +43,7 @@ export const authOptions: NextAuthOptions = {
         //   throw new Error("이메일 인증이 필요합니다.");
         // }
 
+        console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - success`);
         return {
           id: user.id,
           email: user.email,
@@ -61,12 +65,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+        token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.role = token.role;
+        session.user.id = token.id as string;
       }
       return session;
     },

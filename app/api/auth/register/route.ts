@@ -4,6 +4,12 @@ import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { sendEmail } from '@/lib/email';
 
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  return NextResponse.json({ message: 'Auth register API placeholder' })
+}
+
 export async function POST(req: Request) {
   try {
     const { name, email, password } = await req.json();

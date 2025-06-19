@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import AnalysisResults from '../components/AnalysisResults'
+import jsPDF from 'jspdf'
 
 interface Issue {
   id: string
@@ -137,6 +138,47 @@ function ReviewContent() {
     }
   }, [searchParams])
 
+  // Add handlers for PDF export and share
+  const handleExportPDF = () => {
+    if (!analysisResult) return;
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text('LawScan 계약서 분석 결과', 20, 20);
+    doc.setFontSize(12);
+    doc.text(`파일명: ${analysisResult.contractName}`, 20, 35);
+    doc.text(`분석 일시: ${new Date(analysisResult.analysisDate).toLocaleString()}`, 20, 45);
+    doc.text(`리스크 점수: ${analysisResult.overallRiskScore} (${analysisResult.riskLevel})`, 20, 55);
+    doc.text(`이슈 개수: ${analysisResult.totalIssues}`, 20, 65);
+    doc.text(`주요 요약:`, 20, 75);
+    doc.text(analysisResult.summary, 20, 85, { maxWidth: 170 });
+    doc.text('주요 이슈:', 20, 105);
+    analysisResult.issues.forEach((issue, idx) => {
+      doc.text(`${idx + 1}. [${issue.severity}] ${issue.title}`, 20, 115 + idx * 10, { maxWidth: 170 });
+    });
+    doc.save('lawscan-analysis.pdf');
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'LawScan 계약서 분석 결과',
+          url,
+        });
+      } catch (e) {
+        // User cancelled share
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('링크가 복사되었습니다!');
+      } catch (e) {
+        alert('링크 복사에 실패했습니다.');
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -202,13 +244,13 @@ function ReviewContent() {
               <h1 className="text-xl font-semibold text-gray-900">계약서 분석 결과</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+              <button onClick={handleExportPDF} className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 PDF 다운로드
               </button>
-              <button className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+              <button onClick={handleShare} className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                 </svg>

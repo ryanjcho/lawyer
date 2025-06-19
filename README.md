@@ -146,3 +146,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Production Launch Checklist
+
+- Set `SENTRY_DSN` in your environment for error monitoring (see Sentry docs).
+- Use Redis for rate limiting in `middleware.ts` (replace in-memory store).
+- Review and complete all items in `SECURITY_REVIEW.md`.
+- Run all tests: `npm test` and `npx playwright test`.
+- Complete manual QA in `QA_ERROR_PAGES.md`.
+
+## Mobile & Accessibility QA Checklist
+- [ ] Test all pages on mobile (iOS/Android) and major browsers
+- [ ] Check all forms and buttons are accessible via keyboard
+- [ ] Use Lighthouse (Chrome DevTools) to check a11y and performance
+- [ ] All images have alt text
+- [ ] Sufficient color contrast
+
+## Automated a11y/mobile check
+You can run Lighthouse CI or use Chrome DevTools > Lighthouse tab for automated checks.

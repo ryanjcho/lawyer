@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import axios from 'axios'
 import { env } from '@/lib/env'
 import { prisma, handleDatabaseError } from '@/lib/db'
-import type { Prisma } from '@prisma/client'
 
 // I'mport API configuration
 const IMP_KEY = process.env.IMP_KEY
@@ -17,9 +16,20 @@ interface PaymentVerificationRequest {
   planId: string
 }
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   try {
-    const { impUid, merchantUid, userId, planId } = await request.json() as PaymentVerificationRequest
+    // Accept both camelCase and snake_case keys
+    const body = await request.json();
+    const impUid = body.impUid || body.imp_uid;
+    const merchantUid = body.merchantUid || body.merchant_uid;
+    const userId = body.userId;
+    const planId = body.planId;
+    if (!impUid || !merchantUid || !userId || !planId) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+    console.log(`[${new Date().toISOString()}] Payment verification attempt: userId=${userId}, planId=${planId}, impUid=${impUid}, merchantUid=${merchantUid}`);
 
     // Get access token from I'mport
     const accessTokenResponse = await axios.post(
@@ -51,6 +61,7 @@ export async function POST(request: Request) {
 
     // Verify payment amount and status
     if (paymentData.status !== 'paid') {
+      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, impUid=${impUid}, status=${paymentData.status}`);
       return NextResponse.json(
         { error: 'Payment not completed' },
         { status: 400 }
@@ -63,6 +74,7 @@ export async function POST(request: Request) {
     })
 
     if (!plan) {
+      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, planId=${planId} - invalid plan`);
       return NextResponse.json(
         { error: 'Invalid plan' },
         { status: 400 }
@@ -70,6 +82,7 @@ export async function POST(request: Request) {
     }
 
     if (paymentData.amount !== plan.price) {
+      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, impUid=${impUid} - amount mismatch`);
       return NextResponse.json(
         { error: 'Payment amount mismatch' },
         { status: 400 }
@@ -77,7 +90,7 @@ export async function POST(request: Request) {
     }
 
     // Create payment record and update subscription
-    const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Create payment record
       const payment = await tx.payment.create({
         data: {
@@ -121,6 +134,7 @@ export async function POST(request: Request) {
         },
       })
 
+      console.log(`[${new Date().toISOString()}] Payment verification success: userId=${userId}, planId=${planId}, impUid=${impUid}`);
       return { payment, subscription }
     })
 
@@ -130,6 +144,13 @@ export async function POST(request: Request) {
       subscription: result.subscription,
     })
   } catch (error) {
+    try {
+      const body = await request.json();
+      const userId = body?.userId || 'unknown';
+      const planId = body?.planId || 'unknown';
+      const impUid = body?.impUid || 'unknown';
+      console.log(`[${new Date().toISOString()}] Payment verification error: userId=${userId}, planId=${planId}, impUid=${impUid} - ${error}`);
+    } catch {}
     console.error('Payment verification error:', error)
     handleDatabaseError(error)
     return NextResponse.json(

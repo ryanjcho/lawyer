@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library'
 
 declare global {
   var prisma: PrismaClient | undefined
@@ -26,13 +27,14 @@ export class DatabaseError extends Error {
 
 // Helper function to handle database errors
 export function handleDatabaseError(error: unknown): never {
+  if (error instanceof PrismaClientKnownRequestError) {
+    throw new DatabaseError(error.message, error.code)
+  }
+  if (error instanceof PrismaClientValidationError) {
+    throw new DatabaseError('Invalid data provided')
+  }
   if (error instanceof Error) {
-    if (error.name === 'PrismaClientKnownRequestError') {
-      throw new DatabaseError(error.message, (error as any).code)
-    }
-    if (error.name === 'PrismaClientValidationError') {
-      throw new DatabaseError('Invalid data provided')
-    }
+    throw new DatabaseError(error.message)
   }
   throw error
 }

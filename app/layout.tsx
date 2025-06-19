@@ -6,6 +6,8 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 import { Providers } from './providers'
 import './globals.css'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'AI 계약서 검토 서비스',
   description: '인공지능 기반 계약서 검토 서비스로 법률 리스크를 사전에 예방하세요.',

@@ -228,8 +228,7 @@ export default function Pricing() {
   const roi = calculateROI()
 
   const handlePlanSelect = (planId: string) => {
-    localStorage.setItem('selectedPlan', planId)
-    window.location.href = '/payment'
+    window.location.href = `/payment?planId=${planId}`
   }
 
   return (

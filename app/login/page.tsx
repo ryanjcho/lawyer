@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 
 function LoginForm() {
@@ -12,13 +12,6 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { data: session, status } = useSession()
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      router.push('/dashboard')
-    }
-  }, [status, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,6 +24,8 @@ function LoginForm() {
         password,
         redirect: false,
       })
+      console.log('signIn result:', result)
+      
       if (result?.error) {
         setError(result.error)
       } else {
@@ -43,21 +38,11 @@ function LoginForm() {
     }
   }
 
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-md mx-auto mt-16 p-6 bg-white rounded-lg shadow-md">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto"></div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
       <div className="max-w-md w-full mx-auto px-4">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-2xl font-bold text-center mb-6">로그인</h1>
+          <h1 className="text-2xl font-bold text-center mb-6 text-gray-900">로그인</h1>
 
           {searchParams.get('registered') && (
             <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
@@ -81,7 +66,7 @@ function LoginForm() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                 required
               />
             </div>
@@ -95,7 +80,7 @@ function LoginForm() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                 required
               />
             </div>
@@ -132,11 +117,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
-      </div>
-    }>
+    <Suspense>
       <LoginForm />
     </Suspense>
   )

@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import FileUpload from '../components/FileUpload'
+import jsPDF from 'jspdf'
+import * as XLSX from 'xlsx'
 
 interface UploadedFile {
   id: string;
@@ -19,6 +21,7 @@ export default function TrialPage() {
   const [analysisComplete, setAnalysisComplete] = useState(false)
 
   const handleFilesUploaded = (files: UploadedFile[]) => {
+    console.log('handleFilesUploaded called with:', files)
     setUploadedFiles(files)
     // Start analysis after files are uploaded
     if (files.length > 0) {
@@ -29,6 +32,31 @@ export default function TrialPage() {
         setAnalysisComplete(true)
       }, 5000)
     }
+  }
+
+  const handleExportPDF = () => {
+    const doc = new jsPDF()
+    doc.setFontSize(18)
+    doc.text('LawScan 계약서 분석 결과', 20, 20)
+    doc.setFontSize(12)
+    doc.text(`파일명: ${uploadedFiles[0]?.name || 'N/A'}`, 20, 40)
+    doc.text('분석 상태: 완료', 20, 50)
+    doc.text('주요 결과: 위험 요소 없음 (데모)', 20, 60)
+    doc.save('lawscan-analysis.pdf')
+  }
+
+  const handleExportExcel = () => {
+    const wsData = [
+      ['LawScan 계약서 분석 결과'],
+      [],
+      ['파일명', uploadedFiles[0]?.name || 'N/A'],
+      ['분석 상태', '완료'],
+      ['주요 결과', '위험 요소 없음 (데모)'],
+    ]
+    const ws = XLSX.utils.aoa_to_sheet(wsData)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, '분석 결과')
+    XLSX.writeFile(wb, 'lawscan-analysis.xlsx')
   }
 
   return (
@@ -198,6 +226,20 @@ export default function TrialPage() {
                   >
                     분석 결과 보기
                   </Link>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center mt-4">
+                    <button
+                      onClick={handleExportPDF}
+                      className="inline-flex items-center px-6 py-3 border border-indigo-600 text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 transition-colors"
+                    >
+                      PDF 다운로드
+                    </button>
+                    <button
+                      onClick={handleExportExcel}
+                      className="inline-flex items-center px-6 py-3 border border-green-600 text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50 transition-colors"
+                    >
+                      Excel 내보내기
+                    </button>
+                  </div>
                   <div className="text-sm text-gray-500">
                     또는 <Link href="/register" className="text-indigo-600 hover:text-indigo-800">회원가입</Link>하여 
                     더 많은 계약서를 분석해보세요.

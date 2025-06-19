@@ -13,25 +13,32 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="text-center">
             <h1 id="hero-heading" className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              <span className="block">한국 최초의 독자 개발</span>
-              <span className="block text-indigo-200">법률 AI 플랫폼</span>
+              <span className="block">AI와 변호사의 하이브리드</span>
+              <span className="block text-indigo-200">계약 검토의 새로운 표준</span>
             </h1>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-4 max-w-4xl mx-auto font-semibold">강남 최고급 로펌의 엘리트 변호사가 직접 참여하는 계약 검토 서비스</p>
             <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-4xl mx-auto">
-              강남 최고급 로펌이 직접 개발한 AI와 전문 변호사의 이중 검증을 통해<br/>
-              <span className="font-semibold">엔터프라이즈급 계약 리스크 관리 솔루션</span>을 제공합니다<br/>
-              <span className="text-lg text-indigo-200 mt-2 block">여러분의 비즈니스를 완벽하게 보호하는 법률 보험</span>
+              업로드 즉시 AI가 빠르게 분석하고, 업계별 특화 변호사가 신뢰성 있는 결과를 제공합니다.<br/>
+              <span className="font-semibold">100% 온라인, 누구나 이해할 수 있는 쉬운 리포트</span>로<br/>
+              시간과 비용을 절감하며, 계약 검토의 새로운 경험을 만나보세요.
             </p>
             
             {/* Trust Indicators */}
             <div className="flex flex-wrap justify-center gap-6 mb-8">
               <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
-                <p className="text-white font-semibold text-sm">한국 최초 독자 개발</p>
+                <p className="text-white font-semibold text-sm">AI + 변호사 하이브리드</p>
               </div>
               <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
-                <p className="text-white font-semibold text-sm">AI + 변호사 이중 검증</p>
+                <p className="text-white font-semibold text-sm">즉시 AI 피드백</p>
               </div>
               <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
-                <p className="text-white font-semibold text-sm">완벽한 보호 보장</p>
+                <p className="text-white font-semibold text-sm">업계별 특화 변호사</p>
+              </div>
+              <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                <p className="text-white font-semibold text-sm">100% 온라인/비대면</p>
+              </div>
+              <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                <p className="text-white font-semibold text-sm">강남 변호사 직접 참여</p>
               </div>
             </div>
 
@@ -67,12 +74,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 id="value-heading" className="text-3xl font-bold text-gray-900 mb-4">
-              엔터프라이즈급 계약 리스크 관리
+              AI와 변호사의 하이브리드, 새로운 계약 검토 경험
             </h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto mt-4">모든 계약 검토는 강남 최고급 로펌의 엘리트 변호사가 직접 감독 및 검증하여, 업계 최고의 전문성과 신뢰를 보장합니다.</p>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              <span className="font-semibold text-indigo-600">강남 최고급 로펌이 직접 개발한 독자 AI 시스템</span>과<br/>
-              <span className="font-semibold text-indigo-600">전문 변호사의 이중 검증</span>을 통한 최고 품질의 계약 분석 서비스<br/>
-              <span className="text-lg text-gray-500 mt-2 block">여러분의 비즈니스는 안전한 손에 맡겨주세요</span>
+              <span className="font-semibold text-indigo-600">즉시 AI 피드백</span>과 <span className="font-semibold text-indigo-600">업계별 특화 변호사</span>의 신뢰성 있는 검토,<br/>
+              <span className="font-semibold text-indigo-600">100% 온라인/비대면</span>의 간편함, <span className="font-semibold text-indigo-600">누구나 이해할 수 있는 쉬운 리포트</span>.<br/>
+              시간과 비용을 절감하며, 계약 검토의 새로운 표준을 경험하세요.
             </p>
           </div>
           
@@ -83,28 +91,22 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">독자 개발 AI 시스템</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">즉시 AI 피드백</h3>
               <p className="text-gray-600 mb-4">
-                강남 최고급 로펌이 수천 건의 검증된 계약서와 판례를 기반으로 직접 개발한 독자 AI 시스템으로, 최고 수준의 법률 전문성을 구현합니다.
+                업로드 즉시 AI가 계약서를 빠르게 분석하여, 신속한 의사결정을 지원합니다.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
                   <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  수천 건의 검증된 계약서 및 판례 학습
+                  실시간 분석 및 결과 제공
                 </li>
                 <li className="flex items-start">
                   <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  엘리트 변호사들이 직접 훈련 및 검증
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  한국 최초의 독자 개발 법률 AI 플랫폼
+                  반복적이고 표준화된 검토 자동화
                 </li>
               </ul>
             </div>
@@ -115,28 +117,22 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">이중 검증 프로세스</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">업계별 특화 변호사</h3>
               <p className="text-gray-600 mb-4">
-                AI의 정밀한 분석과 전문 변호사의 최종 검증을 거쳐 엔터프라이즈급 품질을 보장하는 체계적인 프로세스를 제공합니다.
+                각 업계와 계약 유형에 특화된 변호사가 맞춤형 검토와 실질적인 조언을 제공합니다.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
                   <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  1단계: AI 정밀 분석 및 리스크 식별
+                  업계별 맞춤 리포트 제공
                 </li>
                 <li className="flex items-start">
                   <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  2단계: 전문 변호사 최종 검증 및 권고사항
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  엔터프라이즈급 품질 보장
+                  실무 중심의 구체적 개선안
                 </li>
               </ul>
             </div>
