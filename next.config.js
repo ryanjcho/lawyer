@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   output: 'standalone',
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client'],
+  serverExternalPackages: ['@prisma/client'],
+  images: {
+    domains: ['placehold.co'],
   },
   async headers() {
     return [

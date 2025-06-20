@@ -1,5 +1,44 @@
 # AI Contract Review Service
 
+## 🚀 Quick Start
+
+1. **Setup Environment Variables:**
+   ```bash
+   npm run setup-env
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure your .env file** with actual values
+
+4. **Start Redis server** (required for rate limiting):
+   ```bash
+   # macOS with Homebrew
+   brew install redis
+   brew services start redis
+   
+   # Ubuntu/Debian
+   sudo apt-get install redis-server
+   sudo systemctl start redis
+   
+   # Windows
+   # Download Redis from https://redis.io/download
+   ```
+
+5. **Setup Database:**
+   ```bash
+   npm run prisma:migrate
+   npm run prisma:generate
+   ```
+
+6. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
 ## Environment Setup
 
 To run this application, you need to set up the following environment variables:
@@ -73,6 +112,45 @@ SMTP_FROM="your-email@gmail.com"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
+### AWS S3 (Required for file uploads)
+```bash
+AWS_REGION="ap-northeast-2"
+AWS_ACCESS_KEY_ID="your-aws-access-key"
+AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
+AWS_S3_BUCKET="your-s3-bucket-name"
+```
+
+### OpenAI (Required for AI analysis)
+```bash
+OPENAI_API_KEY="your-openai-api-key"
+```
+
+### Sentry (Error Monitoring)
+```bash
+SENTRY_DSN="your-sentry-dsn"
+```
+
+### Payment (I'mport - Korean payment gateway)
+```bash
+IMP_KEY="your-imp-key"
+IMP_SECRET="your-imp-secret"
+IMP_USER_CODE="your-imp-user-code"
+```
+
+### Security
+```bash
+RATE_LIMIT_WINDOW_MS="60000"
+RATE_LIMIT_MAX_REQUESTS="30"
+VIRUS_SCAN_ENABLED="true"
+VIRUS_SCAN_API_KEY="your-virus-scan-api-key"
+VIRUS_SCAN_API_URL="https://api.virustotal.com/v3/files"
+```
+
+### Redis (for rate limiting)
+```bash
+REDIS_URL="redis://localhost:6379"
+```
+
 ## Development Setup
 
 1. Install dependencies:
@@ -92,13 +170,22 @@ npm run dev
 
 ## Features
 
+### ✅ Implemented (Priority 2 - Security & Infrastructure)
+- **Environment Variables Setup** - Comprehensive configuration with validation
+- **Email Verification System** - Required for user registration and login
+- **Virus/Malware Scanning** - File upload security with VirusTotal integration
+- **Production Rate Limiting** - Redis-based rate limiting for API endpoints
 - User authentication with email/password
 - Social authentication (Google, Kakao, Naver)
-- Email verification
 - Password reset
 - Subscription management
-- Contract review with AI
-- Payment processing
+- Contract review with AI (placeholder)
+- Payment processing (partial)
+
+### 🔄 In Progress (Priority 1 - Core Business Logic)
+- **AI Analysis Implementation** - Core contract analysis functionality
+- **File Upload to S3** - Real file storage implementation
+- **Contract Assignment System** - Lawyer assignment workflow
 
 ## Tech Stack
 
@@ -109,6 +196,9 @@ npm run dev
 - NextAuth.js
 - Tailwind CSS
 - Nodemailer
+- Redis (for rate limiting)
+- AWS S3 (for file storage)
+- VirusTotal API (for virus scanning)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -150,7 +240,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Production Launch Checklist
 
 - Set `SENTRY_DSN` in your environment for error monitoring (see Sentry docs).
-- Use Redis for rate limiting in `middleware.ts` (replace in-memory store).
+- Use Redis for rate limiting in `middleware.ts` (✅ Implemented).
 - Review and complete all items in `SECURITY_REVIEW.md`.
 - Run all tests: `npm test` and `npx playwright test`.
 - Complete manual QA in `QA_ERROR_PAGES.md`.
@@ -164,3 +254,25 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Automated a11y/mobile check
 You can run Lighthouse CI or use Chrome DevTools > Lighthouse tab for automated checks.
+
+## Priority Implementation Status
+
+### ✅ Priority 2: Security & Infrastructure (COMPLETED)
+- Environment Variables Setup
+- Email Verification System  
+- Virus/Malware Scanning
+- Production Rate Limiting
+
+### 🔄 Priority 1: Core Business Logic (IN PROGRESS)
+- AI Analysis Implementation
+- File Upload to S3
+- Contract Assignment System
+
+### 📋 Priority 3-7: Future Enhancements
+- Payment & Subscription Management
+- User Experience Improvements
+- Analytics & Monitoring
+- Mobile & Accessibility
+- Testing & Quality
+
+For detailed implementation information, see [PRIORITY_2_IMPLEMENTATION.md](./PRIORITY_2_IMPLEMENTATION.md).

@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { MenuIcon, XIcon, UserIcon, UserAddIcon } from '@heroicons/react/solid'
+import { Bars3Icon, XMarkIcon, UserIcon, UserPlusIcon } from '@heroicons/react/24/solid'
 import Notifications from './Notifications'
 
 const navLinks = [
@@ -84,10 +84,10 @@ export default function Navbar() {
                   >
                     <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
                       <span className="text-sm font-medium text-white">
-                        {session.user.name?.charAt(0) || 'U'}
+                        {session.user.name && session.user.name.length > 0 ? session.user.name.charAt(0) : 'U'}
                       </span>
                     </div>
-                    <span className="ml-2 text-gray-700">{session.user.name}</span>
+                    <span className="ml-2 text-gray-700">{session.user.name || 'User'}</span>
                   </button>
 
                   {isUserMenuOpen && (
@@ -132,7 +132,7 @@ export default function Navbar() {
                   className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   aria-label="회원가입"
                 >
-                  <UserAddIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+                  <UserPlusIcon className="h-5 w-5 mr-1" aria-hidden="true" />
                   회원가입
                 </Link>
               </>
@@ -154,9 +154,9 @@ export default function Navbar() {
             >
               <span className="sr-only">메뉴 열기</span>
               {isMenuOpen ? (
-                <XIcon className="block h-6 w-6" aria-hidden="true" />
+                <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
               ) : (
-                <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -231,7 +231,7 @@ export default function Navbar() {
                   aria-label="회원가입"
                 >
                   <div className="flex items-center">
-                    <UserAddIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                    <UserPlusIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                     회원가입
                   </div>
                 </Link>

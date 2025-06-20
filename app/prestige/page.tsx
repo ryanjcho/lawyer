@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import Testimonials from './components/Testimonials';
+import Testimonials from '../components/Testimonials';
 import { BriefcaseIcon, BuildingOffice2Icon, ChartBarIcon, BanknotesIcon, UserGroupIcon, ShieldCheckIcon, TrophyIcon, ClockIcon, DocumentTextIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon, LockClosedIcon, CurrencyDollarIcon, InboxIcon } from '@heroicons/react/24/solid';
 import { useEffect, useRef, useState } from 'react';
@@ -38,7 +38,7 @@ const LAWYERS = [
   {
     name: '김지훈 변호사',
     title: '대표 변호사 / M&A, 기업법 전문',
-    image: 'https://placehold.co/200x200?text=Lawyer+1',
+    image: '/public/lawyer1.jpg',
     desc: '서울대 법대, 前 대형로펌 파트너, 20년 경력. 5000건 이상의 기업 자문 및 M&A 수행.',
     quote: '"고객의 신뢰와 성공이 저의 최우선 가치입니다."',
     specialties: ['M&A', '기업법', '계약서 검토'],
@@ -48,7 +48,7 @@ const LAWYERS = [
   {
     name: '이수진 변호사',
     title: '계약/지적재산권 전문',
-    image: 'https://placehold.co/200x200?text=Lawyer+2',
+    image: '/public/lawyer2.jpg',
     desc: '하버드 로스쿨, 국내외 대기업 자문, 15년 경력. IT/제조/바이오 등 다양한 산업 경험.',
     quote: '"복잡한 문제일수록 맞춤형 전략이 필요합니다."',
     specialties: ['계약', '지적재산권', 'IT/제조'],
@@ -58,7 +58,7 @@ const LAWYERS = [
   {
     name: '박민석 변호사',
     title: '노무/인사/분쟁 전문',
-    image: 'https://placehold.co/200x200?text=Lawyer+3',
+    image: '/public/lawyer3.jpg',
     desc: '고려대 법대, 노동법 박사, 18년 경력. 1000건 이상의 분쟁 해결 및 자문.',
     quote: '"진심을 담아, 끝까지 책임지는 자문을 약속합니다."',
     specialties: ['노무', '인사', '분쟁'],
@@ -139,20 +139,13 @@ export default function PrestigeHome() {
               업계 최고 변호사가 직접 설계하는<br />
               <span className="text-yellow-300">단 하나뿐인 맞춤형 법률 솔루션</span>을 제공합니다.
             </p>
-            <div className="flex flex-col md:flex-row justify-center items-center gap-2 mb-8 w-full max-w-xl mx-auto">
+            <div className="flex justify-center mb-8">
               <Link
                 href="/upload"
-                className="w-full md:flex-1 h-16 inline-flex items-center justify-center border border-transparent text-lg font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-2xl"
+                className="inline-flex items-center justify-center px-12 py-5 border border-transparent text-lg font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg mx-auto transition-transform duration-200 hover:scale-105 hover:shadow-2xl"
                 aria-label="계약서 업로드하고 견적 받기"
               >
                 계약서 업로드하고 견적 받기
-              </Link>
-              <Link
-                href="/generate"
-                className="w-full md:flex-1 h-16 inline-flex items-center justify-center border border-transparent text-lg font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-2xl"
-                aria-label="계약서 초안 생성하기"
-              >
-                계약서 초안 생성하기
               </Link>
             </div>
             <div className="flex flex-wrap justify-center gap-6 mb-4">
@@ -175,6 +168,7 @@ export default function PrestigeHome() {
           </div>
         </div>
       </section>
+
       {/* Trust Badges Section */}
       <section className="py-8 bg-white border-b border-indigo-100">
         <div className="max-w-5xl mx-auto px-4 flex flex-wrap justify-center gap-6">
@@ -186,6 +180,7 @@ export default function PrestigeHome() {
           ))}
         </div>
       </section>
+
       {/* Process Section */}
       <section className="py-16 bg-gradient-to-br from-white to-indigo-50" aria-labelledby="process-heading">
         <div className="max-w-5xl mx-auto px-4">
@@ -208,6 +203,7 @@ export default function PrestigeHome() {
           </div>
         </div>
       </section>
+
       {/* Testimonial Snippet */}
       <section className="py-8 bg-white border-b border-indigo-100">
         <div className="max-w-3xl mx-auto px-4 text-center">
@@ -215,59 +211,7 @@ export default function PrestigeHome() {
           <div className="text-sm text-gray-500">- 실제 고객 후기 중에서</div>
         </div>
       </section>
-      {/* Pricing Section */}
-      <section className="py-16 bg-gradient-to-br from-indigo-50 to-white" aria-labelledby="pricing-heading">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <CurrencyDollarIcon className="w-14 h-14 mx-auto text-indigo-600 mb-6" />
-          <h2 id="pricing-heading" className="text-3xl font-bold text-gray-900 mb-4">투명한 가격 안내</h2>
-          <p className="text-lg text-gray-700 mb-8">모든 서비스는 <span className='font-bold text-indigo-700'>사전 견적</span>을 통해 투명하게 안내되며, <span className='font-bold'>숨겨진 비용이나 추가 청구</span>가 없습니다.<br />
-            계약서 업로드 후, 맞춤 견적을 무료로 받아보세요.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div className="bg-white rounded-2xl shadow-lg p-8 border border-indigo-100 flex flex-col items-center hover:shadow-2xl transition-shadow">
-              <div className="text-xl font-bold text-indigo-700 mb-2">계약서 검토</div>
-              <div className="text-2xl font-extrabold text-indigo-900 mb-2">5만원~</div>
-              <div className="text-sm text-gray-500 mb-2">난이도/분량별 차등</div>
-            </div>
-            <div className="bg-white rounded-2xl shadow-lg p-8 border border-indigo-100 flex flex-col items-center hover:shadow-2xl transition-shadow">
-              <div className="text-xl font-bold text-indigo-700 mb-2">계약서 초안/작성</div>
-              <div className="text-2xl font-extrabold text-indigo-900 mb-2">15만원~</div>
-              <div className="text-sm text-gray-500 mb-2">상황별 맞춤 설계</div>
-            </div>
-            <div className="bg-white rounded-2xl shadow-lg p-8 border border-indigo-100 flex flex-col items-center hover:shadow-2xl transition-shadow">
-              <div className="text-xl font-bold text-indigo-700 mb-2">맞춤 자문/협상</div>
-              <div className="text-2xl font-extrabold text-indigo-900 mb-2">별도 안내</div>
-              <div className="text-sm text-gray-500 mb-2">복잡한 사안, 협상 지원</div>
-            </div>
-          </div>
-          <ul className="text-sm text-gray-600 mb-8 list-disc list-inside text-left max-w-md mx-auto">
-            <li>모든 견적은 VAT 포함, 사전 안내 후 확정</li>
-            <li>견적 동의 전까지 비용 청구 없음</li>
-            <li>결과 미흡 시 100% 환불 보장</li>
-            <li>장기/반복 의뢰 시 추가 할인</li>
-          </ul>
-          {/* ROI Stats Row */}
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <div className="flex flex-col items-center">
-              <ChartBarIcon className="w-8 h-8 text-indigo-500 mb-2" />
-              <div className="text-2xl font-extrabold text-indigo-800 mb-1"><AnimatedCounter value={STATS[4].value} /></div>
-              <div className="text-sm text-gray-700">{STATS[4].label}</div>
-              <div className="text-xs text-gray-500">{STATS[4].desc}</div>
-            </div>
-            <div className="flex flex-col items-center">
-              <ShieldCheckIcon className="w-8 h-8 text-indigo-500 mb-2" />
-              <div className="text-2xl font-extrabold text-indigo-800 mb-1"><AnimatedCounter value={STATS[5].value} /></div>
-              <div className="text-sm text-gray-700">{STATS[5].label}</div>
-              <div className="text-xs text-gray-500">{STATS[5].desc}</div>
-            </div>
-            <div className="flex flex-col items-center">
-              <TrophyIcon className="w-8 h-8 text-indigo-500 mb-2" />
-              <div className="text-2xl font-extrabold text-indigo-800 mb-1"><AnimatedCounter value={STATS[3].value} /></div>
-              <div className="text-sm text-gray-700">{STATS[3].label}</div>
-              <div className="text-xs text-gray-500">{STATS[3].desc}</div>
-            </div>
-          </div>
-        </div>
-      </section>
+
       {/* Stats Section */}
       <section className="py-20 bg-gradient-to-br from-indigo-50 to-white" aria-labelledby="stats-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -295,6 +239,7 @@ export default function PrestigeHome() {
           </div>
         </div>
       </section>
+
       {/* One Stop Shop Section */}
       <section className="py-16 bg-white" aria-labelledby="onestop-heading">
         <div className="max-w-5xl mx-auto px-4">
@@ -340,6 +285,7 @@ export default function PrestigeHome() {
           <p className="mt-10 text-center text-indigo-800 font-bold text-lg">계약의 시작부터 끝까지, <span className="text-indigo-900">모든 단계에서 전문가가 함께합니다.</span></p>
         </div>
       </section>
+
       {/* Meet Our Lawyers Section */}
       <section className="py-16 bg-gradient-to-br from-indigo-50 to-white" aria-labelledby="lawyers-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -387,8 +333,9 @@ export default function PrestigeHome() {
           </div>
         </div>
       </section>
+
       {/* Service Categories Section */}
-      {/* <section className="py-16 bg-gradient-to-br from-indigo-50 to-white" aria-labelledby="services-heading">
+      <section className="py-16 bg-gradient-to-br from-indigo-50 to-white" aria-labelledby="services-heading">
         <div className="max-w-7xl mx-auto px-4">
           <h2 id="services-heading" className="text-2xl font-bold text-gray-900 mb-10 text-center">주요 서비스 영역</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
@@ -401,7 +348,8 @@ export default function PrestigeHome() {
             ))}
           </div>
         </div>
-      </section> */}
+      </section>
+
       {/* Value Proposition Section */}
       <section className="py-16 bg-white" aria-labelledby="value-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -445,6 +393,7 @@ export default function PrestigeHome() {
           </div>
         </div>
       </section>
+
       {/* FAQ Section */}
       <section className="py-16 bg-white" aria-labelledby="faq-heading">
         <div className="max-w-4xl mx-auto px-4">
@@ -459,6 +408,7 @@ export default function PrestigeHome() {
           </div>
         </div>
       </section>
+
       {/* Security Section */}
       <section className="py-12 bg-gradient-to-br from-indigo-100 to-white" aria-labelledby="security-heading">
         <div className="max-w-3xl mx-auto px-4 text-center">
@@ -475,6 +425,28 @@ export default function PrestigeHome() {
           <p className="text-sm text-gray-500">고객의 정보와 문서는 오직 담당 변호사만 접근 가능하며, 외부 유출 및 무단 열람이 원천적으로 차단됩니다.</p>
         </div>
       </section>
+
+      {/* Pricing Section */}
+      <section className="py-12 bg-white" aria-labelledby="pricing-heading">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <CurrencyDollarIcon className="w-12 h-12 mx-auto text-indigo-600 mb-4" />
+          <h2 id="pricing-heading" className="text-2xl font-bold text-gray-900 mb-4">투명한 가격 안내</h2>
+          <p className="text-lg text-gray-700 mb-4">모든 서비스는 <span className='font-bold text-indigo-700'>사전 견적</span>을 통해 투명하게 안내되며, <span className='font-bold'>숨겨진 비용이나 추가 청구</span>가 없습니다.<br />
+            계약서 업로드 후, 맞춤 견적을 무료로 받아보세요.</p>
+          <div className="flex flex-col items-center gap-2 mb-4">
+            <div className="bg-indigo-50 rounded-lg px-6 py-3 text-indigo-900 font-semibold text-base w-full max-w-md">계약서 검토: 5만원~ (난이도/분량별 차등)</div>
+            <div className="bg-indigo-50 rounded-lg px-6 py-3 text-indigo-900 font-semibold text-base w-full max-w-md">계약서 초안/작성: 15만원~</div>
+            <div className="bg-indigo-50 rounded-lg px-6 py-3 text-indigo-900 font-semibold text-base w-full max-w-md">맞춤 자문/협상: 별도 안내</div>
+          </div>
+          <ul className="text-sm text-gray-600 mb-4 list-disc list-inside text-left max-w-md mx-auto">
+            <li>모든 견적은 VAT 포함, 사전 안내 후 확정</li>
+            <li>견적 동의 전까지 비용 청구 없음</li>
+            <li>결과 미흡 시 100% 환불 보장</li>
+            <li>장기/반복 의뢰 시 추가 할인</li>
+          </ul>
+        </div>
+      </section>
+
       {/* Call to Action Section */}
       <section className="py-16 bg-indigo-700 text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
@@ -489,16 +461,10 @@ export default function PrestigeHome() {
             >
               계약서 업로드하고 견적 받기
             </Link>
-            <Link
-              href="/generate"
-              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              aria-label="계약서 초안 생성하기"
-            >
-              계약서 초안 생성하기
-            </Link>
           </div>
         </div>
       </section>
+
       {/* Sticky CTA */}
       <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center sm:hidden animate-pulse">
         <Link href="/upload" className="px-8 py-3 rounded-full bg-indigo-700 text-white font-bold shadow-lg">계약서 업로드하고 견적 받기</Link>

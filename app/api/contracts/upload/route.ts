@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/authOptions'
 import { prisma } from '@/lib/prisma'
 import { uploadToS3 } from '@/lib/s3'
+import { VirusScanService } from '@/lib/virusScan'
+import { envConfig } from '@/config/env.config'
 
 export const dynamic = "force-dynamic";
 
@@ -38,19 +40,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File size too large. Maximum size is 10MB.' }, { status: 400 })
     }
 
-    // TODO: Integrate real virus/malware scanning in production
-    // Example: Use ClamAV, VirusTotal API, or a cloud service
-    // For now, simulate a scan and reject files named 'virus.pdf'
-    if (fileName.toLowerCase().includes('virus')) {
-      return NextResponse.json({ error: 'Malware detected in file. Upload rejected.' }, { status: 400 })
+    // Convert file to buffer for virus scanning
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Virus scanning
+    const virusScanService = VirusScanService.getInstance();
+    const scanResult = await virusScanService.scanFile(buffer, fileName);
+    
+    if (!scanResult.isClean) {
+      console.log(`[${new Date().toISOString()}] File upload attempt: ${session.user.email} - virus detected: ${scanResult.threats.join(', ')}`);
+      return NextResponse.json({ 
+        error: 'Malware detected in file. Upload rejected.',
+        threats: scanResult.threats,
+        provider: scanResult.provider
+      }, { status: 400 })
     }
 
     // Upload file to S3
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
     const s3Key = `${session.user.id}/${Date.now()}-${fileName}`;
     const s3Url = await uploadToS3({
-      Bucket: process.env.AWS_S3_BUCKET!,
+      Bucket: envConfig.aws.s3Bucket,
       Key: s3Key,
       Body: buffer,
       ContentType: file.type,
@@ -75,7 +85,16 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    console.log(`[${new Date().toISOString()}] File upload success: ${session.user.email} - ${fileName}`);
+    // Create audit log entry
+    await prisma.auditLog.create({
+      data: {
+        userId: session.user.id,
+        action: 'UPLOAD_CONTRACT',
+        details: `Contract ${contract.id} uploaded by ${session.user.email}. Virus scan: ${scanResult.provider} - Clean: ${scanResult.isClean}`
+      }
+    });
+
+    console.log(`[${new Date().toISOString()}] File upload success: ${session.user.email} - ${fileName} (Virus scan: ${scanResult.provider})`);
 
     return NextResponse.json({
       success: true,
@@ -86,6 +105,11 @@ export async function POST(request: NextRequest) {
         uploadedAt: contract.uploadedAt,
         user: contract.user.name,
         fileUrl: contract.fileUrl,
+      },
+      virusScan: {
+        isClean: scanResult.isClean,
+        provider: scanResult.provider,
+        scanDate: scanResult.scanDate
       }
     })
   } catch (error) {

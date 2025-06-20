@@ -1,10 +1,11 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { envConfig } from '@/config/env.config';
 
 const s3 = new S3Client({
-  region: process.env.AWS_REGION,
+  region: envConfig.aws.region,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    accessKeyId: envConfig.aws.accessKeyId,
+    secretAccessKey: envConfig.aws.secretAccessKey,
   },
 });
 
@@ -28,5 +29,5 @@ export async function uploadToS3({
       ACL: 'public-read',
     })
   );
-  return `https://${Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${Key}`;
+  return `https://${Bucket}.s3.${envConfig.aws.region}.amazonaws.com/${Key}`;
 } 

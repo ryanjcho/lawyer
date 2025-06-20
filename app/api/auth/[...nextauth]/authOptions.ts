@@ -38,10 +38,11 @@ export const authOptions: NextAuthOptions = {
           throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
 
-        // Temporarily disable email verification for testing
-        // if (!user.emailVerified) {
-        //   throw new Error("이메일 인증이 필요합니다.");
-        // }
+        // Enable email verification for production
+        if (!user.emailVerified) {
+          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - email not verified`);
+          throw new Error("이메일 인증이 필요합니다. 이메일을 확인하여 인증을 완료해주세요.");
+        }
 
         console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - success`);
         return {
@@ -57,6 +58,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
     error: "/login",
+    verifyRequest: "/verify-email",
   },
   session: {
     strategy: "jwt",
