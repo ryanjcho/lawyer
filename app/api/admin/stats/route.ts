@@ -23,8 +23,6 @@ export async function GET(request: NextRequest) {
       activeUsers,
       totalContracts,
       contractsThisMonth,
-      activeSubscriptions,
-      subscriptionsThisMonth,
       completedContracts
     ] = await Promise.all([
       // Total users
@@ -51,28 +49,6 @@ export async function GET(request: NextRequest) {
         }
       }),
       
-      // Active subscriptions with plan details
-      prisma.subscription.findMany({
-        where: {
-          status: 'ACTIVE'
-        },
-        include: {
-          plan: true
-        }
-      }),
-      
-      // Subscriptions created this month
-      prisma.subscription.findMany({
-        where: {
-          createdAt: {
-            gte: firstDayOfMonth
-          }
-        },
-        include: {
-          plan: true
-        }
-      }),
-      
       // Completed contracts for processing time calculation
       prisma.contract.count({
         where: {
@@ -83,10 +59,6 @@ export async function GET(request: NextRequest) {
         }
       })
     ])
-
-    // Calculate total revenue from active subscriptions
-    const totalRevenue = activeSubscriptions.reduce((sum, sub) => sum + sub.plan.price, 0)
-    const revenueThisMonth = subscriptionsThisMonth.reduce((sum, sub) => sum + sub.plan.price, 0)
 
     // Mock average processing time (would calculate from actual completedAt - uploadedAt in real app)
     const averageProcessingTime = completedContracts > 0 ? 2.3 : 0
@@ -99,8 +71,6 @@ export async function GET(request: NextRequest) {
       activeUsers,
       totalContracts,
       contractsThisMonth,
-      revenue: totalRevenue,
-      revenueThisMonth,
       averageProcessingTime,
       customerSatisfaction
     }

@@ -15,11 +15,6 @@ export async function GET(request: NextRequest) {
 
     const users = await prisma.user.findMany({
       include: {
-        subscriptions: {
-          include: {
-            plan: true
-          }
-        },
         contracts: {
           select: {
             id: true
@@ -33,28 +28,20 @@ export async function GET(request: NextRequest) {
       id: string;
       name: string | null;
       email: string | null;
-      subscriptions: Array<{
-        status: string;
-        plan: { name: string };
-      }>;
       contracts: Array<{ id: string }>;
       updatedAt: Date;
     }>;
 
     const formattedUsers = users.map(user => {
-      const activeSubscription = user.subscriptions.find((sub: { status: string }) => sub.status === 'ACTIVE');
       const contractsCount = user.contracts.length;
-      
       // Determine user status based on last activity
       const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
       const isActive = user.updatedAt > thirtyDaysAgo
-      
       return {
         id: user.id,
         name: user.name,
         email: user.email,
         company: 'N/A', // Would come from user profile in real app
-        subscription: activeSubscription?.plan.name || 'No Subscription',
         status: isActive ? 'active' : 'inactive',
         lastLogin: user.updatedAt.toISOString(),
         contractsAnalyzed: contractsCount

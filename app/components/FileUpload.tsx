@@ -184,23 +184,22 @@ export default function FileUpload({
     <div className={`w-full ${className}`}>
       {/* File Upload Area */}
       <div
-        className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-          dragActive 
-            ? 'border-indigo-500 bg-indigo-50' 
-            : 'border-gray-300 hover:border-indigo-400 hover:bg-gray-50'
-        }`}
+        className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors shadow-xl bg-gradient-to-br from-indigo-50 via-white to-purple-50
+          ${dragActive 
+            ? 'border-indigo-500 bg-indigo-100' 
+            : 'border-gray-300 hover:border-indigo-400 hover:bg-indigo-50'}
+        `}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
         <div className="space-y-4">
-          <div className="mx-auto w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mx-auto w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110 hover:shadow-lg animate-bounce-slow">
+            <svg className="w-10 h-10 text-indigo-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
           </div>
-          
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               파일을 드래그하여 업로드하거나 클릭하여 선택하세요
@@ -212,11 +211,10 @@ export default function FileUpload({
               최대 {maxFiles}개 파일 업로드 가능
             </p>
           </div>
-
           <button
             type="button"
             onClick={openFileDialog}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-bold rounded-xl text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
           >
             파일 선택
           </button>
@@ -286,6 +284,16 @@ export default function FileUpload({
                     {file.error && (
                       <p className="text-sm text-red-600">{file.error}</p>
                     )}
+                    {/* File Type Badge */}
+                    <div className="mt-1">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                        file.type === 'application/pdf' 
+                          ? 'bg-red-100 text-red-800' 
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {file.type === 'application/pdf' ? 'PDF' : '문서'}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 
@@ -306,6 +314,7 @@ export default function FileUpload({
                     <button
                       onClick={() => retryUpload(file.id)}
                       className="text-sm text-indigo-600 hover:text-indigo-900"
+                      aria-label="재시도"
                     >
                       재시도
                     </button>
@@ -314,6 +323,7 @@ export default function FileUpload({
                   <button
                     onClick={() => removeFile(file.id)}
                     className="text-gray-400 hover:text-gray-600"
+                    aria-label="파일 삭제"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -323,6 +333,45 @@ export default function FileUpload({
               </div>
             ))}
           </div>
+          
+          {/* File Preview Section */}
+          {uploadedFiles.some(f => f.status === 'success') && (
+            <div className="mt-4 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+              <h5 className="text-sm font-medium text-indigo-900 mb-3 flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                파일 미리보기
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {uploadedFiles.filter(f => f.status === 'success').map((file) => (
+                  <div key={file.id} className="bg-white rounded-lg p-3 shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        {file.type === 'application/pdf' ? (
+                          <svg className="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{file.name}</p>
+                        <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+                        <p className="text-xs text-gray-400">
+                          업로드 완료 • {new Date().toLocaleTimeString('ko-KR')}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

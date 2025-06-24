@@ -4,9 +4,14 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { CheckCircleIcon, ClockIcon, ExclamationTriangleIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
+import {
+  CheckCircleIcon,
+  ClockIcon,
+  ExclamationTriangleIcon,
+  DocumentTextIcon,
+} from '@heroicons/react/24/outline'
 
-interface Contract {
+type Contract = {
   id: string
   title: string
   status: string
@@ -101,12 +106,16 @@ export default function DashboardPage() {
     }
   }
 
-  // Best-effort: treat as generated if planName includes '생성' or fileName is auto-generated, else review
+  // Determine contract type based on analysis result or title
   const isGenerated = (contract: Contract) => {
-    const planName = contract.analysisResult?.planName || ''
-    // Heuristic: planName includes '생성' or 'generate', or fileName/title includes '생성'
+    // Check if the contract title or analysis result indicates it's a generated contract
+    const title = contract.title || ''
+    const analysisResult = contract.analysisResult || {}
+    
+    // Look for keywords that indicate generation vs review
     return (
-      /생성|generate/i.test(planName) || /생성|generate/i.test(contract.title)
+      /생성|generate|template|draft/i.test(title) || 
+      /생성|generate|template|draft/i.test(analysisResult.contractType || '')
     )
   }
 
@@ -288,14 +297,12 @@ export default function DashboardPage() {
                   {/* Created date and actions */}
                   <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
                     <span className="text-xs text-gray-500">업로드일: <span className="text-black font-medium">{formatDate(contract.createdAt)}</span></span>
-                    <a
+                    <Link
                       href={`/dashboard/contracts/${contract.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition-colors text-sm shadow text-center"
                     >
                       상세보기
-                    </a>
+                    </Link>
                   </div>
                 </div>
               ))}

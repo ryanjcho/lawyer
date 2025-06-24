@@ -55,64 +55,6 @@ interface IamportRequestPayResponse {
   receipt_url?: string;
 }
 
-interface Plan {
-  id: string;
-  name: string;
-  price: number;
-  priceDisplay: string;
-  type: 'one-time' | 'subscription';
-  features: string[];
-}
-
-// Consistent pricing with upload page
-const plans = [
-  {
-    id: 'basic-onetime',
-    name: 'Basic',
-    price: 300000,
-    priceDisplay: '₩300,000',
-    features: [
-      '계약서 1건 검토',
-      '24시간 이내 검토 완료',
-      '기본 리스크 분석',
-      '개선 제안서 제공',
-      '이메일 상담 지원',
-    ],
-    highlight: false,
-  },
-  {
-    id: 'professional-onetime',
-    name: 'Professional',
-    price: 500000,
-    priceDisplay: '₩500,000',
-    features: [
-      '계약서 1건 검토',
-      '12시간 이내 검토 완료',
-      '상세 리스크 분석',
-      '개선 제안서 제공',
-      '전문가 상담 1회',
-      '긴급 검토 가능',
-    ],
-    highlight: true,
-  },
-  {
-    id: 'enterprise-onetime',
-    name: 'Enterprise',
-    price: 1000000,
-    priceDisplay: '₩1,000,000',
-    features: [
-      '계약서 1건 검토',
-      '3시간 이내 검토 완료',
-      '심층 리스크 분석',
-      '개선 제안서 제공',
-      '전문가 상담 3회',
-      '긴급 검토 가능',
-      '계약 협상 지원',
-    ],
-    highlight: false,
-  },
-];
-
 export default function PaymentPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -160,29 +102,37 @@ export default function PaymentPage() {
   const handlePayment = async () => {
     if (!session?.user) return;
 
+    console.log('Payment button clicked')
     setIsLoading(true);
     setError(null);
 
     try {
-      // Create payment record in database
+      console.log('Creating payment record with data:', { amount: quote, filesCount: uploadedFiles?.length, hasAnalysis: !!analysis })
+      
+      // Create payment record in database with the quoted amount
       const response = await fetch('/api/contracts/upload', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          planId: 'quoted',
-          planName: '계약서 분석 서비스',
           amount: quote,
           files: uploadedFiles,
+          analysis: analysis,
         }),
       });
 
+      console.log('Payment API response status:', response.status)
+
       if (!response.ok) {
-        throw new Error('Failed to create payment record');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Payment API error:', errorData)
+        throw new Error(errorData.error || 'Failed to create payment record');
       }
 
-      const { contractId } = await response.json();
+      const responseData = await response.json();
+      console.log('Payment API success:', responseData)
+      const { contractId } = responseData;
 
       // Initialize Iamport payment
       if (window.IMP) {
@@ -202,10 +152,36 @@ export default function PaymentPage() {
           },
         };
 
-        window.IMP.request_pay(paymentData, (response) => {
+        window.IMP.request_pay(paymentData, async (response) => {
           if (response.success) {
-            // Payment successful
-            router.push(`/payment/success?contractId=${contractId}`);
+            // Payment successful - verify with our backend
+            try {
+              const verifyResponse = await fetch('/api/verify-payment', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  impUid: response.imp_uid,
+                  merchantUid: response.merchant_uid,
+                  userId: session.user.id,
+                  amount: quote,
+                }),
+              });
+
+              if (verifyResponse.ok) {
+                // Payment verified successfully
+                router.push(`/payment/success?contractId=${contractId}`);
+              } else {
+                const errorData = await verifyResponse.json();
+                setError(errorData.error || '결제 검증에 실패했습니다.');
+                setIsLoading(false);
+              }
+            } catch (verifyError) {
+              console.error('Payment verification error:', verifyError);
+              setError('결제 검증 중 오류가 발생했습니다.');
+              setIsLoading(false);
+            }
           } else {
             setError(response.error_msg || '결제에 실패했습니다.');
             setIsLoading(false);
@@ -306,10 +282,10 @@ export default function PaymentPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              완전한 계약서 분석을 받아보세요
+              맞춤형 계약서 분석 서비스
             </h1>
             <p className="text-lg text-gray-600">
-              선택하신 계약서 분석 서비스로 전문 변호사의 상세 분석을 받으실 수 있습니다.
+              전문 변호사가 직접 검토하는 상세한 계약서 분석을 받으실 수 있습니다.
             </p>
           </div>
         </div>
@@ -477,13 +453,18 @@ export default function PaymentPage() {
             </div>
 
             {/* Payment Button */}
-            <button
-              onClick={handlePayment}
-              disabled={isLoading}
-              className="w-full bg-indigo-600 text-white py-4 px-6 rounded-lg font-bold text-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors mb-2"
-            >
-              {isLoading ? '결제 처리 중...' : `₩${quote?.toLocaleString()} 결제하기`}
-            </button>
+            <div className="mt-6 flex flex-col items-center">
+              <button
+                onClick={handlePayment}
+                disabled={isProcessing || isLoading}
+                className="inline-flex items-center px-10 py-4 rounded-xl font-bold text-white text-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed mb-2"
+              >
+                결제하기
+              </button>
+              <div className="text-xs text-gray-400 mt-2">
+                모든 파일은 암호화되어 안전하게 처리되며, 외부에 절대 공유되지 않습니다.
+              </div>
+            </div>
 
             {/* No hidden fees microcopy */}
             <div className="text-xs text-gray-500 mt-1 flex items-center justify-center gap-1">

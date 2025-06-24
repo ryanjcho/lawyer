@@ -21,7 +21,6 @@ model User {
   accounts          Account[]
   sessions          Session[]
   payments          Payment[]
-  subscriptions     Subscription[]
   passwordResetTokens PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
   role              Role      @default(USER)
@@ -89,45 +88,14 @@ model EmailVerificationToken {
   createdAt DateTime @default(now())
 }
 
-model Plan {
-  id          String         @id @default(cuid())
-  name        String
-  type        PlanType
-  price       Int
-  features    String[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  payments    Payment[]
-  subscriptions Subscription[]
-
-  @@unique([name, type])
-}
-
 model Payment {
   id        String   @id @default(cuid())
   userId    String
-  planId    String
   amount    Int
   status    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
-  plan      Plan     @relation(fields: [planId], references: [id])
-}
-
-model Subscription {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  planId    String
-  status    SubscriptionStatus
-  startDate DateTime @default(now())
-  endDate   DateTime?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan      Plan     @relation(fields: [planId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, planId])
 }
 
 model Contract {

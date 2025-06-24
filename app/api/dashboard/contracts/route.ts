@@ -36,14 +36,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Not found' }, { status: 404 });
       }
       const analysisResult = contract.analysisResult ? contract.analysisResult as any : {};
-      const planName = analysisResult.planName || 'Unknown';
-      const planId = analysisResult.planId || 'unknown';
-      let planType = 'BASIC';
-      if (planId.includes('professional')) {
-        planType = 'PROFESSIONAL';
-      } else if (planId.includes('enterprise')) {
-        planType = 'ENTERPRISE';
-      }
       const amount = analysisResult.amount || 300000;
       const mockAnalysisResult = {
         riskScore: contract.riskLevel === 'LOW' ? 25 : contract.riskLevel === 'MEDIUM' ? 65 : 85,
@@ -53,9 +45,9 @@ export async function GET(request: NextRequest) {
       };
       const formatted = {
         id: contract.id,
-        title: contract.fileName || `${planName} 계약서 검토`,
+        title: contract.fileName || '계약서 분석',
         status: contract.status.toUpperCase(),
-        planType: planType,
+        serviceType: 'CONTRACT_ANALYSIS',
         amount: amount,
         createdAt: contract.uploadedAt.toISOString(),
         updatedAt: contract.updatedAt.toISOString(),
@@ -86,19 +78,9 @@ export async function GET(request: NextRequest) {
     })
 
     const formattedContracts = contracts.map(contract => {
-      // Extract plan information from analysisResult
+      // Extract information from analysisResult
       const analysisResult = contract.analysisResult ? contract.analysisResult as any : {}
-      const planName = analysisResult.planName || 'Unknown'
-      const planId = analysisResult.planId || 'unknown'
       
-      // Determine plan type from planId
-      let planType = 'BASIC'
-      if (planId.includes('professional')) {
-        planType = 'PROFESSIONAL'
-      } else if (planId.includes('enterprise')) {
-        planType = 'ENTERPRISE'
-      }
-
       // Get amount from analysisResult or use default
       const amount = analysisResult.amount || 300000
 
@@ -112,9 +94,9 @@ export async function GET(request: NextRequest) {
 
       return {
         id: contract.id,
-        title: contract.fileName || `${planName} 계약서 검토`,
+        title: contract.fileName || '계약서 분석',
         status: contract.status.toUpperCase(),
-        planType: planType,
+        serviceType: 'CONTRACT_ANALYSIS',
         amount: amount,
         createdAt: contract.uploadedAt.toISOString(),
         updatedAt: contract.updatedAt.toISOString(),

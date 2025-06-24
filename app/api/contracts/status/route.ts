@@ -82,6 +82,18 @@ export async function PUT(request: NextRequest) {
       }
     })
 
+    // Notify user of contract status change
+    await prisma.notification.create({
+      data: {
+        userId: updatedContract.userId,
+        type: 'info',
+        title: '계약서 상태 변경',
+        message: `계약서 상태가 '${updatedContract.status}'(으)로 변경되었습니다.`,
+        actionUrl: `/dashboard/contracts/${updatedContract.id}`,
+        actionText: '상태 확인'
+      }
+    });
+
     return NextResponse.json({
       success: true,
       contract: {

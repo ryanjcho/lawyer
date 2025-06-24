@@ -13,7 +13,7 @@ interface PaymentVerificationRequest {
   impUid: string
   merchantUid: string
   userId: string
-  planId: string
+  amount: number
 }
 
 export const dynamic = "force-dynamic";
@@ -25,11 +25,12 @@ export async function POST(request: Request) {
     const impUid = body.impUid || body.imp_uid;
     const merchantUid = body.merchantUid || body.merchant_uid;
     const userId = body.userId;
-    const planId = body.planId;
-    if (!impUid || !merchantUid || !userId || !planId) {
+    const expectedAmount = body.amount;
+    
+    if (!impUid || !merchantUid || !userId || !expectedAmount) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-    console.log(`[${new Date().toISOString()}] Payment verification attempt: userId=${userId}, planId=${planId}, impUid=${impUid}, merchantUid=${merchantUid}`);
+    console.log(`[${new Date().toISOString()}] Payment verification attempt: userId=${userId}, amount=${expectedAmount}, impUid=${impUid}, merchantUid=${merchantUid}`);
 
     // Get access token from I'mport
     const accessTokenResponse = await axios.post(
@@ -68,88 +69,90 @@ export async function POST(request: Request) {
       )
     }
 
-    // Get plan details
-    const plan = await prisma.plan.findUnique({
-      where: { id: planId },
-    })
-
-    if (!plan) {
-      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, planId=${planId} - invalid plan`);
-      return NextResponse.json(
-        { error: 'Invalid plan' },
-        { status: 400 }
-      )
-    }
-
-    if (paymentData.amount !== plan.price) {
-      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, impUid=${impUid} - amount mismatch`);
+    // Verify payment amount matches expected amount
+    if (paymentData.amount !== expectedAmount) {
+      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, impUid=${impUid} - amount mismatch (expected: ${expectedAmount}, actual: ${paymentData.amount})`);
       return NextResponse.json(
         { error: 'Payment amount mismatch' },
         { status: 400 }
       )
     }
 
-    // Create payment record and update subscription
+    // Find the pending payment record for this user and amount
+    const pendingPayment = await prisma.payment.findFirst({
+      where: {
+        userId,
+        amount: expectedAmount,
+        status: 'PENDING'
+      }
+    })
+
+    if (!pendingPayment) {
+      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, amount=${expectedAmount} - no pending payment found`);
+      return NextResponse.json(
+        { error: 'No pending payment found' },
+        { status: 400 }
+      )
+    }
+
+    // Update payment status to completed
     const result = await prisma.$transaction(async (tx: any) => {
-      // Create payment record
-      const payment = await tx.payment.create({
+      // Update payment record
+      const payment = await tx.payment.update({
+        where: { id: pendingPayment.id },
         data: {
-          userId,
-          planId,
-          amount: paymentData.amount,
           status: 'completed',
         },
       })
 
-      // Calculate subscription dates
-      const startDate = new Date()
-      const endDate = new Date()
-      if (plan.type === 'BASIC') {
-        endDate.setMonth(endDate.getMonth() + 1)
-      } else if (plan.type === 'PROFESSIONAL') {
-        endDate.setFullYear(endDate.getFullYear() + 1)
-      } else if (plan.type === 'ENTERPRISE') {
-        endDate.setFullYear(endDate.getFullYear() + 2)
-      }
-
-      // Update or create subscription
-      const subscription = await tx.subscription.upsert({
+      // Update contract status to completed
+      const contract = await tx.contract.findFirst({
         where: {
-          userId_planId: {
-            userId,
-            planId,
-          },
-        },
-        create: {
           userId,
-          planId,
-          status: 'ACTIVE',
-          startDate,
-          endDate,
-        },
-        update: {
-          status: 'ACTIVE',
-          startDate,
-          endDate,
-        },
+          status: 'UPLOADED'
+        }
       })
 
-      console.log(`[${new Date().toISOString()}] Payment verification success: userId=${userId}, planId=${planId}, impUid=${impUid}`);
-      return { payment, subscription }
+      if (contract) {
+        await tx.contract.update({
+          where: { id: contract.id },
+          data: {
+            status: 'COMPLETED',
+            completedAt: new Date()
+          }
+        })
+      }
+
+      console.log(`[${new Date().toISOString()}] Payment verification success: userId=${userId}, amount=${expectedAmount}, impUid=${impUid}`);
+      return { payment, contract }
     })
+
+    // Notify user of payment success and link to contract analysis
+    if (result.contract) {
+      await prisma.notification.create({
+        data: {
+          userId: userId,
+          type: 'success',
+          title: '결제가 완료되었습니다',
+          message: '계약서 분석 결과를 확인해보세요.',
+          actionUrl: `/dashboard/contracts/${result.contract.id}`,
+          actionText: '분석 결과 보기'
+        }
+      });
+    }
 
     return NextResponse.json({
       success: true,
       payment: result.payment,
-      subscription: result.subscription,
+      contract: result.contract,
     })
   } catch (error) {
     try {
       const body = await request.json();
       const userId = body?.userId || 'unknown';
-      const planId = body?.planId || 'unknown';
+      const amount = body?.amount || 'unknown';
       const impUid = body?.impUid || 'unknown';
-      console.log(`[${new Date().toISOString()}] Payment verification error: userId=${userId}, planId=${planId}, impUid=${impUid} - ${error}`);
+      console.log(`[${new Date().toISOString()}] Payment verification error: userId=${userId}, amount=${amount}, impUid=${impUid} - ${error}`);
     } catch {}
     console.error('Payment verification error:', error)
     handleDatabaseError(error)

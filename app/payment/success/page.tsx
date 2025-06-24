@@ -27,22 +27,25 @@ export default function PaymentSuccessPage() {
     }
 
     // Load contract details from sessionStorage
-    const storedPlan = sessionStorage.getItem('selectedPlan');
+    const storedAnalysis = sessionStorage.getItem('analysis');
     const storedFiles = sessionStorage.getItem('uploadedFiles');
+    const storedQuote = sessionStorage.getItem('quote');
 
-    if (storedPlan && storedFiles) {
+    if (storedAnalysis && storedFiles && storedQuote) {
       try {
-        const plan = JSON.parse(storedPlan);
+        const analysis = JSON.parse(storedAnalysis);
         const files = JSON.parse(storedFiles);
-        setContractDetails({ plan, files, contractId });
+        const quote = Number(storedQuote);
+        setContractDetails({ analysis, files, contractId, quote });
       } catch (err) {
         console.error('Error parsing stored data:', err);
       }
     }
 
     // Clear sessionStorage after successful payment
-    sessionStorage.removeItem('selectedPlan');
+    sessionStorage.removeItem('analysis');
     sessionStorage.removeItem('uploadedFiles');
+    sessionStorage.removeItem('quote');
     sessionStorage.removeItem('analysisComplete');
   }, [router, session, status, contractId]);
 
@@ -103,7 +106,7 @@ export default function PaymentSuccessPage() {
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">결제가 완료되었습니다!</h1>
           <p className="text-xl text-gray-600 mb-2">
-            {contractDetails.plan.name} 요금제로 계약서 검토가 시작됩니다.
+            맞춤형 계약서 분석 서비스가 시작됩니다.
           </p>
           <p className="text-gray-500">
             계약서 번호: {contractDetails.contractId}
@@ -129,10 +132,7 @@ export default function PaymentSuccessPage() {
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">상세 분석 진행</h3>
               <p className="text-sm text-gray-600">
-                {contractDetails.plan.name === 'Basic' && '24시간 이내'}
-                {contractDetails.plan.name === 'Professional' && '12시간 이내'}
-                {contractDetails.plan.name === 'Enterprise' && '3시간 이내'}
-                에 상세 분석이 완료됩니다.
+                평균 12시간 이내에 상세 분석이 완료됩니다.
               </p>
             </div>
             <div className="text-center">
@@ -152,22 +152,28 @@ export default function PaymentSuccessPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">주문 요약</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">선택된 요금제</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">선택된 서비스</h3>
               <div className="border border-gray-200 rounded-lg p-4">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h4 className="font-semibold text-gray-900">{contractDetails.plan.name}</h4>
-                    <p className="text-sm text-gray-600">계약서 전문 검토 서비스</p>
+                    <h4 className="font-semibold text-gray-900">맞춤형 계약서 분석</h4>
+                    <p className="text-sm text-gray-600">전문 변호사 직접 검토 서비스</p>
                   </div>
-                  <span className="text-lg font-bold text-indigo-600">{contractDetails.plan.priceDisplay}</span>
+                  <span className="text-lg font-bold text-indigo-600">₩{contractDetails.quote?.toLocaleString()}</span>
                 </div>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  {contractDetails.plan.features.slice(0, 3).map((feature: string, index: number) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <CheckCircleIcon className="w-4 h-4 text-green-500" />
-                      {feature}
-                    </li>
-                  ))}
+                  <li className="flex items-center gap-2">
+                    <CheckCircleIcon className="w-4 h-4 text-green-500" />
+                    상세 리스크 분석 리포트
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircleIcon className="w-4 h-4 text-green-500" />
+                    변호사 1:1 Q&A 및 상담
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircleIcon className="w-4 h-4 text-green-500" />
+                    계약서 개선 제안
+                  </li>
                 </ul>
               </div>
             </div>

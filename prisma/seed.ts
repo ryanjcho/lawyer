@@ -1,84 +1,39 @@
-import { PrismaClient, PlanType } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  // Create plans
-  const plans = [
-    {
-      name: 'Basic Plan',
-      price: 10000,
-      type: 'BASIC' as PlanType,
-      features: ['5 contracts per month', 'Basic contract review', 'Email support'],
-    },
-    {
-      name: 'Professional Plan',
-      price: 50000,
-      type: 'PROFESSIONAL' as PlanType,
-      features: [
-        '20 contracts per month',
-        'Advanced contract review',
-        'Priority support',
-        'Custom templates',
-      ],
-    },
-    {
-      name: 'Enterprise Plan',
-      price: 100000,
-      type: 'ENTERPRISE' as PlanType,
-      features: [
-        'Unlimited contracts',
-        'Premium contract review',
-        '24/7 support',
-        'Custom templates',
-        'API access',
-        'Dedicated account manager',
-      ],
-    },
-    {
-      name: 'Basic Plan (Yearly)',
-      price: 100000,
-      type: 'BASIC' as PlanType,
-      features: ['5 contracts per month', 'Basic contract review', 'Email support'],
-    },
-    {
-      name: 'Professional Plan (Yearly)',
-      price: 500000,
-      type: 'PROFESSIONAL' as PlanType,
-      features: [
-        '20 contracts per month',
-        'Advanced contract review',
-        'Priority support',
-        'Custom templates',
-      ],
-    },
-    {
-      name: 'Enterprise Plan (Yearly)',
-      price: 1000000,
-      type: 'ENTERPRISE' as PlanType,
-      features: [
-        'Unlimited contracts',
-        'Premium contract review',
-        '24/7 support',
-        'Custom templates',
-        'API access',
-        'Dedicated account manager',
-      ],
-    },
-  ]
+  // Hash passwords
+  const adminPassword = await bcrypt.hash('admin123', 10)
+  const testPassword = await bcrypt.hash('test123', 10)
 
-  for (const plan of plans) {
-    await prisma.plan.upsert({
-      where: {
-        name_type: {
-          name: plan.name,
-          type: plan.type,
-        },
-      },
-      update: plan,
-      create: plan,
-    })
-  }
+  // Seed only users or other necessary data for the quote-based model
+  // Example: create an admin user
+  await prisma.user.upsert({
+    where: { email: 'admin@lawscan.com' },
+    update: { password: adminPassword },
+    create: {
+      email: 'admin@lawscan.com',
+      name: 'Admin User',
+      password: adminPassword,
+      emailVerified: new Date(),
+      role: 'ADMIN',
+    },
+  });
+
+  // Test client user
+  await prisma.user.upsert({
+    where: { email: 'test@lawscan.com' },
+    update: { password: testPassword },
+    create: {
+      email: 'test@lawscan.com',
+      name: 'Test Client',
+      password: testPassword,
+      emailVerified: new Date(),
+      role: 'USER',
+    },
+  });
 
   console.log('Database has been seeded.')
 }

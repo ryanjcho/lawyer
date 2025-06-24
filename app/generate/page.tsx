@@ -200,6 +200,8 @@ export default function GenerateContractPage() {
   const [showPreview, setShowPreview] = useState(false)
   // Show loading screen after submit
   const [isGenerating, setIsGenerating] = useState(false)
+  // Store generated quote
+  const [quote, setQuote] = useState<number | null>(null)
 
   // Validation per step
   const validateStep = (customStep?: number, customForm?: typeof form) => {
@@ -264,6 +266,9 @@ export default function GenerateContractPage() {
     // Simulate contract generation
     setTimeout(() => {
       setIsGenerating(false)
+      // Generate a random quote between 300,000 and 500,000
+      const generatedQuote = 300000 + Math.floor(Math.random() * 200000)
+      setQuote(generatedQuote)
       setShowPreview(true)
     }, 1500)
   }
@@ -339,7 +344,13 @@ export default function GenerateContractPage() {
         </div>
         {/* Form Card or Loading or Preview */}
         {showPreview ? (
-          <ContractGenerationPreview contractData={form} />
+          quote !== null && (
+            <ContractGenerationPreview 
+              contractData={form} 
+              quote={quote} 
+              onProceedToPayment={() => { /* TODO: Implement payment flow */ }}
+            />
+          )
         ) : step < 4 ? (
           <form 
             className="bg-white rounded-xl shadow-2xl p-10 max-w-3xl mx-auto space-y-8" 
