@@ -28,7 +28,7 @@ export default function Notifications() {
       const data = await res.json()
       setNotifications(data.notifications.map((n: any) => ({
         ...n,
-        timestamp: n.createdAt
+        timestamp: n.createdAt ? new Date(n.createdAt) : new Date()
       })))
       setUnreadCount(data.notifications.filter((n: any) => !n.read).length)
     }
@@ -86,9 +86,17 @@ export default function Notifications() {
     }
   }
 
-  const formatTimeAgo = (date: Date) => {
+  const formatTimeAgo = (date: Date | string) => {
+    // Ensure we have a Date object
+    const dateObj = date instanceof Date ? date : new Date(date)
+    
+    // Check if the date is valid
+    if (isNaN(dateObj.getTime())) {
+      return '시간 정보 없음'
+    }
+    
     const now = new Date()
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
+    const diffInMinutes = Math.floor((now.getTime() - dateObj.getTime()) / (1000 * 60))
     
     if (diffInMinutes < 1) return '방금 전'
     if (diffInMinutes < 60) return `${diffInMinutes}분 전`
@@ -171,7 +179,7 @@ export default function Notifications() {
                             {notification.title}
                           </p>
                           <p className="text-xs text-gray-400">
-                            {formatTimeAgo(notification.timestamp as Date)}
+                            {formatTimeAgo(notification.timestamp ?? new Date())}
                           </p>
                         </div>
                         <p className="text-sm text-gray-600 mt-1">

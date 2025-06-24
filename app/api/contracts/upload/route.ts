@@ -13,114 +13,78 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions)
     
     if (!session?.user) {
-      console.log(`[${new Date().toISOString()}] File upload attempt: unauthorized`);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const formData = await request.formData()
-    const file = formData.get('file') as File
-    const fileName = formData.get('fileName') as string
+    // Verify user exists in database
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id }
+    })
 
-    if (!file || !fileName) {
-      console.log(`[${new Date().toISOString()}] File upload attempt: ${session.user.email} - missing file or fileName`);
-      return NextResponse.json({ error: 'File and fileName are required' }, { status: 400 })
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    // Validate file type
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
-    if (!allowedTypes.includes(file.type)) {
-      console.log(`[${new Date().toISOString()}] File upload attempt: ${session.user.email} - invalid file type: ${file.type}`);
-      return NextResponse.json({ error: 'Invalid file type. Only PDF and Word documents are allowed.' }, { status: 400 })
+    const { planId, planName, amount, files } = await request.json()
+
+    if (!planId || !planName || !amount || !files) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Validate file size (10MB limit)
-    const maxSize = 10 * 1024 * 1024 // 10MB
-    if (file.size > maxSize) {
-      console.log(`[${new Date().toISOString()}] File upload attempt: ${session.user.email} - file too large: ${file.size}`);
-      return NextResponse.json({ error: 'File size too large. Maximum size is 10MB.' }, { status: 400 })
-    }
+    // Mock analysis and quote calculation
+    const mockRiskScore = Math.floor(Math.random() * 10) + 1;
+    const mockRiskLevel = mockRiskScore >= 7 ? 'HIGH' : mockRiskScore >= 4 ? 'MEDIUM' : 'LOW';
+    const mockQuote = 250000 + mockRiskScore * 25000; // e.g., 275,000 ~ 500,000
+    const mockAnalysis = {
+      riskScore: mockRiskScore,
+      riskLevel: mockRiskLevel,
+      quote: mockQuote,
+      summary: 'This contract has been analyzed. Detailed issues and recommendations will be available after payment.'
+    };
 
-    // Convert file to buffer for virus scanning
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    // Virus scanning
-    const virusScanService = VirusScanService.getInstance();
-    const scanResult = await virusScanService.scanFile(buffer, fileName);
-    
-    if (!scanResult.isClean) {
-      console.log(`[${new Date().toISOString()}] File upload attempt: ${session.user.email} - virus detected: ${scanResult.threats.join(', ')}`);
-      return NextResponse.json({ 
-        error: 'Malware detected in file. Upload rejected.',
-        threats: scanResult.threats,
-        provider: scanResult.provider
-      }, { status: 400 })
-    }
-
-    // Upload file to S3
-    const s3Key = `${session.user.id}/${Date.now()}-${fileName}`;
-    const s3Url = await uploadToS3({
-      Bucket: envConfig.aws.s3Bucket,
-      Key: s3Key,
-      Body: buffer,
-      ContentType: file.type,
-    });
-
-    // Create contract record in database
+    // Create contract record
     const contract = await prisma.contract.create({
       data: {
         userId: session.user.id,
-        fileName: fileName,
-        fileUrl: s3Url,
+        fileName: files.map((f: any) => f.name).join(', '),
+        fileUrl: '', // Will be updated when files are actually uploaded
         status: 'UPLOADED',
-        uploadedAt: new Date()
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            email: true
-          }
-        }
-      }
-    })
-
-    // Create audit log entry
-    await prisma.auditLog.create({
-      data: {
-        userId: session.user.id,
-        action: 'UPLOAD_CONTRACT',
-        details: `Contract ${contract.id} uploaded by ${session.user.email}. Virus scan: ${scanResult.provider} - Clean: ${scanResult.isClean}`
+        analysisResult: mockAnalysis,
+        quote: mockQuote,
+        riskLevel: mockRiskLevel
       }
     });
 
-    console.log(`[${new Date().toISOString()}] File upload success: ${session.user.email} - ${fileName} (Virus scan: ${scanResult.provider})`);
+    // Create payment record
+    const payment = await prisma.payment.create({
+      data: {
+        userId: session.user.id,
+        amount: mockQuote,
+        status: 'PENDING'
+      }
+    });
+
+    // Create notification
+    await prisma.notification.create({
+      data: {
+        userId: session.user.id,
+        type: 'CONTRACT_UPLOADED',
+        title: '계약서 업로드 완료',
+        message: `견적이 산출되었습니다. 결제를 진행해 주세요.`,
+        actionUrl: `/dashboard/contracts/${contract.id}`
+      }
+    });
 
     return NextResponse.json({
       success: true,
-      contract: {
-        id: contract.id,
-        fileName: contract.fileName,
-        status: contract.status,
-        uploadedAt: contract.uploadedAt,
-        user: contract.user.name,
-        fileUrl: contract.fileUrl,
-      },
-      virusScan: {
-        isClean: scanResult.isClean,
-        provider: scanResult.provider,
-        scanDate: scanResult.scanDate
-      }
-    })
+      contractId: contract.id,
+      analysis: mockAnalysis,
+      quote: mockQuote,
+      paymentId: payment.id
+    });
+
   } catch (error) {
-    if (typeof request !== 'undefined') {
-      try {
-        const session = await getServerSession(authOptions)
-        const email = session?.user?.email || 'unknown';
-        console.log(`[${new Date().toISOString()}] File upload error: ${email} - ${error}`);
-      } catch {}
-    }
-    console.error('Error uploading contract:', error)
+    console.error('Contract upload error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 } 

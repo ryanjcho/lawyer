@@ -6,6 +6,17 @@ const nextConfig = {
   images: {
     domains: ['placehold.co'],
   },
+  webpack: (config) => {
+    // Exclude problematic OpenTelemetry packages
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      '@opentelemetry/api': false,
+      '@opentelemetry/core': false,
+      '@opentelemetry/instrumentation': false,
+    };
+    
+    return config;
+  },
   async headers() {
     return [
       {

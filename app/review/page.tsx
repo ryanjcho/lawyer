@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import AnalysisResults from '../components/AnalysisResults'
 import jsPDF from 'jspdf'
+import { GeistMono } from "geist/font/mono"
 
 interface Issue {
   id: string
@@ -48,12 +49,13 @@ function ReviewContent() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [step, setStep] = useState(0)
 
   useEffect(() => {
     const contractId = searchParams.get('id')
     
     if (contractId) {
-      // Simulate loading analysis result
+      setStep(0)
       setTimeout(() => {
         const mockResult: AnalysisResult = {
           contractId: contractId,
@@ -131,6 +133,7 @@ function ReviewContent() {
         }
         setAnalysisResult(mockResult)
         setIsLoading(false)
+        setStep(1)
       }, 2000)
     } else {
       setError('계약서 ID가 제공되지 않았습니다.')
@@ -258,6 +261,81 @@ function ReviewContent() {
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Progress Indicator - 3-stepper */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          {/* Debug: show step state */}
+          <div className="text-xs text-gray-400 mb-2">step: {step}</div>
+          {(() => {
+            // Step logic: 0 = 업로드 완료(Upload Complete), 1 = 미리보기(Preview), 2 = 결제 및 완료(Payment)
+            const steps = [
+              { label: '업로드 완료', complete: step > 0, current: step === 0 },
+              { label: '미리보기', complete: step >= 1, current: false }, // never current
+              { label: '결제 및 완료', complete: step > 2, current: step === 2 },
+            ];
+            console.log('Stepper state:', steps);
+            let progress = '0%';
+            if (step === 2) progress = '100%';
+            else if (step === 1) progress = '50%';
+            return (
+              <>
+                <div className="flex items-center justify-between">
+                  {steps.map((stepObj, idx) => {
+                    // Only one branch can be true at a time
+                    let icon, bgColor, labelColor;
+                    if (stepObj.complete) {
+                      icon = (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2l4-4" />
+                        </svg>
+                      );
+                      bgColor = 'bg-green-600';
+                      labelColor = 'text-green-600';
+                    } else if (stepObj.current) {
+                      icon = idx + 1;
+                      bgColor = 'bg-indigo-600';
+                      labelColor = 'text-indigo-700';
+                    } else {
+                      icon = idx + 1;
+                      bgColor = 'bg-indigo-300';
+                      labelColor = 'text-gray-400';
+                    }
+                    return (
+                      <div key={stepObj.label} className="flex-1 flex flex-col items-center">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${bgColor}`}>{icon}</div>
+                        <div className={`mt-2 text-xs font-semibold ${labelColor}`}>{stepObj.label}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+                {/* Progress bar below the 3-stepper */}
+                <div className="relative h-2 mt-4 w-full">
+                  <div className="absolute left-0 top-1/2 w-full h-1 bg-indigo-200 rounded" style={{ transform: 'translateY(-50%)' }} />
+                  <div
+                    className="absolute left-0 top-1/2 h-1 bg-green-200 rounded transition-all duration-500"
+                    style={{
+                      width: progress,
+                      transform: 'translateY(-50%)',
+                    }}
+                  />
+                </div>
+                {/* Simulate payment completion for demo */}
+                {step === 1 && (
+                  <div className="flex justify-end mt-2">
+                    <button
+                      className="px-4 py-1 rounded bg-indigo-100 text-indigo-700 text-xs font-semibold hover:bg-indigo-200"
+                      onClick={() => setStep(2)}
+                    >
+                      결제 완료로 이동 (테스트)
+                    </button>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       </div>
 

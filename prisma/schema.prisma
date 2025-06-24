@@ -29,6 +29,11 @@ model User {
   assignedContracts Contract[]        @relation("AssignedLawyer")
   notifications     Notification[]    @relation("UserNotifications")
   auditLogs         AuditLog[]        @relation("UserAuditLogs")
+  conversionEvents  ConversionEvent[]
+  userFunnel        UserFunnel?
+  eventProperties   EventProperty[]
+  emailSequences    EmailSequence[]
+  abTestAssignments ABTestAssignment[]
 }
 
 model Account {
@@ -163,6 +168,128 @@ model AuditLog {
   createdAt DateTime @default(now())
 }
 
+// Conversion tracking models
+model ConversionEvent {
+  id          String   @id @default(cuid())
+  event       String
+  properties  Json?
+  timestamp   DateTime @default(now())
+  userId      String?
+  userEmail   String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userAgent   String?
+  ipAddress   String?
+  referrer    String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  createdAt   DateTime @default(now())
+}
+
+model UserFunnel {
+  id                    String    @id @default(cuid())
+  userId                String    @unique
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  funnelStage           FunnelStage @default(VISITED)
+  contractUploadedAt    DateTime?
+  previewViewedAt       DateTime?
+  paymentPageVisitedAt  DateTime?
+  paymentInitiatedAt    DateTime?
+  paymentCompletedAt    DateTime?
+  isConverted           Boolean   @default(false)
+  lastEmailOpenedAt     DateTime?
+  lastEmailClickedAt    DateTime?
+  emailOpenCount        Int       @default(0)
+  emailClickCount       Int       @default(0)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model EventProperty {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  event       String
+  properties  Json
+  timestamp   DateTime @default(now())
+}
+
+// Email sequence models
+model EmailSequence {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sequenceId  String   // e.g., 'contract_upload_sequence'
+  status      EmailSequenceStatus @default(ACTIVE)
+  currentStep Int      @default(0)
+  totalSteps  Int
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  emails      EmailSequenceEmail[]
+}
+
+model EmailSequenceEmail {
+  id              String   @id @default(cuid())
+  sequenceId      String
+  sequence        EmailSequence @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+  templateName    String   // e.g., 'welcome', 'urgency'
+  scheduledAt     DateTime
+  sentAt          DateTime?
+  openedAt        DateTime?
+  clickedAt       DateTime?
+  status          EmailStatus @default(SCHEDULED)
+  subject         String?
+  content         String?
+  createdAt       DateTime @default(now())
+}
+
+// A/B testing models
+model ABTest {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  status      ABTestStatus @default(ACTIVE)
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  variants    ABTestVariant[]
+  assignments ABTestAssignment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ABTestVariant {
+  id        String   @id @default(cuid())
+  testId    String
+  test      ABTest   @relation(fields: [testId], references: [id], onDelete: Cascade)
+  name      String
+  weight    Float    // Percentage (0-100)
+  isControl Boolean  @default(false)
+  assignments ABTestAssignment[]
+  createdAt DateTime @default(now())
+}
+
+model ABTestAssignment {
+  id        String   @id @default(cuid())
+  testId    String
+  test      ABTest   @relation(fields: [testId], references: [id], onDelete: Cascade)
+  variantId String
+  variant   ABTestVariant @relation(fields: [variantId], references: [id])
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userEmail String?
+  assignedAt DateTime @default(now())
+  conversions ABTestConversion[]
+}
+
+model ABTestConversion {
+  id          String   @id @default(cuid())
+  assignmentId String
+  assignment   ABTestAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  conversionType String // e.g., 'click', 'purchase', 'signup'
+  amount      Float?
+  createdAt   DateTime @default(now())
+}
+
 enum Role {
   USER
   ADMIN
@@ -193,4 +320,35 @@ enum RiskLevel {
   MEDIUM
   HIGH
   CRITICAL
+}
+
+enum FunnelStage {
+  VISITED
+  UPLOADED
+  PREVIEW_VIEWED
+  PAYMENT_PAGE
+  PAYMENT_INITIATED
+  PAYMENT_COMPLETED
+}
+
+enum EmailSequenceStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum EmailStatus {
+  SCHEDULED
+  SENT
+  OPENED
+  CLICKED
+  FAILED
+}
+
+enum ABTestStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
 } 

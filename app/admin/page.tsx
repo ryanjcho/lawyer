@@ -138,10 +138,10 @@ export default function AdminDashboard() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: profile.name,
-          company: profile.company,
-          phone: profile.phone,
-          image: profile.image
+          name: profile?.name || '',
+          company: profile?.company || '',
+          phone: profile?.phone || '',
+          image: profile?.image || ''
         })
       })
       if (!res.ok) throw new Error('프로필 업데이트에 실패했습니다.')
@@ -606,7 +606,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     name="name"
-                    value={profile.name || ''}
+                    value={profile?.name || ''}
                     onChange={handleProfileChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                     required
@@ -617,7 +617,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     name="company"
-                    value={profile.company || ''}
+                    value={profile?.company || ''}
                     onChange={handleProfileChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                   />
@@ -627,7 +627,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     name="phone"
-                    value={profile.phone || ''}
+                    value={profile?.phone || ''}
                     onChange={handleProfileChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                   />
@@ -637,7 +637,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     name="image"
-                    value={profile.image || ''}
+                    value={profile?.image || ''}
                     onChange={handleProfileChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                   />

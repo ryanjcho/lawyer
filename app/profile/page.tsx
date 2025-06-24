@@ -78,7 +78,7 @@ export default function ProfilePage() {
                 type="text"
                 id="name"
                 name="name"
-                value={profile.name}
+                value={profile?.name || ''}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                 required
@@ -90,7 +90,7 @@ export default function ProfilePage() {
                 type="text"
                 id="company"
                 name="company"
-                value={profile.company}
+                value={profile?.company || ''}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />
@@ -101,7 +101,7 @@ export default function ProfilePage() {
                 type="text"
                 id="phone"
                 name="phone"
-                value={profile.phone}
+                value={profile?.phone || ''}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />
@@ -112,7 +112,7 @@ export default function ProfilePage() {
                 type="text"
                 id="image"
                 name="image"
-                value={profile.image}
+                value={profile?.image || ''}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />

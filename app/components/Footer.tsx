@@ -16,8 +16,9 @@ export function Footer() {
               <span className="text-2xl font-bold text-indigo-400">LawScan</span>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              강남 최고급 로펌의 전문성과 최첨단 AI 기술을 결합한<br/>
-              한국 최초의 독자 개발 법률 AI 플랫폼입니다.
+              계약서 검토부터 분쟁 예방까지,<br/>
+              실제 변호사가 직접 제공하는<br/>
+              온라인 법률 서비스입니다.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-indigo-400 transition-colors">
@@ -40,6 +41,16 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-6 text-indigo-300">서비스</h3>
             <ul className="space-y-3">
               <li>
+                <Link href="/upload" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  계약서 업로드
+                </Link>
+              </li>
+              <li>
+                <Link href="/generate" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  계약서 초안 생성
+                </Link>
+              </li>
+              <li>
                 <Link href="/services" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
                   서비스 소개
                 </Link>
@@ -51,22 +62,12 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/pricing" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  요금제
-                </Link>
-              </li>
-              <li>
-                <Link href="/trial" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  무료 체험
+                  요금 안내
                 </Link>
               </li>
               <li>
                 <Link href="/dashboard" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
                   내 대시보드
-                </Link>
-              </li>
-              <li>
-                <Link href="/notifications" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  알림 (예정)
                 </Link>
               </li>
               {isAdmin && (
@@ -105,6 +106,11 @@ export function Footer() {
                   문의하기
                 </Link>
               </li>
+              <li>
+                <Link href="/resources" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  법률 자료실
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -132,6 +138,11 @@ export function Footer() {
                   이메일 문의
                 </a>
               </li>
+              <li>
+                <Link href="/review" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  서비스 후기
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -139,9 +150,9 @@ export function Footer() {
         {/* Newsletter Signup */}
         <div className="border-t border-gray-700 pt-8 mb-8">
           <div className="max-w-md">
-            <h3 className="text-lg font-semibold mb-4 text-indigo-300">뉴스레터 구독</h3>
+            <h3 className="text-lg font-semibold mb-4 text-indigo-300">법률 트렌드 구독</h3>
             <p className="text-gray-300 mb-4">
-              최신 법률 트렌드와 AI 기술 소식을 받아보세요.
+              최신 계약법 동향과 법률 리스크 예방 팁을 받아보세요.
             </p>
             <div className="flex">
               <input
@@ -169,6 +180,8 @@ export function Footer() {
               </Link>
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-400">
+              <span>대한변협 등록 법률사무소</span>
+              <span>•</span>
               <span>Made with ❤️ in Korea</span>
             </div>
           </div>
