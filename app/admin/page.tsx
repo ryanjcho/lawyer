@@ -21,7 +21,6 @@ interface User {
   name: string
   email: string
   company: string
-  subscription: string
   status: 'active' | 'inactive' | 'suspended'
   lastLogin: string
   contractsAnalyzed: number
@@ -32,7 +31,7 @@ interface Contract {
   fileName: string
   user: string
   status: 'processing' | 'completed' | 'failed' | 'uploaded' | 'review'
-  riskLevel: 'low' | 'medium' | 'high' | 'critical' | 'unknown'
+  riskLevel: 'low' | 'medium' | 'high' | 'critical' | '알 수 없음'
   uploadedAt: string
   completedAt?: string
   assignedLawyer?: string
@@ -450,7 +449,6 @@ export default function AdminDashboard() {
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">사용자</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">회사</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">구독</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">상태</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">마지막 로그인</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">계약 수</th>
@@ -467,7 +465,6 @@ export default function AdminDashboard() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.company}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.subscription}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(user.status)}`}>
                           {getStatusText(user.status)}

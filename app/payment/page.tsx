@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Script from 'next/script';
 import { useSearchParams } from 'next/navigation';
-import TrustIndicators, { GuaranteeBanner } from '../components/TrustIndicators';
-import { CheckCircleIcon, ExclamationTriangleIcon, UserIcon, LockClosedIcon, ArrowRightCircleIcon, ChatBubbleLeftRightIcon, DocumentTextIcon, UserGroupIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, ExclamationTriangleIcon, UserIcon, LockClosedIcon, DocumentTextIcon, UserGroupIcon, QuestionMarkCircleIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 // Import types
 declare global {
@@ -79,19 +79,37 @@ export default function PaymentPage() {
       return;
     }
     if (typeof window !== 'undefined') {
+      // Check for uploaded contract data
       const storedFiles = sessionStorage.getItem('uploadedFiles');
       const storedAnalysis = sessionStorage.getItem('analysis');
       const storedQuote = sessionStorage.getItem('quote');
       const analysisComplete = sessionStorage.getItem('analysisComplete');
-      if (!storedFiles || !storedAnalysis || !storedQuote || !analysisComplete) {
+      
+      // Check for generated contract data
+      const generatedContract = sessionStorage.getItem('generatedContract');
+      const generatedQuote = sessionStorage.getItem('generatedQuote');
+      const contractType = sessionStorage.getItem('contractType');
+      
+      if ((!storedFiles || !storedAnalysis || !storedQuote || !analysisComplete) && 
+          (!generatedContract || !generatedQuote)) {
         router.push('/upload');
         return;
       }
+      
       try {
-        const files = JSON.parse(storedFiles);
-        setUploadedFiles(files);
-        setAnalysis(JSON.parse(storedAnalysis));
-        setQuote(Number(storedQuote));
+        if (contractType === 'GENERATED') {
+          // Handle generated contract
+          const contractData = JSON.parse(generatedContract);
+          setUploadedFiles([{ name: `${contractData.contractType} 계약서 초안`, size: 0, type: 'generated' }]);
+          setAnalysis({ contractType: contractData.contractType, isGenerated: true });
+          setQuote(Number(generatedQuote));
+        } else {
+          // Handle uploaded contract
+          const files = JSON.parse(storedFiles);
+          setUploadedFiles(files);
+          setAnalysis(JSON.parse(storedAnalysis));
+          setQuote(Number(storedQuote));
+        }
       } catch (err) {
         console.error('Error parsing stored data:', err);
         router.push('/upload');
@@ -144,7 +162,7 @@ export default function PaymentPage() {
           merchant_uid: `contract_${contractId}_${Date.now()}`,
           name: '계약서 분석 서비스',
           amount: quote,
-          buyer_name: session.user.name || 'Unknown',
+          buyer_name: session.user.name || '알 수 없음',
           buyer_email: session.user.email || '',
           buyer_tel: '',
           custom_data: {
@@ -427,9 +445,31 @@ export default function PaymentPage() {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">결제 정보</h2>
             
-            {/* Trust Indicators */}
-            <TrustIndicators />
-            
+            {/* Security and Trust Indicators */}
+            <div className="mb-6 space-y-4">
+              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                <ShieldCheckIcon className="w-6 h-6 text-green-600" />
+                <div>
+                  <h3 className="font-semibold text-green-700">안전한 결제 보장</h3>
+                  <p className="text-sm text-green-600">SSL 암호화 및 안전한 결제 시스템 사용</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                <LockClosedIcon className="w-6 h-6 text-blue-600" />
+                <div>
+                  <h3 className="font-semibold text-blue-700">개인정보 보호</h3>
+                  <p className="text-sm text-blue-600">모든 데이터는 암호화되어 안전하게 보관</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
+                <CheckCircleIcon className="w-6 h-6 text-purple-600" />
+                <div>
+                  <h3 className="font-semibold text-purple-700">7일 환불 보장</h3>
+                  <p className="text-sm text-purple-600">불만족 시 전액 환불 가능</p>
+                </div>
+              </div>
+            </div>
+
             {/* Testimonial/review block */}
             <div className="bg-gray-50 rounded-lg p-4 mb-6 text-center shadow-sm">
               <div className="flex justify-center mb-2">
@@ -443,7 +483,13 @@ export default function PaymentPage() {
             {/* Attorney Profile */}
             <div className="bg-white rounded-lg shadow-lg p-6 mb-8 flex flex-col items-center">
               <div className="w-20 h-20 rounded-full bg-indigo-100 flex items-center justify-center mb-3 overflow-hidden">
-                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Attorney" className="w-20 h-20 object-cover rounded-full" />
+                <Image
+                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  alt="Attorney"
+                  width={80}
+                  height={80}
+                  className="w-20 h-20 object-cover rounded-full"
+                />
               </div>
               <div className="font-bold text-lg text-gray-900 mb-1">김지훈 변호사</div>
               <div className="text-sm text-gray-600 mb-2">Senior Attorney, Contract Law Specialist</div>
@@ -469,23 +515,6 @@ export default function PaymentPage() {
             {/* No hidden fees microcopy */}
             <div className="text-xs text-gray-500 mt-1 flex items-center justify-center gap-1">
               <CheckCircleIcon className="w-4 h-4 text-green-400" /> 숨겨진 비용 없이, 1회 결제로 모든 분석 결과 제공
-            </div>
-
-            {/* Guarantee Banner */}
-            <GuaranteeBanner />
-
-            {/* Security Notice */}
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg flex items-center gap-2">
-              <LockClosedIcon className="w-5 h-5 text-indigo-400" />
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-1">보안 안내</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• 모든 결제 정보는 SSL 암호화로 보호됩니다</li>
-                  <li>• 결제 정보는 안전하게 처리되며 저장되지 않습니다</li>
-                  <li>• 결제 후 즉시 계약서 분석이 시작됩니다</li>
-                  <li>• 모든 정보는 변호사 윤리 기준에 따라 안전하게 보호됩니다</li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>

@@ -28,7 +28,7 @@ export default function PrivacyPage() {
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. 개인정보의 처리 목적</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                LawScan(이하 "회사")은 다음의 목적을 위하여 개인정보를 처리하고 있으며, 
+                LawScan(이하 &quot;회사&quot;)은 다음의 목적을 위하여 개인정보를 처리하고 있으며, 
                 다음의 목적 이외의 용도로는 이용하지 않습니다.
               </p>
               <ul className="list-disc pl-6 space-y-2 text-gray-600">

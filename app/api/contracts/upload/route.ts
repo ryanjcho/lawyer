@@ -5,8 +5,27 @@ import { prisma } from '@/lib/prisma'
 import { uploadToS3 } from '@/lib/s3'
 import { VirusScanService } from '@/lib/virusScan'
 import { envConfig } from '@/config/env.config'
+import { RiskLevel } from '@prisma/client'
 
 export const dynamic = "force-dynamic";
+
+// Map riskLevel to enum value
+function toRiskLevelEnum(val: any): RiskLevel {
+  if (!val) return RiskLevel.MEDIUM;
+  if (typeof val !== 'string') return RiskLevel.MEDIUM;
+  const map: Record<string, RiskLevel> = {
+    '낮음': RiskLevel.LOW,
+    'low': RiskLevel.LOW,
+    '보통': RiskLevel.MEDIUM,
+    'medium': RiskLevel.MEDIUM,
+    '중간': RiskLevel.MEDIUM,
+    '높음': RiskLevel.HIGH,
+    'high': RiskLevel.HIGH,
+    '위험': RiskLevel.CRITICAL,
+    'critical': RiskLevel.CRITICAL,
+  };
+  return map[val.toLowerCase()] || RiskLevel.MEDIUM;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,7 +68,7 @@ export async function POST(request: NextRequest) {
         fileUrl: '', // Will be updated when files are actually uploaded
         status: 'UPLOADED',
         analysisResult: analysis || {},
-        riskLevel: analysis?.riskLevel || 'MEDIUM'
+        riskLevel: toRiskLevelEnum(analysis?.riskLevel)
       }
     });
     console.log('Contract created:', contract.id)

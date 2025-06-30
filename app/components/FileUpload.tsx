@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
@@ -33,7 +34,7 @@ export default function FileUpload({
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File) => {
     // Check file size
     if (file.size > maxFileSize) {
       return `파일 크기가 너무 큽니다. 최대 ${formatFileSize(maxFileSize)}까지 업로드 가능합니다.`
@@ -46,43 +47,14 @@ export default function FileUpload({
     }
 
     return null
-  }
+  }, [maxFileSize, acceptedTypes])
 
-  const formatFileSize = (bytes: number) => {
+  const formatFileSize = useCallback((bytes: number) => {
     if (bytes === 0) return '0 Bytes'
     const k = 1024
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
-
-  const handleDrag = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true)
-    } else if (e.type === "dragleave") {
-      setDragActive(false)
-    }
-  }, [])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setDragActive(false)
-    setError(null)
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFiles(e.dataTransfer.files)
-    }
-  }, [])
-
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setError(null)
-    if (e.target.files && e.target.files[0]) {
-      console.log('File selected:', e.target.files[0])
-      handleFiles(e.target.files)
-    }
   }, [])
 
   const handleFiles = useCallback((files: FileList) => {
@@ -150,7 +122,36 @@ export default function FileUpload({
         }
       }, 3000)
     }
-  }, [uploadedFiles, maxFiles, onFilesUploaded])
+  }, [uploadedFiles, maxFiles, onFilesUploaded, validateFile])
+
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true)
+    } else if (e.type === "dragleave") {
+      setDragActive(false)
+    }
+  }, [])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragActive(false)
+    setError(null)
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFiles(e.dataTransfer.files)
+    }
+  }, [handleFiles])
+
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null)
+    if (e.target.files && e.target.files[0]) {
+      console.log('File selected:', e.target.files[0])
+      handleFiles(e.target.files)
+    }
+  }, [handleFiles])
 
   const removeFile = useCallback((fileId: string) => {
     setUploadedFiles(prev => prev.filter(f => f.id !== fileId))

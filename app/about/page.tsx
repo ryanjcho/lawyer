@@ -15,8 +15,8 @@ export default function AboutPage() {
               <span className="block text-indigo-200">미래를 선도합니다</span>
             </h1>
             <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-4xl mx-auto">
-              강남 최고급 로펌의 전문성과 최첨단 AI 기술을 결합하여<br/>
-              <span className="font-semibold">한국 최초의 독자 개발 법률 AI 플랫폼</span>을 만들어갑니다
+              강남 최고급 로펌의 전문성과 혁신적인 법률 서비스로<br/>
+              <span className="font-semibold">한국 최초의 독자 개발 법률 플랫폼</span>을 만들어갑니다
             </p>
           </div>
         </div>
@@ -34,8 +34,8 @@ export default function AboutPage() {
                 법률 서비스의 민주화를 통해 모든 기업과 개인이 최고 수준의 법률 보호를 받을 수 있도록 하는 것입니다.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                강남 최고급 로펌의 전문성을 AI 기술로 확장하여, 복잡하고 비용이 많이 드는 법률 서비스를 
-                누구나 쉽게 접근할 수 있는 형태로 제공합니다. 우리는 기술과 인간의 조화를 통해 
+                강남 최고급 로펌의 전문성을 혁신적인 서비스로 확장하여, 복잡하고 비용이 많이 드는 법률 서비스를 
+                누구나 쉽게 접근할 수 있는 형태로 제공합니다. 우리는 전문성과 인간 중심의 접근을 통해 
                 법률 리스크를 사전에 방지하고, 고객의 비즈니스 성공을 보장하는 완벽한 파트너가 되겠습니다.
               </p>
             </div>
@@ -89,7 +89,7 @@ export default function AboutPage() {
               LawScan의 이야기
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              강남 최고급 로펌의 변호사들이 모여 만든 한국 최초의 독자 개발 법률 AI 플랫폼
+              강남 최고급 로펌의 변호사들이 모여 만든 한국 최초의 독자 개발 법률 플랫폼
             </p>
           </div>
 
@@ -110,7 +110,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">개발</h3>
               <p className="text-gray-600">
-                수천 건의 검증된 계약서와 판례를 기반으로 독자 AI 시스템 개발을 시작했습니다.
+                수천 건의 검증된 계약서와 판례를 기반으로 혁신적인 법률 서비스 개발을 시작했습니다.
               </p>
             </div>
 
@@ -120,7 +120,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">출시</h3>
               <p className="text-gray-600">
-                한국 최초의 독자 개발 법률 AI 플랫폼을 출시하여 500개 이상의 기업에 서비스를 제공합니다.
+                한국 최초의 독자 개발 법률 플랫폼을 출시하여 500개 이상의 기업에 서비스를 제공합니다.
               </p>
             </div>
           </div>
@@ -135,8 +135,8 @@ export default function AboutPage() {
               리더십 팀
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              강남 최고급 로펌 출신의 엘리트 변호사들과 AI 전문가들이 모여<br/>
-              법률 기술의 미래를 만들어갑니다
+              강남 최고급 로펌 출신의 엘리트 변호사들이 모여<br/>
+              법률 서비스의 미래를 만들어갑니다
             </p>
           </div>
 
@@ -190,7 +190,7 @@ export default function AboutPage() {
               <p className="text-indigo-600 font-medium mb-3">Chief Legal Officer</p>
               <p className="text-gray-600 text-sm mb-4">
                 전 대법원 판사로 20년간 법률 경험을 쌓았습니다. 강남 최고급 로펌에서 계약법 및 기업법무 전문 변호사로 12년간 활동했습니다.
-                AI 시스템의 법률 정확성을 검증하고 품질을 보장합니다.
+                법률 서비스의 정확성을 검증하고 품질을 보장합니다.
               </p>
               <div className="text-xs text-gray-500">
                 연세대학교 법학과 졸업<br/>

@@ -31,7 +31,7 @@ export default function ContractPreview({ contractData }: ContractPreviewProps) 
           Your Contract Analysis Preview
         </h2>
         <p className="text-lg text-gray-600">
-          Here's what our AI and legal experts found in your contract
+          Here&apos;s what our AI and legal experts found in your contract
         </p>
       </div>
 

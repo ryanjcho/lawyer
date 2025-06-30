@@ -32,7 +32,15 @@ model User {
   userFunnel        UserFunnel?
   eventProperties   EventProperty[]
   emailSequences    EmailSequence[]
-  abTestAssignments ABTestAssignment[]
+  
+  // Collaboration relations
+  comments          Comment[]
+  collaborationSessionsStarted CollaborationSession[] @relation("SessionStartedBy")
+  collaborationSessionParticipants CollaborationSessionParticipant[]
+  approvalWorkflowSteps ApprovalWorkflowStep[]
+  calendarEventsCreated CalendarEvent[] @relation("EventCreatedBy")
+  eventParticipants EventParticipant[]
+  integrationSettings IntegrationSettings?
 }
 
 model Account {
@@ -112,6 +120,13 @@ model Contract {
   uploadedAt       DateTime @default(now())
   completedAt      DateTime?
   updatedAt        DateTime @updatedAt
+  
+  // Collaboration relations
+  comments         Comment[]
+  calendarEvents   CalendarEvent[]
+  approvalWorkflows ApprovalWorkflow[]
+  collaborationSessions CollaborationSession[]
+  documentSyncs    DocumentSync[]
 }
 
 model Notification {
@@ -211,51 +226,153 @@ model EmailSequenceEmail {
   createdAt       DateTime @default(now())
 }
 
-// A/B testing models
-model ABTest {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  status      ABTestStatus @default(ACTIVE)
-  startDate   DateTime @default(now())
-  endDate     DateTime?
-  variants    ABTestVariant[]
-  assignments ABTestAssignment[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+// Collaboration models
+model Comment {
+  id             String   @id @default(cuid())
+  content        String
+  clauseReference String?
+  isPrivate      Boolean  @default(false)
+  contractId     String
+  contract       Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentId       String?
+  parent         Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  replies        Comment[] @relation("CommentReplies")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
-model ABTestVariant {
-  id        String   @id @default(cuid())
-  testId    String
-  test      ABTest   @relation(fields: [testId], references: [id], onDelete: Cascade)
+model CollaborationSession {
+  id           String   @id @default(cuid())
+  contractId   String
+  contract     Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  status       CollaborationSessionStatus @default(ACTIVE)
+  startedBy    String
+  startedByUser User    @relation("SessionStartedBy", fields: [startedBy], references: [id])
+  participants CollaborationSessionParticipant[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model CollaborationSessionParticipant {
+  id        String @id @default(cuid())
+  sessionId String
+  session   CollaborationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime @default(now())
+  leftAt    DateTime?
+  isActive  Boolean @default(true)
+
+  @@unique([sessionId, userId])
+}
+
+model ApprovalWorkflow {
+  id         String   @id @default(cuid())
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  name       String
+  status     ApprovalWorkflowStatus @default(IN_PROGRESS)
+  steps      ApprovalWorkflowStep[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model ApprovalWorkflowStep {
+  id        String @id @default(cuid())
+  workflowId String
+  workflow  ApprovalWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   name      String
-  weight    Float    // Percentage (0-100)
-  isControl Boolean  @default(false)
-  assignments ABTestAssignment[]
+  order     Int
+  assignedTo String
+  assignedToUser User @relation(fields: [assignedTo], references: [id])
+  status    ApprovalStepStatus @default(PENDING)
+  comments  String?
+  completedAt DateTime?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model ABTestAssignment {
-  id        String   @id @default(cuid())
-  testId    String
-  test      ABTest   @relation(fields: [testId], references: [id], onDelete: Cascade)
-  variantId String
-  variant   ABTestVariant @relation(fields: [variantId], references: [id])
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userEmail String?
-  assignedAt DateTime @default(now())
-  conversions ABTestConversion[]
+// Integration models
+model CalendarEvent {
+  id               String   @id @default(cuid())
+  title            String
+  description      String?
+  startDate        DateTime
+  endDate          DateTime
+  type             CalendarEventType @default(MEETING)
+  contractId       String
+  contract         Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  calendarProvider CalendarProvider @default(GOOGLE)
+  externalEventId  String?
+  isSynced         Boolean  @default(false)
+  createdBy        String
+  createdByUser    User     @relation("EventCreatedBy", fields: [createdBy], references: [id])
+  participants     EventParticipant[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
-model ABTestConversion {
-  id          String   @id @default(cuid())
-  assignmentId String
-  assignment   ABTestAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-  conversionType String // e.g., 'click', 'purchase', 'signup'
-  amount      Float?
-  createdAt   DateTime @default(now())
+model EventParticipant {
+  id      String @id @default(cuid())
+  eventId String
+  event   CalendarEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role    EventParticipantRole @default(ATTENDEE)
+  status  EventParticipantStatus @default(PENDING)
+
+  @@unique([eventId, userId])
+}
+
+model IntegrationSettings {
+  id        String @id @default(cuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Calendar integrations
+  googleCalendarEnabled Boolean @default(false)
+  googleCalendarToken   String?
+  outlookCalendarEnabled Boolean @default(false)
+  outlookCalendarToken   String?
+  appleCalendarEnabled Boolean @default(false)
+  
+  // Email integrations
+  gmailEnabled         Boolean @default(false)
+  gmailToken           String?
+  outlookEmailEnabled  Boolean @default(false)
+  outlookEmailToken    String?
+  customSmtpEnabled    Boolean @default(false)
+  customSmtpHost       String?
+  customSmtpPort       Int?
+  customSmtpUsername   String?
+  customSmtpPassword   String?
+  
+  // Storage integrations
+  googleDriveEnabled   Boolean @default(false)
+  googleDriveToken     String?
+  dropboxEnabled       Boolean @default(false)
+  dropboxToken         String?
+  onedriveEnabled      Boolean @default(false)
+  onedriveToken        String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DocumentSync {
+  id         String @id @default(cuid())
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  fileName   String
+  fileType   String
+  provider   StorageProvider
+  externalFileId String?
+  syncStatus SyncStatus @default(PENDING)
+  lastSync   DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 enum Role {
@@ -314,9 +431,59 @@ enum EmailStatus {
   FAILED
 }
 
-enum ABTestStatus {
-  DRAFT
+// New enums for collaboration and integration
+enum CollaborationSessionStatus {
   ACTIVE
   PAUSED
   COMPLETED
+}
+
+enum ApprovalWorkflowStatus {
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+}
+
+enum ApprovalStepStatus {
+  PENDING
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum CalendarEventType {
+  MEETING
+  DEADLINE
+  REMINDER
+}
+
+enum CalendarProvider {
+  GOOGLE
+  OUTLOOK
+  APPLE
+}
+
+enum EventParticipantRole {
+  ORGANIZER
+  ATTENDEE
+  OPTIONAL
+}
+
+enum EventParticipantStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  TENTATIVE
+}
+
+enum StorageProvider {
+  GOOGLE_DRIVE
+  DROPBOX
+  ONEDRIVE
+}
+
+enum SyncStatus {
+  PENDING
+  SYNCED
+  FAILED
 } 

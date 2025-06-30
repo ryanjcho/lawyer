@@ -229,7 +229,7 @@ export default function AnalysisResults({ result, className = '' }: AnalysisResu
               </div>
               <div className="bg-white border border-gray-200 rounded-lg p-4">
                 <h4 className="font-medium text-gray-900 mb-2">법률 검토자</h4>
-                <p className="text-lg text-gray-700">{result.legalReviewer || 'AI 시스템'}</p>
+                <p className="text-lg text-gray-700">{result.legalReviewer || '전문가'}</p>
               </div>
             </div>
 
@@ -442,7 +442,7 @@ export default function AnalysisResults({ result, className = '' }: AnalysisResu
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-gray-500">법률 검토자</dt>
-                    <dd className="text-sm text-gray-900">{result.legalReviewer || 'AI 시스템'}</dd>
+                    <dd className="text-sm text-gray-900">{result.legalReviewer || '전문가'}</dd>
                   </div>
                   {result.reviewDate && (
                     <div>

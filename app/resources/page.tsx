@@ -15,7 +15,7 @@ export default function Resources() {
               <span className="block text-indigo-200">센터</span>
             </h1>
             <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-4xl mx-auto">
-              AI 계약 검토와 관련된 최신 정보, 가이드,<br/>
+              계약 검토와 관련된 최신 정보, 가이드,<br/>
               <span className="font-semibold">전문 자료를 확인하세요</span>
             </p>
           </div>
@@ -30,7 +30,7 @@ export default function Resources() {
               추천 아티클
             </h2>
             <p className="text-xl text-gray-600">
-              AI 계약 검토와 관련된 최신 트렌드와 인사이트
+              계약 검토와 관련된 최신 트렌드와 인사이트
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -45,10 +45,10 @@ export default function Resources() {
               <div className="p-6">
                 <div className="text-sm text-indigo-600 mb-2 font-medium">2024.03.15</div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  AI 기반 계약 검토의 혁신
+                  계약 검토 혁신의 실제 사례
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  강남 최고급 로펌이 개발한 AI 기술이 계약 검토 프로세스를 어떻게 혁신하고 있는지 알아봅니다.
+                  강남 최고급 로펌이 제공하는 혁신적인 계약 검토 프로세스를 알아봅니다.
                 </p>
                 <Link href="#" className="text-indigo-600 hover:text-indigo-700 font-medium">
                   자세히 보기 →

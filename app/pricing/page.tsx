@@ -10,7 +10,7 @@ export default function Pricing() {
       name: '김민수',
       title: '법무팀장',
       company: '삼성전자',
-      content: 'LegalCare의 계약서 분석 서비스로 계약 검토 시간을 70% 단축했습니다. 특히 글로벌 계약서에서 놓치기 쉬운 조항들을 정확히 포착해주어 큰 도움이 되었습니다.',
+      content: 'OhKContract의 계약서 분석 서비스로 계약 검토 시간을 70% 단축했습니다. 특히 글로벌 계약서에서 놓치기 쉬운 조항들을 정확히 포착해주어 큰 도움이 되었습니다.',
       rating: 5,
       savings: '연간 2억원 절약'
     },
@@ -18,7 +18,7 @@ export default function Pricing() {
       name: '박지영',
       title: '법무이사',
       company: 'SK하이닉스',
-      content: '반도체 업계의 복잡한 기술 라이선스 계약을 검토할 때 LegalCare의 전문성이 빛났습니다. 리스크 분석이 매우 정확하고 실용적인 개선안을 제시해주었습니다.',
+      content: '반도체 업계의 복잡한 기술 라이선스 계약을 검토할 때 OhKContract의 전문성이 빛났습니다. 리스크 분석이 매우 정확하고 실용적인 개선안을 제시해주셨습니다.',
       rating: 5,
       savings: '계약 리스크 80% 감소'
     },
@@ -26,7 +26,7 @@ export default function Pricing() {
       name: '이준호',
       title: 'CEO',
       company: '네이버',
-      content: '스타트업에서 대기업으로 성장하면서 계약 관리가 복잡해졌는데, LegalCare의 맞춤형 분석 서비스로 체계적인 계약 관리가 가능해졌습니다. 투자 대비 효과가 매우 뛰어납니다.',
+      content: '스타트업에서 대기업으로 성장하면서 계약 관리가 복잡해졌는데, OhKContract의 맞춤형 분석 서비스로 체계적인 계약 관리가 가능해졌습니다. 투자 대비 효과가 매우 뛰어납니다.',
       rating: 5,
       savings: '법무 비용 60% 절약'
     },
@@ -34,7 +34,7 @@ export default function Pricing() {
       name: '최수진',
       title: '법무총괄',
       company: '현대자동차',
-      content: '글로벌 공급망 계약의 복잡성을 고려할 때 LegalCare의 다국어 지원과 국제법 준수 검토 기능이 매우 유용했습니다. 특히 긴급 검토 서비스가 비즈니스 진행에 큰 도움이 되었습니다.',
+      content: '글로벌 공급망 계약의 복잡성을 고려할 때 OhKContract의 다국어 지원과 국제법 준수 검토 기능이 매우 유용했습니다. 특히 긴급 검토 서비스가 비즈니스 진행에 큰 도움이 되었습니다.',
       rating: 5,
       savings: '계약 체결 시간 50% 단축'
     },
@@ -42,7 +42,7 @@ export default function Pricing() {
       name: '정현우',
       title: '법무팀장',
       company: 'LG화학',
-      content: '화학 업계의 특수한 규제 요건을 반영한 계약 검토가 필요한데, LegalCare가 업계별 맞춤 검토를 제공해주어 매우 만족스럽습니다. 특히 환경 규제 관련 조항 검토가 정확합니다.',
+      content: '화학 업계의 특수한 규제 요건을 반영한 계약 검토가 필요한데, OhKContract가 업계별 맞춤 검토를 제공해주셔서 매우 만족스럽습니다. 특히 환경 규제 관련 조항 검토가 정확합니다.',
       rating: 5,
       savings: '규제 위반 리스크 90% 감소'
     },
@@ -50,7 +50,7 @@ export default function Pricing() {
       name: '한소영',
       title: '법무팀장',
       company: '포스코',
-      content: '철강 업계의 장기 계약과 복잡한 조건들을 검토할 때 LegalCare의 전문성이 돋보였습니다. 특히 가격 조정 조항과 포스코 마켓 조항 검토가 정확했습니다.',
+      content: '철강 업계의 장기 계약과 복잡한 조건들을 검토할 때 OhKContract의 전문성이 돋보였습니다. 특히 가격 조정 조항과 포스코 마켓 조항 검토가 정확했습니다.',
       rating: 5,
       savings: '계약 분쟁 75% 감소'
     }
@@ -93,7 +93,7 @@ export default function Pricing() {
     {
       step: 1,
       title: '계약서 업로드',
-      description: '분석할 계약서를 업로드하면 AI가 자동으로 계약서 유형과 복잡도를 분석합니다.'
+      description: '분석할 계약서를 업로드하면 전문가가 계약서 유형과 복잡도를 분석합니다.'
     },
     {
       step: 2,
@@ -121,7 +121,7 @@ export default function Pricing() {
             맞춤형 계약서 분석 서비스
           </h1>
           <p className="text-xl md:text-2xl text-indigo-100 mb-8">
-            계약서의 복잡도에 따라 <span className="font-bold text-yellow-300">정확한 견적</span>을 제공하는<br/>
+            계약서의 복잡도에 따라 &quot;정확한 견적&quot;을 제공하는<br/>
             전문 변호사 맞춤 분석 서비스
           </p>
           <div className="flex flex-col md:flex-row justify-center gap-6 mt-8">
@@ -146,7 +146,7 @@ export default function Pricing() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              왜 LegalCare를 선택해야 할까요?
+              왜 OhKContract를 선택해야 할까요?
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               강남 최고 로펌 출신 변호사들이 제공하는 전문적이고 정확한 계약서 분석 서비스
@@ -289,7 +289,7 @@ export default function Pricing() {
               고객 후기
             </h2>
             <p className="text-lg text-gray-600">
-              실제 고객들이 경험한 LegalCare의 서비스
+              실제 고객들이 경험한 OhKContract의 서비스
             </p>
           </div>
           
@@ -304,7 +304,7 @@ export default function Pricing() {
                   </div>
                 </div>
                 <p className="text-gray-700 mb-4 text-sm leading-relaxed">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 <div className="border-t pt-4">
                   <div className="font-semibold text-gray-900">{testimonial.name}</div>

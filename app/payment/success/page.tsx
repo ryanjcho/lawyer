@@ -30,13 +30,27 @@ export default function PaymentSuccessPage() {
     const storedAnalysis = sessionStorage.getItem('analysis');
     const storedFiles = sessionStorage.getItem('uploadedFiles');
     const storedQuote = sessionStorage.getItem('quote');
+    const generatedContract = sessionStorage.getItem('generatedContract');
+    const generatedQuote = sessionStorage.getItem('generatedQuote');
+    const contractType = sessionStorage.getItem('contractType');
 
-    if (storedAnalysis && storedFiles && storedQuote) {
+    if ((storedAnalysis && storedFiles && storedQuote) || (generatedContract && generatedQuote)) {
       try {
-        const analysis = JSON.parse(storedAnalysis);
-        const files = JSON.parse(storedFiles);
-        const quote = Number(storedQuote);
-        setContractDetails({ analysis, files, contractId, quote });
+        if (contractType === 'GENERATED') {
+          const contractData = JSON.parse(generatedContract);
+          const quote = Number(generatedQuote);
+          setContractDetails({ 
+            analysis: { contractType: contractData.contractType, isGenerated: true }, 
+            files: [{ name: `${contractData.contractType} 계약서 초안`, size: 0, type: 'generated' }], 
+            contractId, 
+            quote 
+          });
+        } else {
+          const analysis = JSON.parse(storedAnalysis);
+          const files = JSON.parse(storedFiles);
+          const quote = Number(storedQuote);
+          setContractDetails({ analysis, files, contractId, quote });
+        }
       } catch (err) {
         console.error('Error parsing stored data:', err);
       }
@@ -47,6 +61,9 @@ export default function PaymentSuccessPage() {
     sessionStorage.removeItem('uploadedFiles');
     sessionStorage.removeItem('quote');
     sessionStorage.removeItem('analysisComplete');
+    sessionStorage.removeItem('generatedContract');
+    sessionStorage.removeItem('generatedQuote');
+    sessionStorage.removeItem('contractType');
   }, [router, session, status, contractId]);
 
   if (status === 'loading') {

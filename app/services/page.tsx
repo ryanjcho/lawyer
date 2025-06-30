@@ -27,12 +27,12 @@ const demoSteps: DemoStep[] = [
   },
   {
     id: 2,
-    title: "AI 1차 분석",
-    description: "독자 개발 AI가 계약서를 자동으로 분석하여 잠재적 리스크를 식별합니다.",
+    title: "전문가 1차 분석",
+    description: "경험 많은 법률 전문가가 계약서를 신속하게 분석하여 잠재적 리스크를 식별합니다.",
     features: [
-      "98% 이상의 정확도로 리스크 분석",
-      "계약 유형 자동 분류",
-      "핵심 조항 자동 추출",
+      "정확한 리스크 분석",
+      "계약 유형 분류",
+      "핵심 조항 추출",
       "리스크 점수 산정",
       "실시간 분석 진행 상황 표시"
     ],
@@ -41,7 +41,7 @@ const demoSteps: DemoStep[] = [
   {
     id: 3,
     title: "전문 변호사 검증",
-    description: "강남 최고급 로펌의 전문 변호사가 AI 분석 결과를 검증하고 심층 분석을 수행합니다.",
+    description: "강남 최고급 로펌의 전문 변호사가 1차 분석 결과를 검증하고 심층 분석을 수행합니다.",
     features: [
       "엘리트 변호사의 이중 검증",
       "실무적 관점의 리스크 평가",
@@ -54,7 +54,7 @@ const demoSteps: DemoStep[] = [
   {
     id: 4,
     title: "종합 분석 리포트",
-    description: "AI와 전문 변호사의 분석 결과를 종합한 상세한 리포트를 제공합니다.",
+    description: "전문가의 분석 결과를 종합한 상세한 리포트를 제공합니다.",
     features: [
       "리스크 등급별 분류 (높음/중간/낮음)",
       "구체적인 개선 제안사항",
@@ -77,25 +77,25 @@ export default function Services() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              AI와 탑티어 변호사의 하이브리드 계약 검토
+              쉽고 신뢰할 수 있는 계약 검토 서비스
             </h1>
             <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-3xl mx-auto">
-              업계별 특화 변호사와 AI가 결합된, 쉽고 빠른 100% 온라인 계약 검토 서비스
+              업계별 특화 변호사와 전문가가 제공하는, 쉽고 빠른 100% 온라인 계약 검토 서비스
             </p>
           </div>
         </div>
       </section>
 
       {/* AI Model Capabilities Section */}
-      <section className="py-20 bg-white" aria-labelledby="ai-capabilities-heading">
+      <section className="py-20 bg-white" aria-labelledby="capabilities-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 id="ai-capabilities-heading" className="text-3xl font-bold text-gray-900 mb-4">
-              AI와 변호사의 하이브리드, 새로운 계약 검토 경험
+            <h2 id="capabilities-heading" className="text-3xl font-bold text-gray-900 mb-4">
+              전문가 중심의 새로운 계약 검토 경험
             </h2>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto mt-4">모든 계약 검토는 강남 최고급 로펌의 엘리트 변호사가 직접 감독 및 검증하여, 업계 최고의 전문성과 신뢰를 보장합니다.</p>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              <span className="font-semibold text-indigo-600">즉시 AI 피드백</span>과 <span className="font-semibold text-indigo-600">업계별 특화 변호사</span>의 신뢰성 있는 검토,<br/>
+              <span className="font-semibold text-indigo-600">즉시 피드백</span>과 <span className="font-semibold text-indigo-600">업계별 특화 변호사</span>의 신뢰성 있는 검토,<br/>
               <span className="font-semibold text-indigo-600">100% 온라인/비대면</span>의 간편함, <span className="font-semibold text-indigo-600">누구나 이해할 수 있는 쉬운 리포트</span>.<br/>
               시간과 비용을 절감하며, 계약 검토의 새로운 표준을 경험하세요.
             </p>
@@ -110,7 +110,7 @@ export default function Services() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">정밀한 리스크 식별</h3>
               <p className="text-gray-600 mb-4">
-                수천 건의 검증된 계약서와 판례를 학습한 AI가 계약의 모든 잠재적 리스크를 정밀하게 식별합니다.
+                수천 건의 검증된 계약서와 판례를 바탕으로 전문가가 계약의 모든 잠재적 리스크를 정밀하게 식별합니다.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start">
@@ -137,33 +137,16 @@ export default function Services() {
             <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-xl border border-indigo-200 hover:shadow-xl hover:scale-105">
               <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
                 <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">신속한 1차 분석</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">전문가의 시너지</h3>
               <p className="text-gray-600 mb-4">
-                복잡한 계약서도 수 분 내에 정밀 분석하여 초기 리스크 평가 및 개선안을 제시합니다.
+                전문가들의 협업을 통해 최고의 결과를 보장합니다.
               </p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  실시간 계약 구조 분석
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  자동 리스크 등급 분류
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  개선 제안서 자동 생성
-                </li>
-              </ul>
+              <div className="text-sm text-indigo-600 font-medium">
+                ✓ 신뢰할 수 있는 결과 제공
+              </div>
             </div>
 
             <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-xl border border-indigo-200 hover:shadow-xl hover:scale-105">
@@ -181,19 +164,19 @@ export default function Services() {
                   <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  98% 이상의 정확도 달성
+                  전문가 분석의 신뢰성
                 </li>
                 <li className="flex items-start">
                   <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  최신 법령 및 판례 반영
+                  전문 변호사 이중 검증
                 </li>
                 <li className="flex items-start">
                   <svg className="w-4 h-4 text-indigo-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  지속적인 성능 개선
+                  수천 건의 검증된 데이터 기반 분석
                 </li>
               </ul>
             </div>
@@ -306,7 +289,7 @@ export default function Services() {
               Why LawScan?
             </h2>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              강남 로펌의 실전 경험과 AI와 변호사의 시너지를 통해 완벽한 계약 리스크 관리를 보장합니다.
+              강남 로펌의 실전 경험과 전문가의 시너지를 통해 완벽한 계약 리스크 관리를 보장합니다.
             </p>
           </div>
 
@@ -332,12 +315,12 @@ export default function Services() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">AI와 변호사의 시너지</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">전문가의 시너지</h3>
               <p className="text-gray-600 mb-4">
-                AI와 변호사의 시너지를 통해 최고의 결과를 보장합니다.
+                전문가들의 협업을 통해 최고의 결과를 보장합니다.
               </p>
               <div className="text-sm text-indigo-600 font-medium">
-                ✓ 98% 정확도 달성
+                ✓ 신뢰할 수 있는 결과 제공
               </div>
             </div>
 

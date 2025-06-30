@@ -2,9 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  serverExternalPackages: ['@prisma/client'],
   images: {
-    domains: ['placehold.co'],
+    domains: ['placehold.co', 'randomuser.me'],
   },
   webpack: (config) => {
     // Exclude problematic OpenTelemetry packages

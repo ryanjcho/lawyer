@@ -13,7 +13,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center mb-6">
-              <span className="text-2xl font-bold text-indigo-400">LawScan</span>
+              <span className="text-2xl font-bold text-indigo-400">OhKContract</span>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed">
               계약서 검토부터 분쟁 예방까지,<br/>
@@ -134,7 +134,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="mailto:support@lawscan.co.kr" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                <a href="mailto:support@ohkcontract.com" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
                   이메일 문의
                 </a>
               </li>
@@ -171,7 +171,7 @@ export function Footer() {
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-6 text-sm text-gray-400">
-              <span>© {new Date().getFullYear()} LawScan. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} OhKContract. All rights reserved.</span>
               <Link href="/terms" className="hover:text-indigo-400 transition-colors">
                 이용약관
               </Link>

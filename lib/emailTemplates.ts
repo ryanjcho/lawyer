@@ -1,7 +1,7 @@
 export const emailTemplates = {
   // Welcome email after contract upload
   welcome: {
-    subject: "계약서 분석이 시작되었습니다 - LawScan",
+    subject: "계약서 분석이 시작되었습니다 - OhKContract",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; text-align: center; color: white;">
@@ -29,7 +29,7 @@ export const emailTemplates = {
           <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px;">
             <p style="color: #666; font-size: 14px;">
               궁금한 점이 있으시면 언제든 문의해주세요.<br>
-              📧 support@lawscan.kr | 📞 02-1234-5678
+              📧 support@ohkcontract.com | 📞 02-1234-5678
             </p>
           </div>
         </div>
@@ -136,7 +136,7 @@ export const emailTemplates = {
 
   // Social proof email
   socialProof: {
-    subject: "다른 고객들은 어떻게 생각하시나요? - LawScan 후기",
+    subject: "다른 고객들은 어떻게 생각하시나요? - OhKContract 후기",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; text-align: center; color: white;">
@@ -172,7 +172,7 @@ export const emailTemplates = {
               </div>
             </div>
             <p style="color: #666; line-height: 1.6; margin: 0; font-style: italic;">
-              "복잡한 문제일수록 맞춤형 전략이 필요합니다. LawScan이 제공한 분석으로 
+              "복잡한 문제일수록 맞춤형 전략이 필요합니다. OhKContract가 제공한 분석으로 
               큰 위험을 피할 수 있었고, 구체적인 해결방안까지 제시해주셨어요."
             </p>
           </div>

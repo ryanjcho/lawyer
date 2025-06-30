@@ -1,13 +1,7 @@
 import { NextResponse } from 'next/server'
 import axios from 'axios'
-import { env } from '@/lib/env'
+import { envConfig } from '@/config/env.config'
 import { prisma, handleDatabaseError } from '@/lib/db'
-
-// I'mport API configuration
-const IMP_KEY = process.env.IMP_KEY
-const IMP_SECRET = process.env.IMP_SECRET
-const IMP_ACCESS_TOKEN_URL = 'https://api.iamport.kr/users/getToken'
-const IMP_PAYMENT_VERIFY_URL = 'https://api.iamport.kr/payments/'
 
 interface PaymentVerificationRequest {
   impUid: string
@@ -34,10 +28,10 @@ export async function POST(request: Request) {
 
     // Get access token from I'mport
     const accessTokenResponse = await axios.post(
-      env.IMP_ACCESS_TOKEN_URL,
+      envConfig.payment.imp.accessTokenUrl,
       {
-        imp_key: env.IMP_KEY,
-        imp_secret: env.IMP_SECRET,
+        imp_key: envConfig.payment.imp.key,
+        imp_secret: envConfig.payment.imp.secret,
       },
       {
         headers: {
@@ -50,7 +44,7 @@ export async function POST(request: Request) {
 
     // Verify payment with I'mport
     const paymentResponse = await axios.get(
-      `${env.IMP_PAYMENT_VERIFY_URL}/${impUid}`,
+      `${envConfig.payment.imp.paymentVerifyUrl}/${impUid}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

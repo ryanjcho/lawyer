@@ -40,7 +40,7 @@ export default function Navbar() {
       <nav className="bg-white shadow-sm" role="navigation" aria-label="메인 네비게이션">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <span className="text-2xl font-bold text-indigo-600">LawScan</span>
+            <span className="text-2xl font-bold text-indigo-600">OhKContract</span>
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link href="/" className="flex-shrink-0 flex items-center" aria-label="홈으로 이동">
-              <span className="text-2xl font-bold text-indigo-600">LawScan</span>
+              <span className="text-2xl font-bold text-indigo-600">OhKContract</span>
             </Link>
             <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
               {navLinks.map(({ href, label, ariaLabel }) => (

@@ -2,6 +2,7 @@
 
 import React, { useState, ChangeEvent, FormEvent, useRef, useEffect } from 'react'
 import ContractGenerationPreview from '../components/ContractGenerationPreview'
+import { useRouter } from 'next/navigation'
 
 // Externalized strings for future i18n
 const STRINGS = {
@@ -202,6 +203,7 @@ export default function GenerateContractPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   // Store generated quote
   const [quote, setQuote] = useState<number | null>(null)
+  const router = useRouter()
 
   // Validation per step
   const validateStep = (customStep?: number, customForm?: typeof form) => {
@@ -348,7 +350,16 @@ export default function GenerateContractPage() {
             <ContractGenerationPreview 
               contractData={form} 
               quote={quote} 
-              onProceedToPayment={() => { /* TODO: Implement payment flow */ }}
+              onProceedToPayment={() => {
+                // Store contract generation data in sessionStorage
+                if (typeof window !== 'undefined') {
+                  sessionStorage.setItem('generatedContract', JSON.stringify(form));
+                  sessionStorage.setItem('generatedQuote', quote.toString());
+                  sessionStorage.setItem('contractType', 'GENERATED');
+                }
+                // Redirect to payment page
+                router.push('/payment');
+              }}
             />
           )
         ) : step < 4 ? (
