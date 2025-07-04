@@ -7,27 +7,27 @@ import { ShieldCheckIcon, ChartBarIcon, BriefcaseIcon, UserGroupIcon, DocumentTe
 // Unique differentiators for LawKit
 const DIFFERENTIATORS = [
   {
-    icon: <ChartBarIcon className="w-8 h-8 text-indigo-600" />,
+    icon: <ChartBarIcon className="text-indigo-600" />,
     title: "데이터 기반 계약 벤치마킹",
     desc: "업계 수천 건의 계약 데이터를 분석하여 내 계약의 리스크와 조건을 업계 평균과 비교합니다."
   },
   {
-    icon: <DocumentTextIcon className="w-8 h-8 text-blue-600" />,
+    icon: <DocumentTextIcon className="text-blue-600" />,
     title: "계약 리스크 모니터링 & 알림",
     desc: "계약 체결 후에도 법률/규제 변화에 따라 리스크 발생 시 실시간 알림을 제공합니다."
   },
   {
-    icon: <UserGroupIcon className="w-8 h-8 text-emerald-600" />,
+    icon: <UserGroupIcon className="text-emerald-600" />,
     title: "고객사별 맞춤 계약 가이드북",
     desc: "반복 거래가 많은 기업 고객을 위해 전용 계약 협상 매뉴얼과 플레이북을 제공합니다."
   },
   {
-    icon: <ChatBubbleLeftRightIcon className="w-8 h-8 text-pink-600" />,
+    icon: <ChatBubbleLeftRightIcon className="text-pink-600" />,
     title: "플랫폼 내 실시간 협업",
     desc: "변호사와의 실시간 Q&A, 피드백, 버전 관리 등 협업 기능을 한 곳에서 제공합니다."
   },
   {
-    icon: <ShieldCheckIcon className="w-8 h-8 text-yellow-600" />,
+    icon: <ShieldCheckIcon className="text-yellow-600" />,
     title: "규제 변화 실시간 추적",
     desc: "업계별 법률/규제 변화가 발생하면, 관련 계약에 미치는 영향까지 분석해 안내합니다."
   }
@@ -70,19 +70,19 @@ const INDUSTRIES = [
 // Example contract guides
 const CONTRACT_GUIDES = [
   {
-    icon: <DocumentTextIcon className="w-8 h-8 text-indigo-500" />,
+    icon: <DocumentTextIcon className="text-indigo-500" />,
     type: "기술 라이선스 계약",
     desc: "기술 이전 및 사용에 관한 주요 쟁점과 협상 포인트 안내",
     tips: "기술의 핵심성과 사업 연계성을 고려해 권리 귀속과 사용 범위를 꼼꼼히 검토해야 합니다."
   },
   {
-    icon: <BriefcaseIcon className="w-8 h-8 text-blue-500" />,
+    icon: <BriefcaseIcon className="text-blue-500" />,
     type: "서비스 제공 계약",
     desc: "서비스 범위, 책임, 대금 지급 등 핵심 조항 가이드",
     tips: "서비스의 품질 기준과 분쟁 발생 시 책임 소재를 명확히 하는 것이 중요합니다."
   },
   {
-    icon: <ShieldCheckIcon className="w-8 h-8 text-emerald-500" />,
+    icon: <ShieldCheckIcon className="text-emerald-500" />,
     type: "NDA(비밀유지계약)",
     desc: "비밀정보 정의, 예외, 위반 시 책임 등 실무 가이드",
     tips: "비밀정보의 범위와 예외를 구체적으로 정의하고, 위반 시 실효성 있는 제재 조항을 두어야 합니다."
@@ -92,19 +92,23 @@ const CONTRACT_GUIDES = [
 // Detailed differentiators for stepper
 const DETAILED_DIFFERENTIATORS = [
   {
-    title: "데이터 기반 계약 벤치마킹",
-    icon: <ChartBarIcon className="w-12 h-12 text-indigo-600" />,
+    title: "데이터 기반 벤치마킹 & 기술 라이선스 전략",
+    icon: <ChartBarIcon className="text-indigo-600" />,
     details: [
       "업계 수천 건의 계약 데이터를 분석하여 내 계약의 리스크와 조건을 업계 평균과 비교.",
       "주요 조항, 리스크, 조건을 업계 표준과 비교해 강점/취약점 시각화.",
       "실제 수치와 그래프로 한눈에 확인.",
-      "벤치마킹 리포트 예시 제공."
+      "벤치마킹 리포트 예시 제공.",
+      "기술 라이선스 계약의 독점/비독점, 지역, 기간, 2차 라이선스 허용 등 권리 범위 명확화.",
+      "로열티, 기술 개선 시 권리 귀속, 계약 해지 및 위약금 등 실무상 분쟁이 잦은 부분 안내.",
+      "기술의 사업적 가치와 경쟁력, 향후 활용 가능성까지 고려해 협상.",
+      "계약서의 세부 조항이 실제 사업에 미치는 영향 강조."
     ],
-    callout: "내 계약은 업계 평균 대비 안전한가?를 한눈에!"
+    callout: "내 계약은 업계 평균 대비 안전한가?를 한눈에!\n기술의 핵심성과 사업 연계성을 고려해 권리 귀속과 사용 범위를 꼼꼼히 검토해야 합니다."
   },
   {
     title: "계약 리스크 모니터링 & 알림",
-    icon: <DocumentTextIcon className="w-12 h-12 text-blue-600" />,
+    icon: <DocumentTextIcon className="text-blue-600" />,
     details: [
       "계약 만료, 갱신, 주요 일정 자동 알림.",
       "법률/규제 변화에 따른 리스크 사전 경고.",
@@ -115,7 +119,7 @@ const DETAILED_DIFFERENTIATORS = [
   },
   {
     title: "고객사별 맞춤 계약 가이드북",
-    icon: <UserGroupIcon className="w-12 h-12 text-emerald-600" />,
+    icon: <UserGroupIcon className="text-emerald-600" />,
     details: [
       "고객사별 표준 계약서 및 협상 전략 정리.",
       "자주 발생하는 쟁점/리스크에 대한 맞춤 대응 가이드.",
@@ -126,7 +130,7 @@ const DETAILED_DIFFERENTIATORS = [
   },
   {
     title: "플랫폼 내 실시간 협업",
-    icon: <ChatBubbleLeftRightIcon className="w-12 h-12 text-pink-600" />,
+    icon: <ChatBubbleLeftRightIcon className="text-pink-600" />,
     details: [
       "플랫폼 내 댓글, 첨삭, 버전 히스토리 제공.",
       "실시간 알림 및 피드백.",
@@ -137,7 +141,7 @@ const DETAILED_DIFFERENTIATORS = [
   },
   {
     title: "규제 변화 실시간 추적",
-    icon: <ShieldCheckIcon className="w-12 h-12 text-yellow-600" />,
+    icon: <ShieldCheckIcon className="text-yellow-600" />,
     details: [
       "주요 법률/규제 변화 실시간 모니터링.",
       "내 계약에 미치는 영향 자동 분석.",
@@ -260,7 +264,7 @@ const DETAILED_INDUSTRIES = [
 // Detailed contract guides
 const DETAILED_GUIDES = [
   {
-    icon: <DocumentTextIcon className="w-8 h-8 text-indigo-500" />,
+    icon: <DocumentTextIcon className="text-indigo-500" />,
     type: "기술 라이선스 계약",
     desc: "기술 이전 및 사용에 관한 주요 쟁점과 협상 포인트 안내",
     tips: "기술의 핵심성과 사업 연계성을 고려해 권리 귀속과 사용 범위를 꼼꼼히 검토해야 합니다.",
@@ -269,7 +273,7 @@ const DETAILED_GUIDES = [
     ]
   },
   {
-    icon: <BriefcaseIcon className="w-8 h-8 text-blue-500" />,
+    icon: <BriefcaseIcon className="text-blue-500" />,
     type: "서비스 제공 계약",
     desc: "서비스 범위, 책임, 대금 지급 등 핵심 조항 가이드",
     tips: "서비스의 품질 기준과 분쟁 발생 시 책임 소재를 명확히 하는 것이 중요합니다.",
@@ -278,7 +282,7 @@ const DETAILED_GUIDES = [
     ]
   },
   {
-    icon: <ShieldCheckIcon className="w-8 h-8 text-emerald-500" />,
+    icon: <ShieldCheckIcon className="text-emerald-500" />,
     type: "NDA(비밀유지계약)",
     desc: "비밀정보 정의, 예외, 위반 시 책임 등 실무 가이드",
     tips: "비밀정보의 범위와 예외를 구체적으로 정의하고, 위반 시 실효성 있는 제재 조항을 두어야 합니다.",
@@ -290,21 +294,6 @@ const DETAILED_GUIDES = [
 
 // Restore the contract guides section as a single large card with a stepper/tab interface
 const DETAILED_GUIDES_STEPPER = [
-  {
-    icon: <DocumentTextIcon className="w-12 h-12 text-indigo-500" />,
-    type: "기술 라이선스 계약",
-    desc: `기술 라이선스 계약은 특허, 소프트웨어, 노하우 등 지식재산권의 사용을 허락하는 계약입니다. 주로 IT, 바이오, 제조업 등에서 기술 이전, 공동 개발, 상용화 과정에서 체결됩니다.\n\n이 계약은 기술의 독점/비독점 사용, 지역, 기간, 2차 라이선스 허용 여부 등 권리 범위가 핵심 쟁점입니다. 로열티, 기술 개선 시 권리 귀속, 계약 해지 및 위약금 등도 실무상 분쟁이 잦은 부분입니다.\n\n기술의 사업적 가치와 경쟁력, 향후 활용 가능성까지 고려해 협상해야 하며, 계약서의 세부 조항이 실제 사업에 미치는 영향이 매우 큽니다.`,
-    details: [
-      "라이선스 범위(독점/비독점, 지역, 기간) 명확화",
-      "로열티 및 수익 분배 구조 협상",
-      "기술 개선/업데이트 시 권리 귀속",
-      "2차 라이선스 허용 여부 및 조건",
-      "계약 해지 및 위약금 조항",
-      "기술 이전/교육/지원 범위 및 비용",
-      "지식재산권 침해 시 책임 및 손해배상"
-    ],
-    tips: "기술의 핵심성과 사업 연계성을 고려해 권리 귀속과 사용 범위를 꼼꼼히 검토해야 합니다."
-  },
   {
     icon: <BriefcaseIcon className="w-12 h-12 text-blue-500" />,
     type: "서비스 제공 계약",
@@ -427,6 +416,21 @@ const DETAILED_GUIDES_STEPPER = [
   }
 ];
 
+// Add this data above the main export:
+const CLIENT_SECTORS = [
+  { name: '제약·의료기기', icon: <ShieldCheckIcon className="text-indigo-600" />, logo: '/logos/sector-pharma.png' },
+  { name: '바이오 벤처', icon: <ChartBarIcon className="text-blue-600" />, logo: '/logos/sector-bio.png' },
+  { name: '투자회사', icon: <BriefcaseIcon className="text-emerald-600" />, logo: '/logos/sector-invest.png' },
+  { name: '디지털헬스케어', icon: <UserGroupIcon className="text-pink-600" />, logo: '/logos/sector-digitalhealth.png' },
+  { name: 'IT', icon: <ChartBarIcon className="text-indigo-400" />, logo: '/logos/sector-it.png' },
+  { name: '일반기업', icon: <BriefcaseIcon className="text-gray-600" />, logo: '/logos/sector-corp.png' },
+  { name: '운송·물류', icon: <UserGroupIcon className="text-yellow-600" />, logo: '/logos/sector-logistics.png' },
+  { name: '엔터테인먼트', icon: <ChatBubbleLeftRightIcon className="text-pink-500" />, logo: '/logos/sector-ent.png' },
+  { name: '병원', icon: <ShieldCheckIcon className="text-green-600" />, logo: '/logos/sector-hospital.png' },
+  { name: '기관', icon: <BriefcaseIcon className="text-indigo-700" />, logo: '/logos/sector-institution.png' },
+  { name: '외국기업', icon: <UserGroupIcon className="text-blue-400" />, logo: '/logos/sector-foreign.png' },
+];
+
 export default function ExpertisePage() {
   const [diffIndex, setDiffIndex] = useState(0);
   const [guideIndex, setGuideIndex] = useState(0);
@@ -444,196 +448,289 @@ export default function ExpertisePage() {
         </div>
       </section>
 
-      {/* LawKit만의 차별화 Section - Stepper (smaller card) */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-white mb-10">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="bg-gradient-to-br from-white via-indigo-50 to-blue-100 rounded-3xl shadow-2xl border border-indigo-100 p-8 flex flex-col items-center relative overflow-hidden">
-            <div className="absolute -top-8 -left-8 w-24 h-24 bg-indigo-100 rounded-full blur-2xl opacity-30 z-0" />
-            <div className="flex flex-col items-center mb-6 z-10">
-              <div className="bg-gradient-to-br from-indigo-500 to-indigo-300 rounded-full p-3 shadow-lg mb-3">
-                {DETAILED_DIFFERENTIATORS[diffIndex].icon}
-              </div>
-              <h3 className="text-xl font-extrabold text-indigo-800 mt-1 mb-2 tracking-tight drop-shadow text-center">{DETAILED_DIFFERENTIATORS[diffIndex].title}</h3>
-            </div>
-            <ul className="list-disc list-inside text-gray-700 text-base mb-3 w-full max-w-lg mx-auto space-y-1 z-10">
-              {DETAILED_DIFFERENTIATORS[diffIndex].details.map((d, i) => (
-                <li key={i}>{d}</li>
-              ))}
-            </ul>
-            <div className="bg-indigo-50 border-l-4 border-indigo-400 rounded-r px-3 py-2 mt-1 text-indigo-800 text-sm font-semibold shadow-sm w-full max-w-lg mx-auto z-10">
-              {DETAILED_DIFFERENTIATORS[diffIndex].callout}
-            </div>
-            <div className="flex flex-wrap justify-center gap-2 mt-6 z-10">
-              {DETAILED_DIFFERENTIATORS.map((d, idx) => (
-                <button
-                  key={d.title}
-                  onClick={() => setDiffIndex(idx)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
-                    diffIndex === idx
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg scale-105'
-                      : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
-                  }`}
-                  aria-current={diffIndex === idx ? 'step' : undefined}
-                >
-                  {d.title}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 산업별 솔루션 제공 Section - Compact, less empty space */}
-      <section className="py-12 bg-white">
+      {/* Consolidated Client & Industry Coverage Section with Case Studies */}
+      <section className="py-16 bg-gradient-to-br from-white via-indigo-50 to-blue-50 mb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-1">산업별 전문 솔루션 및 성공 사례</h2>
-            <p className="text-lg text-gray-600">각 산업의 특성에 맞춘 맞춤형 계약 검토 서비스와 실제 사례를 함께 확인하세요.</p>
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">산업별 전문 솔루션 & 성공 사례</h2>
+            <p className="text-lg text-gray-600">OhKims와 LawKit이 신뢰받는 다양한 산업별 고객사, 맞춤 계약 유형, 그리고 실제 성공 사례를 한눈에 확인하세요.</p>
           </div>
-          <div className="space-y-6">
+          {/* Client Sectors & Industry Icon Row */}
+          <IndustryIconRow sectors={CLIENT_SECTORS} />
+          {/* Horizontally scrollable industry solution cards */}
+          <div className="flex gap-8 overflow-x-auto scrollbar-thin scrollbar-thumb-indigo-200 pb-2">
             {DETAILED_INDUSTRIES.map((industry, idx) => (
-              <div key={idx} className="bg-gray-50 rounded-2xl p-4 shadow-sm border border-gray-100">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      {industry.icon}
-                    </div>
-                    <div className="flex flex-col min-w-0">
-                      <h3 className="text-xl font-bold text-gray-900 mb-0 truncate">{industry.name}</h3>
-                      <p className="text-base text-gray-600 mb-0 truncate max-w-xs">{industry.description}</p>
-                      <div className="flex flex-wrap gap-1 mt-1 mb-1">
-                        {industry.contractTypes.slice(0, 3).map((type, index) => (
-                          <span key={index} className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">{type}</span>
-                        ))}
-                        {industry.contractTypes.length > 3 && (
-                          <span className="text-xs text-gray-500">+{industry.contractTypes.length - 3}개 더</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-row items-center gap-4 justify-start mt-2 mb-1">
-                    <div className="text-center min-w-[60px]">
-                      <div className="text-base font-bold text-indigo-600">{industry.metrics.riskReduction}</div>
-                      <div className="text-gray-600 text-xs">리스크 감소</div>
-                    </div>
-                    <div className="text-center min-w-[60px]">
-                      <div className="text-base font-bold text-indigo-600">{industry.metrics.timeSaving}</div>
-                      <div className="text-gray-600 text-xs">시간 단축</div>
-                    </div>
-                    <div className="text-center min-w-[60px]">
-                      <div className="text-base font-bold text-indigo-600">{industry.metrics.satisfaction}</div>
-                      <div className="text-gray-600 text-xs">고객 만족도</div>
-                    </div>
-                    <div className="text-center min-w-[60px]">
-                      <div className="text-base font-bold text-indigo-600">{industry.metrics.avgTime}</div>
-                      <div className="text-gray-600 text-xs">평균 검토 시간</div>
-                    </div>
-                  </div>
-                  <div className="text-center md:text-right flex-shrink-0">
-                    <span className="text-xs text-gray-500">{industry.cases.length}개의 성공 사례</span>
-                  </div>
-                </div>
-                {/* Industry-specific reviews/case studies */}
-                {industry.cases.length > 0 && (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {industry.cases.map((c, i) => (
-                      <div key={i} className="bg-white rounded-xl p-3 shadow hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-semibold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full">{c.category}</span>
-                          <span className="text-xs text-gray-500">{industry.name}</span>
-                        </div>
-                        <h4 className="text-sm font-bold text-gray-900 mb-0.5 truncate">{c.title}</h4>
-                        <p className="text-sm text-gray-600 mb-0.5 truncate max-w-xs">{c.description}</p>
-                        <div className="mb-1">
-                          <h5 className="text-xs font-semibold text-gray-900 mb-0.5">주요 개선사항</h5>
-                          <ul className="space-y-0.5">
-                            {c.details.slice(0, 2).map((detail, index) => (
-                              <li key={index} className="text-xs text-gray-600 flex items-start">
-                                <svg className="w-3 h-3 text-indigo-600 mt-0.5 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span>{detail}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <div className="border-t pt-1 mt-1">
-                          <div className="text-xs font-semibold text-indigo-600 mb-0.5">결과</div>
-                          <div className="text-xs text-gray-600">{c.result}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              <div key={idx} className="flex-shrink-0 w-[440px] md:w-[520px] lg:w-[600px]">
+                <IndustrySolutionCard industry={industry} />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 계약서 종류별 협상가이드 제공 Section - Stepper Large Card */}
-      <section className="py-20 bg-gradient-to-r from-indigo-50 to-blue-50 mb-16">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="bg-gradient-to-br from-white via-indigo-50 to-blue-100 rounded-3xl shadow-2xl border border-indigo-100 p-12 flex flex-col items-center relative overflow-hidden">
-            <div className="absolute -top-8 -left-8 w-32 h-32 bg-indigo-100 rounded-full blur-2xl opacity-30 z-0" />
-            <div className="flex flex-col items-center mb-8 z-10">
-              <div className="bg-gradient-to-br from-indigo-500 to-indigo-300 rounded-full p-4 shadow-lg mb-4">
-                {DETAILED_GUIDES_STEPPER[guideIndex].icon}
-              </div>
-              <h3 className="text-2xl font-extrabold text-indigo-800 mt-2 mb-3 tracking-tight drop-shadow">{DETAILED_GUIDES_STEPPER[guideIndex].type}</h3>
-            </div>
-            <div className="text-gray-700 text-base mb-6 w-full max-w-lg mx-auto whitespace-pre-line z-10">
-              {DETAILED_GUIDES_STEPPER[guideIndex].desc}
-            </div>
-            <ul className="list-disc list-inside text-gray-700 text-base mb-4 w-full max-w-lg mx-auto space-y-1 z-10">
-              {DETAILED_GUIDES_STEPPER[guideIndex].details.map((d, i) => (
-                <li key={i}>{d}</li>
-              ))}
-            </ul>
-            <div className="bg-indigo-50 border-l-4 border-indigo-400 rounded-r px-4 py-3 mt-2 text-indigo-800 text-sm font-semibold shadow-sm w-full max-w-lg mx-auto z-10">
-              실무 팁: {DETAILED_GUIDES_STEPPER[guideIndex].tips}
-            </div>
-            <div className="flex flex-wrap justify-center gap-3 mt-8 z-10">
-              {DETAILED_GUIDES_STEPPER.map((g, idx) => (
-                <button
-                  key={g.type}
-                  onClick={() => setGuideIndex(idx)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
-                    guideIndex === idx
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
-                  }`}
-                  aria-current={guideIndex === idx ? 'step' : undefined}
-                >
-                  {g.type}
-                </button>
-              ))}
-            </div>
+      {/* Comparison Table Section */}
+      <section className="py-16 bg-white mb-10">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">LawKit vs. 다른 계약 검토 서비스</h2>
+            <p className="text-lg text-gray-600">전문성, 속도, 비용, 사후관리까지 한눈에 비교하세요.</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white rounded-2xl shadow border border-gray-100 text-sm md:text-base">
+              <thead>
+                <tr className="bg-indigo-50 text-indigo-800">
+                  <th className="py-3 px-4 font-bold text-left">항목</th>
+                  <th className="py-3 px-4 font-bold text-center">LawKit/OhKims</th>
+                  <th className="py-3 px-4 font-bold text-center">전통 로펌</th>
+                  <th className="py-3 px-4 font-bold text-center">AI-only</th>
+                  <th className="py-3 px-4 font-bold text-center">사내 검토</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-800">
+                {[
+                  { label: '담당자', values: ['변호사+전문팀', '변호사', 'AI', '직원'] },
+                  { label: '리스크 분석 정확도', values: ['매우 높음', '높음', '중간', '낮음~중간'] },
+                  { label: '평균 검토 소요 시간', values: ['24~48시간', '3~7일', '1~24시간', '1~7일'] },
+                  { label: '비용', values: ['합리적/투명', '높음', '저렴', '인건비'] },
+                  { label: '업계 벤치마킹', values: ['✔️', '❌', '△', '❌'] },
+                  { label: '계약서 개선 제안', values: ['✔️', '✔️', '△', '❌'] },
+                  { label: '사후 관리/알림', values: ['✔️', '❌', '△', '❌'] },
+                  { label: '실시간 협업', values: ['✔️', '❌', '✔️', '△'] },
+                  { label: '고객 맞춤 가이드', values: ['✔️', '△', '❌', '❌'] },
+                  { label: '실제 성공사례', values: ['✔️', '✔️', '❌', '❌'] },
+                  { label: '고객 만족도', values: ['98%+', '90%+', '70~80%', '미측정'] },
+                ].map((row, idx) => (
+                  <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="py-3 px-4 font-semibold text-gray-900">{row.label}</td>
+                    {row.values.map((val, i) => (
+                      <td key={i} className="py-3 px-4 text-center">{val}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* 계약 분석, 벤치마킹, 그리고 실무 전략 Section (clean, side-by-side cards) */}
+      <section className="py-20 bg-white mb-16">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">계약 분석, 벤치마킹, 그리고 실무 전략</h2>
+            <p className="text-lg text-gray-600">LawKit은 데이터 기반 분석과 실무 경험을 바탕으로, 업계 벤치마킹부터 서비스 제공 계약, 기술 라이선스 전략까지 모두 제공합니다.</p>
+          </div>
+          <div className="flex flex-col gap-6 items-center">
+            <ContractGuideStepper />
+            <DifferentiatorStepper />
           </div>
         </div>
       </section>
 
       {/* 법무법인 전문가 직접 검토 Section - Detailed */}
-      <section className="py-16 bg-gradient-to-br from-white via-indigo-50 to-blue-50 mb-16">
+      <section className="py-20 bg-gradient-to-br from-white via-indigo-50 to-blue-100">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <div className="inline-flex items-center justify-center bg-gradient-to-r from-indigo-100 to-blue-100 border-2 border-indigo-300 rounded-full px-8 py-6 mb-8 shadow-lg">
             <ShieldCheckIcon className="w-10 h-10 text-indigo-600 mr-4" />
             <span className="text-xl font-extrabold text-indigo-800 flex items-center gap-2">모든 계약서는 법무법인 전문가가 직접 검토합니다 <span className="inline-flex items-center bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold ml-2"><CheckCircleIcon className="w-4 h-4 mr-1" /> Verified</span></span>
           </div>
-          <p className="text-2xl text-gray-700 mb-3 font-semibold">AI가 아닌, 실제 변호사가 책임지고 읽고 분석합니다.</p>
-          <p className="text-lg text-gray-500 mb-3">1. 업계별 전문 변호사가 직접 배정되어 계약서의 리스크와 쟁점, 개선 포인트를 꼼꼼히 점검합니다.<br />2. 2중 검토 및 피드백 시스템으로 실수 없는 결과 제공.<br />3. 고객의 상황에 맞는 맞춤형 개선안과 협상 전략까지 제안합니다.</p>
-          <p className="text-lg text-gray-500">LawKit은 법무법인 소속 변호사의 책임 하에, 업계 최고 수준의 신뢰와 결과를 보장합니다.</p>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-indigo-100 to-blue-100">
-        <div className="max-w-2xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">LawKit의 전문 서비스를 경험해보세요</h2>
-          <p className="text-xl text-gray-700 mb-8 font-medium">지금 바로 무료 상담을 신청하세요.</p>
+          <p className="text-xl text-gray-700 mb-4 font-semibold">AI가 아닌, 실제 변호사가 직접 책임집니다.</p>
+          <ul className="text-base text-gray-600 mb-8 font-medium list-disc list-inside inline-block text-left mx-auto">
+            <li>전문 변호사가 리스크와 쟁점을 꼼꼼히 점검</li>
+            <li>2중 검토로 실수 없는 결과 제공</li>
+            <li>맞춤형 개선안과 협상 전략 제안</li>
+          </ul>
+          <h2 className="text-2xl font-extrabold text-gray-900 mb-4 tracking-tight">LawKit의 전문 서비스를 경험해보세요</h2>
           <a href="/contact" className="inline-block px-10 py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-extrabold text-lg shadow-lg hover:scale-105 hover:bg-indigo-700 transition-transform duration-200">무료 상담 신청</a>
         </div>
       </section>
+    </div>
+  );
+}
+
+// Add these components above the main export:
+function ContractGuideStepper() {
+  const [guideIndex, setGuideIndex] = React.useState(0);
+  return (
+    <div className="bg-gradient-to-br from-white via-indigo-50 to-blue-100 rounded-3xl shadow-2xl border border-indigo-200 max-w-6xl w-full flex flex-col md:flex-row items-stretch relative overflow-hidden transition-all duration-300 p-0">
+      {/* Stepper icons (vertical, left) */}
+      <div className="flex md:flex-col flex-row md:w-40 w-full md:min-w-[144px] bg-indigo-50 border-r border-indigo-100 p-4 md:py-8 md:px-4 pr-2 gap-2 md:gap-3 items-center md:items-start justify-center md:justify-start overflow-hidden">
+        {DETAILED_GUIDES_STEPPER.map((g, idx) => (
+          <button
+            key={g.type}
+            onClick={() => setGuideIndex(idx)}
+            className={`flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
+              guideIndex === idx
+                ? 'bg-indigo-600 text-white shadow-lg scale-105' : 'bg-white text-indigo-700 hover:bg-indigo-100 border border-indigo-100'
+            }`}
+            aria-current={guideIndex === idx ? 'step' : undefined}
+          >
+            <span className="mb-0.5 flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 border border-indigo-200 shadow-sm mr-2 md:mr-0">
+              {React.cloneElement(g.icon, { className: 'w-8 h-8' })}
+            </span>
+            <span className="w-24 text-xs font-semibold text-center break-words leading-tight">{g.type}</span>
+          </button>
+        ))}
+      </div>
+      {/* Main content (right) */}
+      <div className="flex-1 flex flex-col justify-center px-16 py-8">
+        <h3 className="text-2xl md:text-3xl font-extrabold text-indigo-800 mb-2 tracking-tight drop-shadow z-10 text-left">{DETAILED_GUIDES_STEPPER[guideIndex].type}</h3>
+        <div className="text-gray-700 text-base mb-4 w-full max-w-5xl whitespace-pre-line z-10 text-left font-medium">
+          {DETAILED_GUIDES_STEPPER[guideIndex].desc}
+        </div>
+        <ul className="list-disc list-inside text-gray-700 text-base mb-3 w-full max-w-5xl space-y-1 z-10">
+          {DETAILED_GUIDES_STEPPER[guideIndex].details.map((d, i) => (
+            <li key={i}>{d}</li>
+          ))}
+        </ul>
+        <div className="bg-indigo-50 border-l-4 border-indigo-400 rounded-r px-6 py-2 mt-1 text-indigo-800 text-sm font-semibold shadow-sm w-full max-w-5xl z-10">
+          실무 팁: {DETAILED_GUIDES_STEPPER[guideIndex].tips}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DifferentiatorStepper() {
+  const [diffIndex, setDiffIndex] = React.useState(0);
+  return (
+    <div className="bg-gradient-to-br from-white via-blue-50 to-indigo-50 rounded-3xl shadow-2xl border border-indigo-200 max-w-6xl w-full flex flex-col md:flex-row items-stretch relative overflow-hidden transition-all duration-300 p-0">
+      {/* Stepper icons (vertical, left) */}
+      <div className="flex md:flex-col flex-row md:w-40 w-full md:min-w-[144px] bg-indigo-50 border-r border-indigo-100 p-4 md:py-8 md:px-4 pr-2 gap-2 md:gap-3 items-center md:items-start justify-center md:justify-start overflow-hidden">
+        {DETAILED_DIFFERENTIATORS.map((d, idx) => (
+          <button
+            key={d.title}
+            onClick={() => setDiffIndex(idx)}
+            className={`flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
+              diffIndex === idx
+                ? 'bg-indigo-600 text-white shadow-lg scale-105' : 'bg-white text-indigo-700 hover:bg-indigo-100 border border-indigo-100'
+            }`}
+            aria-current={diffIndex === idx ? 'step' : undefined}
+          >
+            <span className="mb-0.5 flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 border border-indigo-200 shadow-sm mr-2 md:mr-0">
+              {React.cloneElement(d.icon, { className: 'w-8 h-8' })}
+            </span>
+            <span className="w-24 text-xs font-semibold text-center break-words leading-tight">{d.title}</span>
+          </button>
+        ))}
+      </div>
+      {/* Main content (right) */}
+      <div className="flex-1 flex flex-col justify-center px-16 py-8">
+        <h3 className="text-2xl md:text-3xl font-extrabold text-indigo-800 mb-2 tracking-tight drop-shadow z-10 text-left">{DETAILED_DIFFERENTIATORS[diffIndex].title}</h3>
+        <ul className="list-disc list-inside text-gray-700 text-base mb-3 w-full max-w-5xl space-y-1 z-10">
+          {DETAILED_DIFFERENTIATORS[diffIndex].details.map((d, i) => (
+            <li key={i}>{d}</li>
+          ))}
+        </ul>
+        <div className="bg-indigo-50 border-l-4 border-indigo-400 rounded-r px-6 py-2 mt-1 text-indigo-800 text-sm font-semibold shadow-sm w-full max-w-5xl z-10">
+          {DETAILED_DIFFERENTIATORS[diffIndex].callout}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Add this component above the main export:
+function IndustryIconRow({ sectors }) {
+  return (
+    <div className="flex gap-6 overflow-x-auto pb-4 mb-8 border-b border-indigo-100 scrollbar-thin scrollbar-thumb-indigo-200">
+      {sectors.map((sector, idx) => (
+        <div key={idx} className="flex flex-col items-center min-w-[110px]">
+          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-white via-indigo-100 to-blue-200 shadow-md mb-2">
+            {React.cloneElement(sector.icon, { className: 'w-14 h-14 text-indigo-700' })}
+          </div>
+          {sector.logo && (
+            <img src={sector.logo} alt={sector.name + ' logo'} className="w-8 h-8 object-contain mb-1" />
+          )}
+          <span className="text-xs font-semibold text-gray-700 text-center whitespace-nowrap">{sector.name}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Add this component above the main export:
+function IndustrySolutionCard({ industry }) {
+  const [expanded, setExpanded] = React.useState(false);
+  const featuredCase = industry.cases[0];
+  return (
+    <div className="bg-gradient-to-br from-white via-indigo-50 to-blue-50 rounded-2xl shadow-xl border border-indigo-100 p-8 flex flex-col min-h-[420px] relative overflow-hidden transition-all duration-300">
+      <div className="flex items-center gap-3 mb-2">
+        {industry.icon}
+        <span className="text-lg font-bold text-gray-900">{industry.name}</span>
+      </div>
+      <div className="text-gray-600 mb-2 text-sm">{industry.description}</div>
+      <div className="flex flex-wrap gap-1 mb-2">
+        {industry.contractTypes.map((c, i) => (
+          <span key={i} className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full mt-1">{c}</span>
+        ))}
+      </div>
+      <div className="flex gap-4 mb-3 mt-1">
+        <div className="text-center min-w-[60px]">
+          <div className="text-base font-bold text-indigo-600">{industry.metrics.riskReduction}</div>
+          <div className="text-gray-600 text-xs">리스크 감소</div>
+        </div>
+        <div className="text-center min-w-[60px]">
+          <div className="text-base font-bold text-indigo-600">{industry.metrics.timeSaving}</div>
+          <div className="text-gray-600 text-xs">시간 단축</div>
+        </div>
+        <div className="text-center min-w-[60px]">
+          <div className="text-base font-bold text-indigo-600">{industry.metrics.satisfaction}</div>
+          <div className="text-gray-600 text-xs">만족도</div>
+        </div>
+        <div className="text-center min-w-[60px]">
+          <div className="text-base font-bold text-indigo-600">{industry.metrics.avgTime}</div>
+          <div className="text-gray-600 text-xs">평균 검토</div>
+        </div>
+      </div>
+      {featuredCase && (
+        <div className="mt-2 bg-indigo-50 rounded-xl p-4 border-l-4 border-indigo-400 mb-2">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full">{featuredCase.client || featuredCase.category}</span>
+          </div>
+          <div className="text-xs text-gray-700 mb-1"><span className="font-semibold text-indigo-700">과제:</span> {featuredCase.challenge || featuredCase.title}</div>
+          <div className="text-xs text-gray-700 mb-1"><span className="font-semibold text-indigo-700">솔루션:</span> {featuredCase.solution || featuredCase.description}</div>
+          <div className="text-xs text-gray-700 mb-1"><span className="font-semibold text-indigo-700">성과:</span> {featuredCase.outcome || featuredCase.result}</div>
+          {featuredCase.details && (
+            <ul className="list-disc list-inside text-xs text-gray-600 space-y-0.5 mt-1">
+              {featuredCase.details.map((d, i) => (
+                <li key={i}>{d}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+      {industry.cases.length > 1 && (
+        <>
+          <button
+            className="text-indigo-700 text-xs font-semibold underline mt-1 mb-2 self-end"
+            onClick={() => setExpanded((v) => !v)}
+          >
+            {expanded ? '간략히 보기' : `더 많은 성공 사례 보기 (${industry.cases.length - 1})`}
+          </button>
+          {expanded && (
+            <div className="space-y-2 mt-2">
+              {industry.cases.slice(1).map((c, i) => (
+                <div key={i} className="bg-white rounded-lg p-3 border border-indigo-50 shadow-sm">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full">{c.client || c.category}</span>
+                  </div>
+                  <div className="text-xs text-gray-700 mb-1"><span className="font-semibold text-indigo-700">과제:</span> {c.challenge || c.title}</div>
+                  <div className="text-xs text-gray-700 mb-1"><span className="font-semibold text-indigo-700">솔루션:</span> {c.solution || c.description}</div>
+                  <div className="text-xs text-gray-700 mb-1"><span className="font-semibold text-indigo-700">성과:</span> {c.outcome || c.result}</div>
+                  {c.details && (
+                    <ul className="list-disc list-inside text-xs text-gray-600 space-y-0.5 mt-1">
+                      {c.details.map((d, j) => (
+                        <li key={j}>{d}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 } 

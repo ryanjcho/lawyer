@@ -92,7 +92,7 @@ export default function Services() {
     {
       label: '서비스신청',
       icon: '📝',
-      desc: '로킷 홈페이지에서 간단한 정보 입력만으로 서비스 신청이 시작됩니다. 서비스 유형과 필요 사항을 선택하면, 담당 매니저가 신속하게 안내를 드립니다.'
+      desc: 'LawKit 홈페이지에서 간단한 정보 입력만으로 서비스 신청이 시작됩니다. 서비스 유형과 필요 사항을 선택하면, 담당 매니저가 신속하게 안내를 드립니다.'
     },
     {
       label: '견적확인',
@@ -134,7 +134,7 @@ export default function Services() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">서비스 소개</h1>
-            <p className="text-xl md:text-2xl text-indigo-100 mb-8">로킷은 빠르고, 전문적이며, 온라인으로 간편하게 계약 검토를 제공합니다.</p>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-8">5분 접수, 24시간 이내 신속 검토, 변호사 직접 소통. 지금 바로 온라인으로 시작하세요.</p>
           </motion.div>
         </div>
       </section>
@@ -165,6 +165,7 @@ export default function Services() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-indigo-900 mb-10 text-center">이용방법</h2>
+          <p className="text-base text-gray-600 text-center mb-8">LawKit의 서비스는 누구나 쉽게, 투명하게 이용할 수 있도록 설계되어 있습니다. 아래 단계를 따라 진행하시면, 전문 변호사의 검토 결과를 빠르게 받아보실 수 있습니다.</p>
           <div className="flex flex-col items-center">
             <div className="w-full max-w-4xl mx-auto bg-gradient-to-br from-white via-indigo-50 to-indigo-100 rounded-2xl shadow-lg border border-indigo-100 p-8 text-center transition-all duration-200 flex flex-col items-center relative">
               <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600 text-white text-2xl font-bold shadow-lg border-4 border-white">{activeStep}</div>
@@ -191,47 +192,44 @@ export default function Services() {
       {/* 검토결과 Section (expanded, interactive) */}
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-indigo-900 mb-10 text-center">검토결과</h2>
+          <h2 className="text-3xl font-bold text-indigo-900 mb-6 text-center">검토결과</h2>
+          <p className="text-base text-gray-600 text-center mb-8">LawKit의 검토 결과는 한눈에, 명확하게, 그리고 실질적으로 전달됩니다.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-gradient-to-br from-indigo-50 to-white rounded-xl shadow p-6 flex flex-col gap-2 items-center group hover:shadow-2xl hover:-translate-y-1 transition-all cursor-pointer">
               <Image src="/images/review-tracking.png" alt="수정사항 이미지" width={128} height={128} className="w-32 h-32 object-contain mb-2 group-hover:scale-105 transition-transform" />
-              <h3 className="text-lg font-bold text-indigo-800 mb-1 group-hover:text-indigo-900 transition-colors">수정사항을 정확하게 확인</h3>
+              <h3 className="text-lg font-bold text-indigo-800 mb-1 group-hover:text-indigo-900 transition-colors">수정사항 추적</h3>
+              <p className="text-gray-600 text-sm text-center mb-1">모든 변경 내역을 추적하여, 어떤 부분이 어떻게 바뀌었는지 한눈에 확인할 수 있습니다. 투명한 변경 기록으로 신뢰를 더합니다.</p>
               <ul className="text-gray-700 text-sm list-disc list-inside mb-2">
-                <li>추적기능 적용된 이미지 제공</li>
-                <li>변경 내역 하이라이트</li>
-                <li>비교표로 한눈에 확인</li>
+                <li>변경 내역을 한눈에 확인</li>
+                <li>추적기능 적용 이미지 제공</li>
               </ul>
-              <button className="mt-2 px-4 py-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-sm">샘플 보기</button>
             </div>
             <div className="bg-gradient-to-br from-indigo-50 to-white rounded-xl shadow p-6 flex flex-col gap-2 items-center group hover:shadow-2xl hover:-translate-y-1 transition-all cursor-pointer">
               <Image src="/images/required-clauses.png" alt="필수조항 추가 이미지" width={128} height={128} className="w-32 h-32 object-contain mb-2 group-hover:scale-105 transition-transform" />
-              <h3 className="text-lg font-bold text-indigo-800 mb-1 group-hover:text-indigo-900 transition-colors">누락된 필수 조항 추가</h3>
+              <h3 className="text-lg font-bold text-indigo-800 mb-1 group-hover:text-indigo-900 transition-colors">필수조항 자동 추가</h3>
+              <p className="text-gray-600 text-sm text-center mb-1">누락된 필수조항을 자동으로 탐지하고 추가하여, 계약의 완성도와 법적 안전성을 높입니다.</p>
               <ul className="text-gray-700 text-sm list-disc list-inside mb-2">
-                <li>필수조항 자동 탐지 및 추가</li>
-                <li>업종별/유형별 필수조항 반영</li>
+                <li>누락된 필수조항 자동 탐지 및 추가</li>
                 <li>계약 완성도 향상</li>
               </ul>
-              <button className="mt-2 px-4 py-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-sm">샘플 보기</button>
             </div>
             <div className="bg-gradient-to-br from-indigo-50 to-white rounded-xl shadow p-6 flex flex-col gap-2 items-center group hover:shadow-2xl hover:-translate-y-1 transition-all cursor-pointer">
               <Image src="/images/recommend-clauses.png" alt="추천조항 추가 이미지" width={128} height={128} className="w-32 h-32 object-contain mb-2 group-hover:scale-105 transition-transform" />
-              <h3 className="text-lg font-bold text-indigo-800 mb-1 group-hover:text-indigo-900 transition-colors">추천 조항 추가</h3>
+              <h3 className="text-lg font-bold text-indigo-800 mb-1 group-hover:text-indigo-900 transition-colors">추천조항 제안</h3>
+              <p className="text-gray-600 text-sm text-center mb-1">전문가가 상황에 맞는 추천 조항을 제안하여, 계약의 전문성과 실효성을 높여드립니다.</p>
               <ul className="text-gray-700 text-sm list-disc list-inside mb-2">
                 <li>전문가 추천 조항 제안</li>
-                <li>계약 목적/상황별 맞춤</li>
                 <li>법적 리스크 최소화</li>
               </ul>
-              <button className="mt-2 px-4 py-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-sm">샘플 보기</button>
             </div>
             <div className="bg-gradient-to-br from-indigo-50 to-white rounded-xl shadow p-6 flex flex-col gap-2 items-center group hover:shadow-2xl hover:-translate-y-1 transition-all cursor-pointer">
               <Image src="/images/memo.png" alt="메모 첨부 이미지" width={128} height={128} className="w-32 h-32 object-contain mb-2 group-hover:scale-105 transition-transform" />
-              <h3 className="text-lg font-bold text-indigo-800 mb-1 group-hover:text-indigo-900 transition-colors">주요 수정사항 사유 확인</h3>
+              <h3 className="text-lg font-bold text-indigo-800 mb-1 group-hover:text-indigo-900 transition-colors">주요 수정사항 메모</h3>
+              <p className="text-gray-600 text-sm text-center mb-1">주요 변경사항별로 변호사의 설명 메모가 첨부되어, 의뢰인이 쉽게 이해하고 소통할 수 있습니다.</p>
               <ul className="text-gray-700 text-sm list-disc list-inside mb-2">
                 <li>주요 변경사항별 사유 메모 첨부</li>
-                <li>의뢰인 이해도 향상</li>
                 <li>투명한 소통</li>
               </ul>
-              <button className="mt-2 px-4 py-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-sm">샘플 보기</button>
             </div>
           </div>
         </div>
@@ -240,59 +238,41 @@ export default function Services() {
       {/* 차별점 Section (merged, enhanced, detailed) */}
       <section className="py-20 bg-gradient-to-br from-indigo-50 to-white border-t-2 border-indigo-100">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-indigo-900 mb-12 text-center tracking-tight">로킷서비스가 특별한 이유</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-y-12 gap-x-16 items-stretch">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-indigo-900 mb-12 text-center tracking-tight">LawKit 서비스의 차별점</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-12 gap-x-10 items-stretch">
             {/* 1. 산업별·유형별 맞춤 솔루션 */}
-            <div className="flex flex-col items-center bg-white rounded-2xl p-10 w-full max-w-[600px] mx-auto border border-indigo-200 shadow-md group hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
+            <div className="flex flex-col items-center bg-white rounded-2xl p-10 w-full max-w-[400px] mx-auto border border-indigo-200 shadow-md group hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
               <svg className="w-10 h-10 text-indigo-600 mb-3 group-hover:text-indigo-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m4 0V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10m16 0a2 2 0 01-2 2H5a2 2 0 01-2-2" /></svg>
-              <div className="font-semibold text-indigo-700 text-sm mb-2 text-center">업종과 계약 유형에 최적화된 맞춤형 분석과 가이드</div>
               <h3 className="text-lg font-bold text-indigo-800 mb-2 group-hover:text-indigo-900 transition-colors">산업별·유형별 맞춤 솔루션</h3>
+              <p className="text-gray-600 text-sm text-center mb-2">업종과 계약 유형별로 특화된 분석과 가이드를 제공합니다. 최신 산업 트렌드와 법률·규제 변화까지 반영하여, 실전 협상 가이드와 체크리스트, 업계별 주요 쟁점까지 안내합니다. 복잡한 계약도 체계적으로 분류하여 맞춤 솔루션을 제시합니다.</p>
               <ul className="text-gray-700 text-sm list-disc list-inside mb-2 text-left">
-                <li>업종별·계약서 유형별로 특화된 리스크 진단 및 분석 제공</li>
-                <li>최신 산업 트렌드와 법률·규제 변화까지 반영</li>
-                <li>실전 협상 가이드, 체크리스트, 업계별 주요 쟁점 안내</li>
-                <li>복잡한 계약도 체계적으로 분류하여 맞춤 솔루션 제시</li>
+                <li>업종·계약 유형별 특화 분석</li>
+                <li>최신 트렌드·규제 반영</li>
               </ul>
             </div>
-            {/* 2. 전문 변호사 1:1 맞춤 검토 */}
-            <div className="flex flex-col items-center bg-white rounded-2xl p-10 w-full max-w-[600px] mx-auto border border-indigo-200 shadow-md group hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
+            {/* 2. 전문 변호사 직접 검토 */}
+            <div className="flex flex-col items-center bg-white rounded-2xl p-10 w-full max-w-[400px] mx-auto border border-green-200 shadow-md group hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
               <svg className="w-10 h-10 text-green-600 mb-3 group-hover:text-green-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-              <div className="font-semibold text-green-700 text-sm mb-2 text-center">10년 이상 경력 변호사의 실무 중심 1:1 맞춤 검토</div>
-              <h3 className="text-lg font-bold text-green-800 mb-2 group-hover:text-green-900 transition-colors">전문 변호사 1:1 맞춤 검토</h3>
+              <h3 className="text-lg font-bold text-green-800 mb-2 group-hover:text-green-900 transition-colors">전문 변호사 직접 검토</h3>
+              <p className="text-gray-600 text-sm text-center mb-2">10년 이상 경력의 변호사가 1:1로 직접 검토 및 작성합니다. 실무 중심의 리스크 진단과 구체적 개선 제안, 업계별·상황별로 최적화된 피드백과 대안을 제공합니다. 실제 고객 만족도 98% 이상을 기록하고 있습니다.</p>
               <ul className="text-gray-700 text-sm list-disc list-inside mb-2 text-left">
-                <li>10년 이상 경력의 변호사가 직접 검토 및 작성</li>
-                <li>실무 중심의 리스크 진단과 구체적 개선 제안</li>
-                <li>1:1 전문가 상담으로 궁금증 해소 및 협상 전략 제공</li>
-                <li>업계별·상황별로 최적화된 피드백과 대안 제시</li>
+                <li>10년 이상 경력 변호사 1:1 검토</li>
+                <li>실무 중심 개선안·전략 제안</li>
               </ul>
             </div>
-            {/* 3. 신속하고 투명한 서비스 */}
-            <div className="flex flex-col items-center bg-white rounded-2xl p-10 w-full max-w-[600px] mx-auto border border-indigo-200 shadow-md group hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
+            {/* 3. 신속·투명한 온라인 서비스 */}
+            <div className="flex flex-col items-center bg-white rounded-2xl p-10 w-full max-w-[400px] mx-auto border border-blue-200 shadow-md group hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
               <svg className="w-10 h-10 text-blue-600 mb-3 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-              <div className="font-semibold text-blue-700 text-sm mb-2 text-center">신속하고 투명한 온라인 서비스 경험</div>
-              <h3 className="text-lg font-bold text-blue-800 mb-2 group-hover:text-blue-900 transition-colors">신속하고 투명한 서비스</h3>
+              <h3 className="text-lg font-bold text-blue-800 mb-2 group-hover:text-blue-900 transition-colors">신속·투명한 온라인 서비스</h3>
+              <p className="text-gray-600 text-sm text-center mb-2">평균 12시간 이내 신속한 결과 제공, 견적 요청부터 결과 전달까지 실시간 진행 상황 안내. 모든 과정이 온라인·모바일로 간편하게 진행되며, 진행 내역과 결과 리포트는 투명하게 공개됩니다.</p>
               <ul className="text-gray-700 text-sm list-disc list-inside mb-2 text-left">
-                <li>평균 12시간 이내 신속한 결과 제공 (긴급 요청 시 우선 처리)</li>
-                <li>견적 요청부터 결과 전달까지 실시간 진행 상황 안내</li>
-                <li>모든 과정이 온라인·모바일로 간편하게 진행</li>
-                <li>진행 내역과 결과 리포트의 투명한 공개</li>
-              </ul>
-            </div>
-            {/* 4. 맞춤형 견적 및 서비스 */}
-            <div className="flex flex-col items-center bg-white rounded-2xl p-10 w-full max-w-[600px] mx-auto border border-indigo-200 shadow-md group hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
-              <svg className="w-10 h-10 text-yellow-500 mb-3 group-hover:text-yellow-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 10c-4.418 0-8-1.79-8-4V6a2 2 0 012-2h12a2 2 0 012 2v8c0 2.21-3.582 4-8 4z" /></svg>
-              <div className="font-semibold text-yellow-700 text-sm mb-2 text-center">계약 복잡도·업종·요구사항별로 합리적이고 투명한 견적</div>
-              <h3 className="text-lg font-bold text-yellow-700 mb-2 group-hover:text-yellow-800 transition-colors">맞춤형 견적 및 서비스</h3>
-              <ul className="text-gray-700 text-sm list-disc list-inside mb-2 text-left">
-                <li>계약 복잡도, 업종, 서비스 유형(작성/검토)에 따라 맞춤 견적 제공</li>
-                <li>불필요한 비용 없이 합리적이고 투명한 가격 정책</li>
-                <li>고객 요구사항을 반영한 최적화된 서비스 설계</li>
-                <li>견적, 진행, 결과까지 전 과정에서 고객 중심의 맞춤 서비스</li>
+                <li>평균 12시간 이내 결과 제공</li>
+                <li>모든 과정 온라인·모바일 지원</li>
               </ul>
             </div>
           </div>
           <div className="flex justify-center mt-12">
-            <Link href="/register" className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-blue-600 text-white rounded-full font-bold shadow-lg hover:from-indigo-600 hover:to-blue-700 transition-all text-lg">차별화된 서비스 체험하기</Link>
+            <Link href="/register" className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-blue-600 text-white rounded-full font-bold shadow-lg hover:from-indigo-600 hover:to-blue-700 transition-all text-lg">5분 만에 계약서 검토 시작하기</Link>
           </div>
         </div>
       </section>

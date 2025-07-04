@@ -17,7 +17,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">회사소개</h1>
-            <p className="text-xl md:text-2xl text-indigo-100 mb-8">로킷의 미션과 비전, 그리고 팀을 소개합니다.</p>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-8">LawKit의 미션과 비전, 그리고 팀을 소개합니다.</p>
           </motion.div>
         </div>
       </section>
@@ -133,9 +133,9 @@ export default function AboutPage() {
             <li className="ml-8">
               <div className="flex items-center gap-4 mb-1">
                 <span className="w-40 text-left text-2xl font-extrabold text-indigo-700">2025년 7월</span>
-                <span className="text-xl font-semibold text-gray-900" id="timeline-title-2025-7">계약서 검토 서비스 &apos;로킷&apos; 오픈</span>
+                <span className="text-xl font-semibold text-gray-900" id="timeline-title-2025-7">계약서 검토 서비스 &apos;LawKit&apos; 오픈</span>
               </div>
-              <div className="ml-40 pl-4 text-gray-700 text-base">AI 기반 계약서 검토 서비스 LawKit(로킷) 공식 출시</div>
+              <div className="ml-40 pl-4 text-gray-700 text-base">AI 기반 계약서 검토 서비스 LawKit 공식 출시</div>
             </li>
           </ol>
         </div>
@@ -258,19 +258,202 @@ export default function AboutPage() {
               법률데이터 & 기술 팀은 국내 최고 수준의 데이터 처리 및 IT 전문성을 바탕으로, 신뢰할 수 있는 법률 서비스를 제공하기 위해 끊임없이 연구하고 혁신합니다. 다양한 분야의 전문가들이 모여, 고객의 법률 리스크를 최소화하고, 효율적이고 안전한 솔루션을 제공합니다.
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-8">
-            {/* 기술 인프라팀 */}
-            <div className="bg-white rounded-xl p-4 md:p-6 shadow-lg flex flex-col h-full max-w-lg mx-auto">
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">기술 인프라팀</h3>
-              <p className="text-gray-700 mb-3 text-sm md:text-base">
-                기술 인프라팀은 클라우드, 보안, DevOps 등 IT 인프라 전반에 걸친 풍부한 경험을 바탕으로, 고객 데이터의 안전성과 시스템의 안정성을 최우선으로 합니다. 24/7 모니터링과 신속한 대응으로 신뢰받는 서비스를 제공합니다.
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* 법률데이터 분석팀 */}
+            <div className="bg-white rounded-xl p-6 shadow-lg flex flex-col h-full">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
+                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">법률데이터 분석팀</h3>
+              </div>
+              <p className="text-gray-700 mb-4 text-sm">
+                법률 문서의 패턴 분석과 데이터 마이닝을 통해 정확하고 일관된 검토 결과를 제공합니다. AI 모델 학습을 위한 고품질 데이터셋을 구축하고 관리합니다.
               </p>
-              <ul className="space-y-1.5 text-gray-600 text-xs md:text-sm flex-1">
-                <li>• 클라우드 아키텍처 설계 및 운영 전문가</li>
-                <li>• 정보보안 및 개인정보보호 인증 다수 취득</li>
-                <li>• DevOps 및 자동화 파이프라인 구축 경험</li>
-                <li>• 시스템 가용성 99.99% 이상 유지</li>
-                <li>• 대규모 트래픽 및 데이터 처리 경험</li>
+              <ul className="space-y-2 text-gray-600 text-sm flex-1">
+                <li className="flex items-start">
+                  <span className="text-indigo-600 mr-2">•</span>
+                  <span>계약서 패턴 분석 및 분류 시스템</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-indigo-600 mr-2">•</span>
+                  <span>법률 텍스트 데이터 전처리 및 정제</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-indigo-600 mr-2">•</span>
+                  <span>업종별 계약서 템플릿 데이터베이스</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-indigo-600 mr-2">•</span>
+                  <span>판례 및 법령 데이터 연동 시스템</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* AI 개발팀 */}
+            <div className="bg-white rounded-xl p-6 shadow-lg flex flex-col h-full">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">AI 개발팀</h3>
+              </div>
+              <p className="text-gray-700 mb-4 text-sm">
+                최신 인공지능 기술을 활용하여 법률 문서의 자동 분석 및 검토 시스템을 개발합니다. 자연어 처리와 지능형 문서 분석을 통해 효율적인 법률 서비스를 제공합니다.
+              </p>
+              <ul className="space-y-2 text-gray-600 text-sm flex-1">
+                <li className="flex items-start">
+                  <span className="text-blue-600 mr-2">•</span>
+                  <span>자연어 처리(NLP) 시스템 개발</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-600 mr-2">•</span>
+                  <span>계약서 위험도 평가 시스템</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-600 mr-2">•</span>
+                  <span>지능형 문서 분석 및 분류</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-600 mr-2">•</span>
+                  <span>AI 기반 검토 결과 생성</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* 기술 인프라팀 */}
+            <div className="bg-white rounded-xl p-6 shadow-lg flex flex-col h-full">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">기술 인프라팀</h3>
+              </div>
+              <p className="text-gray-700 mb-4 text-sm">
+                클라우드, 보안, DevOps 등 IT 인프라 전반에 걸친 풍부한 경험을 바탕으로, 고객 데이터의 안전성과 시스템의 안정성을 최우선으로 합니다.
+              </p>
+              <ul className="space-y-2 text-gray-600 text-sm flex-1">
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">•</span>
+                  <span>클라우드 아키텍처 설계 및 운영</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">•</span>
+                  <span>정보보안 및 개인정보보호 인증</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">•</span>
+                  <span>DevOps 및 자동화 파이프라인</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">•</span>
+                  <span>시스템 가용성 99.99% 유지</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* 품질관리팀 */}
+            <div className="bg-white rounded-xl p-6 shadow-lg flex flex-col h-full">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">품질관리팀</h3>
+              </div>
+              <p className="text-gray-700 mb-4 text-sm">
+                모든 법률 서비스의 품질을 검증하고 표준화합니다. 변호사 검토 결과의 정확성과 일관성을 보장하며, 지속적인 품질 개선을 추진합니다.
+              </p>
+              <ul className="space-y-2 text-gray-600 text-sm flex-1">
+                <li className="flex items-start">
+                  <span className="text-purple-600 mr-2">•</span>
+                  <span>검토 결과 품질 검증 및 감사</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-600 mr-2">•</span>
+                  <span>서비스 표준화 및 프로세스 관리</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-600 mr-2">•</span>
+                  <span>고객 피드백 분석 및 개선</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-600 mr-2">•</span>
+                  <span>품질 지표 모니터링 및 리포트</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* 연구개발팀 */}
+            <div className="bg-white rounded-xl p-6 shadow-lg flex flex-col h-full">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
+                  <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">연구개발팀</h3>
+              </div>
+              <p className="text-gray-700 mb-4 text-sm">
+                법률 기술의 최신 트렌드와 혁신적인 솔루션을 연구합니다. 새로운 서비스 모델과 기술적 접근법을 개발하여 LawKit의 경쟁력을 지속적으로 향상시킵니다.
+              </p>
+              <ul className="space-y-2 text-gray-600 text-sm flex-1">
+                <li className="flex items-start">
+                  <span className="text-orange-600 mr-2">•</span>
+                  <span>법률 기술 트렌드 분석</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-orange-600 mr-2">•</span>
+                  <span>신규 서비스 모델 개발</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-orange-600 mr-2">•</span>
+                  <span>업계 파트너십 및 협력 연구</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-orange-600 mr-2">•</span>
+                  <span>특허 및 지적재산권 관리</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* 고객지원팀 */}
+            <div className="bg-white rounded-xl p-6 shadow-lg flex flex-col h-full">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mr-4">
+                  <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 109.75 9.75A9.75 9.75 0 0012 2.25z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">고객지원팀</h3>
+              </div>
+              <p className="text-gray-700 mb-4 text-sm">
+                고객의 서비스 이용을 지원하고 기술적 문제를 해결합니다. 24/7 고객 지원 시스템을 통해 신속하고 정확한 답변을 제공합니다.
+              </p>
+              <ul className="space-y-2 text-gray-600 text-sm flex-1">
+                <li className="flex items-start">
+                  <span className="text-teal-600 mr-2">•</span>
+                  <span>24/7 기술 지원 및 문의 응대</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-teal-600 mr-2">•</span>
+                  <span>서비스 이용 가이드 및 교육</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-teal-600 mr-2">•</span>
+                  <span>시스템 장애 대응 및 복구</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-teal-600 mr-2">•</span>
+                  <span>고객 요구사항 분석 및 개선</span>
+                </li>
               </ul>
             </div>
           </div>

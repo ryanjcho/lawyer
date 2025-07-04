@@ -35,22 +35,22 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-white shadow-sm" role="navigation" aria-label="메인 네비게이션">
+    <nav className="bg-white shadow-sm border-b border-gray-100" role="navigation" aria-label="메인 네비게이션">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="flex items-center" aria-label="홈으로 이동">
-              <span className="text-2xl font-bold text-indigo-600">LawKit</span>
+              <span className="text-3xl font-bold text-indigo-600 tracking-tight">LawKit</span>
             </Link>
           </div>
           {/* Nav Links */}
-          <div className="hidden lg:flex lg:gap-x-6 items-center">
+          <div className="hidden lg:flex gap-x-10 items-center">
             {navLinks.map(({ href, label, ariaLabel }) => (
               <Link
                 key={href}
                 href={href}
-                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-indigo-600 focus:outline-none focus:text-indigo-600"
+                className="inline-flex items-center px-1 pt-1 text-base font-medium text-gray-900 hover:text-indigo-600 focus:outline-none focus:text-indigo-600 transition-colors duration-150"
                 aria-label={ariaLabel}
               >
                 {label}
@@ -71,10 +71,10 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     onClick={toggleUserMenu}
-                    className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="flex items-center text-base rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
-                      <span className="text-sm font-medium text-white">
+                    <div className="h-9 w-9 rounded-full bg-indigo-600 flex items-center justify-center">
+                      <span className="text-base font-medium text-white">
                         {session.user.name && session.user.name.length > 0 ? session.user.name.charAt(0) : 'U'}
                       </span>
                     </div>
@@ -83,12 +83,6 @@ export default function Navbar() {
                   {isUserMenuOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                       <div className="py-1">
-                        <Link
-                          href="/dashboard"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          대시보드
-                        </Link>
                         <Link
                           href="/profile"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -111,7 +105,7 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 hover:text-indigo-600 focus:outline-none focus:text-indigo-600"
+                  className="inline-flex items-center px-3 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 focus:outline-none focus:text-indigo-600"
                   aria-label="로그인"
                 >
                   <UserIcon className="h-5 w-5 mr-1" aria-hidden="true" />
@@ -119,7 +113,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/register"
-                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex items-center px-3 py-2 text-base font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   aria-label="회원가입"
                 >
                   <UserPlusIcon className="h-5 w-5 mr-1" aria-hidden="true" />
@@ -160,12 +154,12 @@ export default function Navbar() {
         aria-orientation="vertical"
         aria-labelledby="mobile-menu-button"
       >
-        <div className="pt-2 pb-3 space-y-1">
+        <div className="pt-2 pb-3 space-y-1 bg-white shadow-lg rounded-b-xl">
           {navLinks.map(({ href, label, ariaLabel }) => (
             <Link
               key={href}
               href={href}
-              className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+              className="block pl-5 pr-4 py-3 text-lg font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50 rounded"
               role="menuitem"
               aria-label={ariaLabel}
             >
@@ -180,26 +174,19 @@ export default function Navbar() {
             ) : session && session.user ? (
               <div className="space-y-1">
                 <div className="px-4 py-2">
-                  <p className="text-sm font-medium text-gray-900">{session.user.name}</p>
+                  <p className="text-base text-gray-900">{session.user.name}</p>
                   <p className="text-sm text-gray-500">{session.user.email}</p>
                 </div>
                 <Link
-                  href="/dashboard"
-                  className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
-                  role="menuitem"
-                >
-                  대시보드
-                </Link>
-                <Link
                   href="/profile"
-                  className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+                  className="block pl-5 pr-4 py-3 text-lg font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50 rounded"
                   role="menuitem"
                 >
                   프로필
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+                  className="block w-full text-left pl-5 pr-4 py-3 text-lg font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50 rounded"
                   role="menuitem"
                 >
                   로그아웃
@@ -209,7 +196,7 @@ export default function Navbar() {
               <div className="space-y-1">
                 <Link
                   href="/login"
-                  className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50"
+                  className="block pl-5 pr-4 py-3 text-lg font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50 rounded"
                   role="menuitem"
                   aria-label="로그인"
                 >
@@ -220,7 +207,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/register"
-                  className="block pl-3 pr-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="block pl-5 pr-4 py-3 text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded"
                   role="menuitem"
                   aria-label="회원가입"
                 >
