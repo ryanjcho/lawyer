@@ -80,7 +80,7 @@ const URGENCY_OPTIONS = [
 
 function ReviewContent() {
   const searchParams = useSearchParams()
-  const type = searchParams.get('type') || 'review'
+  const type = searchParams?.get('type') || 'review'
   
   const [step, setStep] = useState<number>(1)
   const [pageCount, setPageCount] = useState<number>(3)

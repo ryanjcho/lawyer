@@ -24,7 +24,6 @@ export async function POST(request: Request) {
     if (!impUid || !merchantUid || !userId || !expectedAmount) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-    console.log(`[${new Date().toISOString()}] Payment verification attempt: userId=${userId}, amount=${expectedAmount}, impUid=${impUid}, merchantUid=${merchantUid}`);
 
     // Get access token from I'mport
     const accessTokenResponse = await axios.post(
@@ -56,7 +55,6 @@ export async function POST(request: Request) {
 
     // Verify payment amount and status
     if (paymentData.status !== 'paid') {
-      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, impUid=${impUid}, status=${paymentData.status}`);
       return NextResponse.json(
         { error: 'Payment not completed' },
         { status: 400 }
@@ -65,7 +63,6 @@ export async function POST(request: Request) {
 
     // Verify payment amount matches expected amount
     if (paymentData.amount !== expectedAmount) {
-      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, impUid=${impUid} - amount mismatch (expected: ${expectedAmount}, actual: ${paymentData.amount})`);
       return NextResponse.json(
         { error: 'Payment amount mismatch' },
         { status: 400 }
@@ -82,7 +79,6 @@ export async function POST(request: Request) {
     })
 
     if (!pendingPayment) {
-      console.log(`[${new Date().toISOString()}] Payment verification failed: userId=${userId}, amount=${expectedAmount} - no pending payment found`);
       return NextResponse.json(
         { error: 'No pending payment found' },
         { status: 400 }
@@ -117,7 +113,6 @@ export async function POST(request: Request) {
         })
       }
 
-      console.log(`[${new Date().toISOString()}] Payment verification success: userId=${userId}, amount=${expectedAmount}, impUid=${impUid}`);
       return { payment, contract }
     })
 
@@ -146,7 +141,6 @@ export async function POST(request: Request) {
       const userId = body?.userId || 'unknown';
       const amount = body?.amount || 'unknown';
       const impUid = body?.impUid || 'unknown';
-      console.log(`[${new Date().toISOString()}] Payment verification error: userId=${userId}, amount=${amount}, impUid=${impUid} - ${error}`);
     } catch {}
     console.error('Payment verification error:', error)
     handleDatabaseError(error)

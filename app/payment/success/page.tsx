@@ -10,7 +10,7 @@ export default function PaymentSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
-  const contractId = searchParams.get('contractId');
+  const contractId = searchParams?.get('contractId');
   const [contractDetails, setContractDetails] = useState<any>(null);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function PaymentSuccessPage() {
 
     if ((storedAnalysis && storedFiles && storedQuote) || (generatedContract && generatedQuote)) {
       try {
-        if (contractType === 'GENERATED') {
+        if (contractType === 'GENERATED' && generatedContract && generatedQuote) {
           const contractData = JSON.parse(generatedContract);
           const quote = Number(generatedQuote);
           setContractDetails({ 
@@ -45,7 +45,7 @@ export default function PaymentSuccessPage() {
             contractId, 
             quote 
           });
-        } else {
+        } else if (storedAnalysis && storedFiles && storedQuote) {
           const analysis = JSON.parse(storedAnalysis);
           const files = JSON.parse(storedFiles);
           const quote = Number(storedQuote);

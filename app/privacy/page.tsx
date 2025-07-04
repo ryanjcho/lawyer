@@ -1,23 +1,24 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white">
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              <span className="block">개인정보처리방침</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-4xl mx-auto">
-              LawScan의 개인정보 수집 및 이용에 관한 안내입니다<br/>
-              <span className="font-semibold">마지막 업데이트: 2024년 1월 1일</span>
-            </p>
-          </div>
+      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white overflow-hidden flex items-center justify-center min-h-[320px]">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/20 to-transparent" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">개인정보처리방침</h1>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-8">LawScan의 개인정보 수집 및 이용에 관한 안내입니다<br/><span className='font-semibold'>마지막 업데이트: 2024년 1월 1일</span></p>
+          </motion.div>
         </div>
       </section>
 

@@ -7,7 +7,7 @@ import Link from 'next/link'
 import {
   CheckCircleIcon,
   ClockIcon,
-No  ExclamationTriangleIcon,
+  ExclamationTriangleIcon,
   DocumentTextIcon,
   ChartBarIcon,
   CurrencyDollarIcon,
@@ -67,7 +67,7 @@ const TABS = [
 function CaseSummaryCard({ caseNumber, status }: { caseNumber: string, status: string }) {
   return (
     <div className="border rounded-lg p-4 mb-4 bg-white shadow-sm">
-      <div className="text-xs text-gray-400 mb-1">케이스 번호</div>
+      <div className="text-xs text-black mb-1">케이스 번호</div>
       <div className="text-lg font-semibold">{caseNumber}</div>
       <div className="text-sm text-indigo-600 mt-1">상태: {status}</div>
     </div>
@@ -100,7 +100,7 @@ function Notifications({ items }: { items: string[] }) {
   return (
     <div className="mb-4">
       <div className="font-medium mb-1">알림</div>
-      <ul className="text-sm text-gray-600 space-y-1">
+      <ul className="text-sm text-black space-y-1">
         {items.length === 0 ? <li>알림 없음</li> : items.map((n, i) => <li key={i}>{n}</li>)}
       </ul>
     </div>
@@ -111,7 +111,7 @@ function ActivityFeed({ items }: { items: string[] }) {
   return (
     <div className="mb-4">
       <div className="font-medium mb-1">활동 내역</div>
-      <ul className="text-xs text-gray-500 space-y-1">
+      <ul className="text-xs text-black space-y-1">
         {items.length === 0 ? <li>아직 활동 내역이 없습니다</li> : items.map((a, i) => <li key={i}>{a}</li>)}
       </ul>
     </div>
@@ -197,7 +197,7 @@ export default function DashboardPage() {
       case 'FAILED':
         return <ExclamationTriangleIcon className="w-5 h-5 text-red-500" />
       default:
-        return <DocumentTextIcon className="w-5 h-5 text-gray-400" />
+        return <DocumentTextIcon className="w-5 h-5 text-black" />
     }
   }
 
@@ -259,15 +259,15 @@ export default function DashboardPage() {
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center border border-gray-100">
-              <span className="text-xs text-gray-400 mb-1">전체 계약</span>
+              <span className="text-xs text-black mb-1">전체 계약</span>
               <span className="text-2xl font-bold text-indigo-700">{stats.totalContracts}</span>
             </div>
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center border border-gray-100">
-              <span className="text-xs text-gray-400 mb-1">완료</span>
+              <span className="text-xs text-black mb-1">완료</span>
               <span className="text-2xl font-bold text-green-600">{stats.completedContracts}</span>
             </div>
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center border border-gray-100">
-              <span className="text-xs text-gray-400 mb-1">진행 중</span>
+              <span className="text-xs text-black mb-1">진행 중</span>
               <span className="text-2xl font-bold text-yellow-600">{stats.pendingContracts}</span>
             </div>
           </div>
@@ -295,7 +295,7 @@ export default function DashboardPage() {
                 ) : contracts.map(contract => (
                   <tr key={contract.id}>
                     <td className="px-4 py-2 font-medium text-gray-900">{contract.title}</td>
-                    <td className="px-4 py-2 flex items-center gap-2">{getStatusIcon(contract.status)} {getStatusText(contract.status)}</td>
+                    <td className="px-4 py-2 flex items-center gap-2 text-black">{getStatusIcon(contract.status)} {getStatusText(contract.status)}</td>
                     <td className="px-4 py-2 text-gray-500">{formatDate(contract.updatedAt)}</td>
                     <td className="px-4 py-2">
                       <Link href={`/dashboard/contracts/${contract.id}`} className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm"><EyeIcon className="w-4 h-4 mr-1" /> 보기</Link>
@@ -304,16 +304,6 @@ export default function DashboardPage() {
                 ))}
               </tbody>
             </table>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow p-6">
-            <ContractUpload onUpload={handleUpload} />
-            <RequestChanges onSubmit={handleRequestChange} />
-          </div>
-          <div className="bg-white rounded-xl shadow p-6">
-            <Notifications items={notifications} />
-            <ActivityFeed items={activity} />
           </div>
         </div>
       </div>

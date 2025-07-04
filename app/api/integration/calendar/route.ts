@@ -148,7 +148,6 @@ export async function POST(request: NextRequest) {
       try {
         await syncWithExternalCalendar(event, calendarProvider);
       } catch (syncError) {
-        console.error('Calendar sync error:', syncError);
         // Continue without failing the request
       }
     }
@@ -304,12 +303,5 @@ export async function DELETE(request: NextRequest) {
 async function syncWithExternalCalendar(event: any, provider: string) {
   // This would integrate with actual calendar APIs
   // For now, we'll just log the sync attempt
-  console.log(`Syncing event ${event.id} with ${provider} calendar`);
-  
-  // Example integration points:
-  // - Google Calendar API
-  // - Outlook Calendar API
-  // - Apple Calendar API
-  
   return Promise.resolve();
 } 

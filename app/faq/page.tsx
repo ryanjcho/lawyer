@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion'
 
 interface FAQItem {
   question: string;
@@ -173,7 +174,6 @@ export default function FAQPage() {
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle contact form submission
-    console.log('Contact form submitted:', contactForm);
     alert('문의가 성공적으로 전송되었습니다. 24시간 내에 답변드리겠습니다.');
     setContactForm({
       name: '',
@@ -187,19 +187,18 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white">
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              <span className="block">고객 지원 &</span>
-              <span className="block text-indigo-200">자주 묻는 질문</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-4xl mx-auto">
-              LawScan 서비스에 대한 궁금한 점들을<br/>
-              <span className="font-semibold">한눈에 확인하고 전문가와 상담하세요</span>
-            </p>
-          </div>
+      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white overflow-hidden flex items-center justify-center min-h-[320px]">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/20 to-transparent" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">FAQ & 지원</h1>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-8">자주 묻는 질문과 고객 지원 정보를 확인하세요.</p>
+          </motion.div>
         </div>
       </section>
 

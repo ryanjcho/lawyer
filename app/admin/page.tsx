@@ -46,6 +46,13 @@ interface Lawyer {
   status: 'available' | 'busy' | 'offline'
 }
 
+interface UserProfile {
+  name: string;
+  company: string;
+  phone: string;
+  image: string;
+}
+
 export default function AdminDashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -56,7 +63,7 @@ export default function AdminDashboard() {
   const [lawyers, setLawyers] = useState<Lawyer[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [profile, setProfile] = useState<any>(null)
+  const [profile, setProfile] = useState<UserProfile | null>(null)
   const [profileLoading, setProfileLoading] = useState(false)
   const [profileError, setProfileError] = useState<string | null>(null)
   const [profileSuccess, setProfileSuccess] = useState<string | null>(null)
@@ -117,18 +124,32 @@ export default function AdminDashboard() {
       setProfileError(null)
       fetch('/api/profile')
         .then(res => res.json())
-        .then(data => setProfile(data))
+        .then(data => {
+          if (data.error) {
+            setProfileError(data.error)
+            setProfile(null)
+          } else {
+            setProfile({
+              name: data.name || '',
+              company: data.company || '',
+              phone: data.phone || '',
+              image: data.image || '',
+            })
+          }
+        })
         .catch(() => setProfileError('프로필 정보를 불러오지 못했습니다.'))
         .finally(() => setProfileLoading(false))
     }
   }, [activeTab])
 
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!profile) return
     setProfile({ ...profile, [e.target.name]: e.target.value })
   }
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!profile) return
     setProfileLoading(true)
     setProfileError(null)
     setProfileSuccess(null)
@@ -136,12 +157,7 @@ export default function AdminDashboard() {
       const res = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: profile?.name || '',
-          company: profile?.company || '',
-          phone: profile?.phone || '',
-          image: profile?.image || ''
-        })
+        body: JSON.stringify(profile),
       })
       if (!res.ok) throw new Error('프로필 업데이트에 실패했습니다.')
       setProfileSuccess('프로필이 성공적으로 업데이트되었습니다.')
@@ -232,7 +248,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">관리자 대시보드 로딩 중...</p>
+          <p className="text-black">관리자 대시보드 로딩 중...</p>
         </div>
       </div>
     )
@@ -247,8 +263,8 @@ export default function AdminDashboard() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <p className="text-gray-900 font-medium mb-2">오류가 발생했습니다</p>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-black font-medium mb-2">오류가 발생했습니다</p>
+          <p className="text-black mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
@@ -267,8 +283,8 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">관리자 대시보드</h1>
-              <p className="text-gray-600">안녕하세요, {session?.user?.name || '관리자'}님</p>
+              <h1 className="text-2xl font-bold text-black">관리자 대시보드</h1>
+              <p className="text-black">안녕하세요, {session?.user?.name || '관리자'}님</p>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -470,7 +486,7 @@ export default function AdminDashboard() {
                           {getStatusText(user.status)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(user.lastLogin)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-black">{formatDate(user.lastLogin)}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.contractsAnalyzed}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button className="text-indigo-600 hover:text-indigo-900">보기</button>
@@ -505,7 +521,7 @@ export default function AdminDashboard() {
                   {contracts.map((contract) => (
                     <tr key={contract.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{contract.fileName}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{contract.user}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{contract.user}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(contract.status)}`}>
                           {getStatusText(contract.status)}
@@ -551,7 +567,7 @@ export default function AdminDashboard() {
                   {lawyers.map((lawyer) => (
                     <tr key={lawyer.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{lawyer.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{lawyer.specialization}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-black">{lawyer.specialization}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lawyer.contractsReviewed}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">★ {lawyer.averageRating}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -603,7 +619,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     name="name"
-                    value={profile?.name || ''}
+                    value={profile.name}
                     onChange={handleProfileChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                     required
@@ -614,7 +630,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     name="company"
-                    value={profile?.company || ''}
+                    value={profile.company}
                     onChange={handleProfileChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                   />
@@ -624,7 +640,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     name="phone"
-                    value={profile?.phone || ''}
+                    value={profile.phone}
                     onChange={handleProfileChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                   />
@@ -634,7 +650,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     name="image"
-                    value={profile?.image || ''}
+                    value={profile.image}
                     onChange={handleProfileChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                   />

@@ -1,0 +1,46 @@
+{
+  "AdminPanel": "관리자 패널",
+  "Dashboard": "대시보드",
+  "Contracts": "계약서 관리",
+  "Analytics": "분석",
+  "Users": "사용자",
+  "AuditLog": "감사 로그",
+  "Settings": "설정",
+  "AdminDashboard": "관리자 대시보드",
+  "SummaryCards": {
+    "TotalContracts": "총 계약서",
+    "InProgress": "진행 중",
+    "AwaitingReview": "검토 대기",
+    "Finalized": "최종 완료",
+    "Overdue": "기한 초과",
+    "FlaggedForRisk": "리스크 표시"
+  },
+  "RecentActivity": "최근 활동",
+  "KPI": {
+    "AvgTurnaroundTime": "평균 처리 시간",
+    "AvgRevisions": "계약서당 평균 수정 횟수",
+    "TotalValue": "총 계약 금액",
+    "ComplianceRate": "준수율",
+    "RenewalRate": "갱신율"
+  },
+  "ContractsTable": {
+    "ContractID": "계약서 ID",
+    "Name": "이름",
+    "Client": "고객",
+    "Status": "상태",
+    "LastModified": "최종 수정일",
+    "Lawyer": "담당 변호사",
+    "Revisions": "수정 횟수",
+    "Value": "금액",
+    "KeyDates": "주요 일정",
+    "Actions": "작업"
+  },
+  "ViewEdit": "보기/수정",
+  "ContractDetail": {
+    "Overview": "개요",
+    "Content": "내용",
+    "RevisionHistory": "수정 이력",
+    "Comments": "댓글",
+    "AuditLog": "감사 로그"
+  }
+}

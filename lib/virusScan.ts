@@ -31,7 +31,6 @@ export class VirusScanService {
    */
   async scanFile(fileBuffer: Buffer, fileName: string): Promise<VirusScanResult> {
     if (!this.enabled) {
-      console.log('Virus scanning disabled, skipping scan');
       return {
         isClean: true,
         threats: [],
@@ -41,7 +40,6 @@ export class VirusScanService {
     }
 
     if (!this.apiKey || !this.apiUrl) {
-      console.warn('Virus scan API not configured, skipping scan');
       return {
         isClean: true,
         threats: [],
@@ -65,8 +63,6 @@ export class VirusScanService {
       // Upload and scan new file
       return await this.uploadAndScan(fileBuffer, fileName, fileHash);
     } catch (error) {
-      console.error('Virus scan error:', error);
-      
       // In production, you might want to reject files if scanning fails
       // For now, we'll allow them but log the error
       return {
@@ -107,7 +103,6 @@ export class VirusScanService {
         provider: 'virustotal'
       };
     } catch (error) {
-      console.error('Error checking file hash:', error);
       return null;
     }
   }
@@ -148,7 +143,6 @@ export class VirusScanService {
       const analysisId = await uploadResponse.json();
       return await this.waitForAnalysis(analysisId.data.id);
     } catch (error) {
-      console.error('Error uploading file for scan:', error);
       throw error;
     }
   }
@@ -186,7 +180,6 @@ export class VirusScanService {
         // Wait before next attempt
         await new Promise(resolve => setTimeout(resolve, delayMs));
       } catch (error) {
-        console.error(`Analysis check attempt ${attempt + 1} failed:`, error);
         if (attempt === maxAttempts - 1) {
           throw error;
         }

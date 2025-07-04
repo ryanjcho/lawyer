@@ -58,7 +58,6 @@ export default function FileUpload({
   }, [])
 
   const handleFiles = useCallback((files: FileList) => {
-    console.log('handleFiles called with:', files)
     const fileArray = Array.from(files)
     
     // Check if adding these files would exceed maxFiles limit
@@ -148,7 +147,6 @@ export default function FileUpload({
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null)
     if (e.target.files && e.target.files[0]) {
-      console.log('File selected:', e.target.files[0])
       handleFiles(e.target.files)
     }
   }, [handleFiles])

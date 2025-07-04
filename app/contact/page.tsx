@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -15,7 +16,6 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // TODO: Implement form submission
-    console.log('Form submitted:', formData)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -29,16 +29,19 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-blue-600 to-blue-800">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/20 to-transparent" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16">
           <div className="text-center">
-            <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl">
-              상담 문의
-            </h1>
-            <p className="mt-6 text-xl text-blue-100">
-              전문 변호사가 귀하의 법률 문제를 해결해 드립니다
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">문의하기</h1>
+              <p className="text-xl md:text-2xl text-indigo-100 mb-8">서비스 관련 문의나 상담 요청을 남겨주세요.</p>
+            </motion.div>
           </div>
         </div>
       </section>

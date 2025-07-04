@@ -5,6 +5,7 @@ import { CheckCircleIcon, ClockIcon, ExclamationTriangleIcon, DocumentTextIcon, 
 import { Tab } from '@headlessui/react';
 import CollaborationPanel from '@/app/components/CollaborationPanel';
 import IntegrationPanel from '@/app/components/IntegrationPanel';
+import FileUpload from '@/app/components/FileUpload';
 
 export default function ContractDetailPage() {
   const router = useRouter();
@@ -16,7 +17,11 @@ export default function ContractDetailPage() {
   const [showIntegration, setShowIntegration] = useState(false);
 
   // Ensure id is always a string
-  const contractId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const contractId = params?.id
+    ? Array.isArray(params.id)
+      ? params.id[0]
+      : params.id
+    : '';
 
   useEffect(() => {
     // Realistic mock contract data for fallback
@@ -191,7 +196,7 @@ export default function ContractDetailPage() {
       case 'PROCESSING':
         return <span className="px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">진행 중</span>;
       case 'UPLOADED':
-        return <span className="px-3 py-1 rounded-full text-xs font-bold bg-gray-200 text-gray-800">업로드 완료</span>;
+        return <span className="px-3 py-1 rounded-full text-xs font-bold bg-gray-200 text-black">업로드 완료</span>;
       default:
         return <span className="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-800">{status}</span>;
     }
@@ -265,6 +270,10 @@ export default function ContractDetailPage() {
               {getStatusBadge(contract.status ?? '정보 없음')}
               <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">{contract.type ?? '정보 없음'}</span>
               {getRiskBadge(contract.riskLevel ?? '정보 없음')}
+            </div>
+            <div className="mt-2">
+              <span className="text-xs text-gray-400 mr-2">케이스 번호</span>
+              <span className="text-lg font-mono font-bold text-indigo-600">{contract.caseNumber || contract.id}</span>
             </div>
           </div>
         </div>
@@ -606,6 +615,13 @@ export default function ContractDetailPage() {
 
             {/* 문서 - Documents (Files, related docs, security) */}
             <Tab.Panel>
+              {/* File Upload for this contract case */}
+              <div className="mb-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <DocumentTextIcon className="w-5 h-5 text-indigo-400" /> 파일 업로드 (이 케이스 전용)
+                </h3>
+                <FileUpload onFilesUploaded={(files) => { /* TODO: handle per-case upload */ }} />
+              </div>
               {/* Original File */}
               <div className="mb-6">
                 <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">

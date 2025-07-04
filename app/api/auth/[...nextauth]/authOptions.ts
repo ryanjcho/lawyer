@@ -15,7 +15,6 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log(`[${new Date().toISOString()}] Login attempt: missing credentials`);
           throw new Error("이메일과 비밀번호를 입력해주세요.");
         }
 
@@ -24,7 +23,6 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user || !user.password) {
-          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - user not found`);
           throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
 
@@ -34,17 +32,14 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isPasswordValid) {
-          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - invalid password`);
           throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
 
         // Enable email verification for production
         if (!user.emailVerified) {
-          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - email not verified`);
           throw new Error("이메일 인증이 필요합니다. 이메일을 확인하여 인증을 완료해주세요.");
         }
 
-        console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - success`);
         return {
           id: user.id,
           email: user.email,
