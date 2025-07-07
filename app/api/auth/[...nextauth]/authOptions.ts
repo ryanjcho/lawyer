@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { NextAuthOptions } from "next-auth";
 
@@ -41,13 +41,9 @@ export const authOptions: NextAuthOptions = {
 
         // Enable email verification for production
         if (!user.emailVerified) {
-          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - email not verified`);
           throw new Error("이메일 인증이 필요합니다. 이메일을 확인하여 인증을 완료해주세요.");
         }
 
-<<<<<<< Updated upstream
-        console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - success`);
-=======
         // Audit log for successful login
         await prisma.auditLog.create({
           data: {
@@ -57,7 +53,6 @@ export const authOptions: NextAuthOptions = {
           }
         });
 
->>>>>>> Stashed changes
         return {
           id: user.id,
           email: user.email,

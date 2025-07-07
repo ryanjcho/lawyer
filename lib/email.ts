@@ -5,6 +5,11 @@ interface EmailOptions {
   to: string
   subject: string
   html: string
+  attachments?: Array<{
+    filename: string
+    content: Buffer | string
+    contentType?: string
+  }>
 }
 
 const transporter = nodemailer.createTransport({
@@ -17,13 +22,14 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-export async function sendEmail({ to, subject, html }: EmailOptions) {
+export async function sendEmail({ to, subject, html, attachments }: EmailOptions) {
   try {
     await transporter.sendMail({
       from: envConfig.email.smtp.from,
       to,
       subject,
       html,
+      attachments,
     })
   } catch (error) {
     console.error('Failed to send email:', error)

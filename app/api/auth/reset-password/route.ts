@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { hash } from 'bcrypt'
+import { hash } from 'bcryptjs'
 import { sendEmail } from '@/lib/email'
 import { randomBytes } from 'crypto'
 
