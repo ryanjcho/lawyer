@@ -84,10 +84,28 @@ export default function Navbar() {
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                       <div className="py-1">
                         <Link
+                          href="/dashboard"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          대시보드
+                        </Link>
+                        <Link
                           href="/profile"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           프로필
+                        </Link>
+                        <Link
+                          href="/dashboard?tab=contracts"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          계약서
+                        </Link>
+                        <Link
+                          href="/dashboard?tab=support"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          지원
                         </Link>
                         <hr className="my-1" />
                         <button
@@ -178,11 +196,32 @@ export default function Navbar() {
                   <p className="text-sm text-gray-500">{session.user.email}</p>
                 </div>
                 <Link
+                  href="/dashboard"
+                  className="block pl-5 pr-4 py-3 text-lg font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50 rounded"
+                  role="menuitem"
+                >
+                  대시보드
+                </Link>
+                <Link
                   href="/profile"
                   className="block pl-5 pr-4 py-3 text-lg font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50 rounded"
                   role="menuitem"
                 >
                   프로필
+                </Link>
+                <Link
+                  href="/dashboard?tab=contracts"
+                  className="block pl-5 pr-4 py-3 text-lg font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50 rounded"
+                  role="menuitem"
+                >
+                  계약서
+                </Link>
+                <Link
+                  href="/dashboard?tab=support"
+                  className="block pl-5 pr-4 py-3 text-lg font-medium text-gray-900 hover:text-indigo-600 hover:bg-gray-50 focus:outline-none focus:text-indigo-600 focus:bg-gray-50 rounded"
+                  role="menuitem"
+                >
+                  지원
                 </Link>
                 <button
                   onClick={handleSignOut}
