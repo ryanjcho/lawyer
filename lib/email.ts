@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { envConfig } from '@/config/env.config'
+import { envConfig } from '../config/env.config'
 
 interface EmailOptions {
   to: string
@@ -29,7 +29,7 @@ export async function sendEmail({ to, subject, html, attachments }: EmailOptions
       to,
       subject,
       html,
-      attachments,
+      ...(attachments ? { attachments } : {}),
     })
   } catch (error) {
     console.error('Failed to send email:', error)
@@ -44,7 +44,7 @@ export function renderCustomNotificationEmail({ title, message }: { title: strin
         <h2 style="color: #4F46E5;">${title}</h2>
         <p>${message}</p>
         <hr />
-        <p style="font-size: 12px; color: #888;">LawScan 알림 메일입니다.</p>
+        <p style="font-size: 12px; color: #888;">LawKit 알림 메일입니다.</p>
       </body>
     </html>
   `;

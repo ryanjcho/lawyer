@@ -2,341 +2,233 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { CheckCircleIcon, ArrowRightIcon, DocumentTextIcon, ChartBarIcon, ShieldCheckIcon, UserGroupIcon, ClockIcon, StarIcon } from '@heroicons/react/24/outline'
+import { CheckCircleIcon, ArrowRightIcon, DocumentTextIcon, ChartBarIcon, ShieldCheckIcon, UserGroupIcon, ClockIcon, StarIcon, CalculatorIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+import { motion } from 'framer-motion'
 
 export default function Pricing() {
-  const testimonials = [
-    {
-      name: '김민수',
-      title: '법무팀장',
-      company: '삼성전자',
-      content: 'LegalCare의 계약서 분석 서비스로 계약 검토 시간을 70% 단축했습니다. 특히 글로벌 계약서에서 놓치기 쉬운 조항들을 정확히 포착해주어 큰 도움이 되었습니다.',
-      rating: 5,
-      savings: '연간 2억원 절약'
-    },
-    {
-      name: '박지영',
-      title: '법무이사',
-      company: 'SK하이닉스',
-      content: '반도체 업계의 복잡한 기술 라이선스 계약을 검토할 때 LegalCare의 전문성이 빛났습니다. 리스크 분석이 매우 정확하고 실용적인 개선안을 제시해주었습니다.',
-      rating: 5,
-      savings: '계약 리스크 80% 감소'
-    },
-    {
-      name: '이준호',
-      title: 'CEO',
-      company: '네이버',
-      content: '스타트업에서 대기업으로 성장하면서 계약 관리가 복잡해졌는데, LegalCare의 맞춤형 분석 서비스로 체계적인 계약 관리가 가능해졌습니다. 투자 대비 효과가 매우 뛰어납니다.',
-      rating: 5,
-      savings: '법무 비용 60% 절약'
-    },
-    {
-      name: '최수진',
-      title: '법무총괄',
-      company: '현대자동차',
-      content: '글로벌 공급망 계약의 복잡성을 고려할 때 LegalCare의 다국어 지원과 국제법 준수 검토 기능이 매우 유용했습니다. 특히 긴급 검토 서비스가 비즈니스 진행에 큰 도움이 되었습니다.',
-      rating: 5,
-      savings: '계약 체결 시간 50% 단축'
-    },
-    {
-      name: '정현우',
-      title: '법무팀장',
-      company: 'LG화학',
-      content: '화학 업계의 특수한 규제 요건을 반영한 계약 검토가 필요한데, LegalCare가 업계별 맞춤 검토를 제공해주어 매우 만족스럽습니다. 특히 환경 규제 관련 조항 검토가 정확합니다.',
-      rating: 5,
-      savings: '규제 위반 리스크 90% 감소'
-    },
-    {
-      name: '한소영',
-      title: '법무팀장',
-      company: '포스코',
-      content: '철강 업계의 장기 계약과 복잡한 조건들을 검토할 때 LegalCare의 전문성이 돋보였습니다. 특히 가격 조정 조항과 포스코 마켓 조항 검토가 정확했습니다.',
-      rating: 5,
-      savings: '계약 분쟁 75% 감소'
-    }
-  ]
-
-  const features = [
-    {
-      icon: DocumentTextIcon,
-      title: '전문 변호사 검토',
-      description: '강남 최고 로펌 출신 변호사들이 직접 검토하여 정확하고 신뢰할 수 있는 분석을 제공합니다.'
-    },
-    {
-      icon: ChartBarIcon,
-      title: '리스크 진단',
-      description: '수천 건의 계약서 데이터베이스를 기반으로 한 정확한 리스크 분석과 점수화를 제공합니다.'
-    },
-    {
-      icon: ShieldCheckIcon,
-      title: '개선 제안',
-      description: '계약서의 문제점을 파악하고 구체적인 개선 방안과 대안 조항을 제시합니다.'
-    },
-    {
-      icon: UserGroupIcon,
-      title: '1:1 상담',
-      description: '분석 결과에 대한 전문가 상담을 통해 궁금한 점을 해결하고 협상 전략을 수립합니다.'
-    },
-    {
-      icon: ClockIcon,
-      title: '빠른 분석',
-      description: 'AI 기반 빠른 분석 후 전문 변호사 검토를 통해 신속하고 정확한 결과를 제공합니다.'
-    },
-    {
-      icon: StarIcon,
-      title: '맞춤형 서비스',
-      description: '계약서의 복잡도와 업종에 따라 맞춤형 분석과 견적을 제공합니다.'
-    }
-  ]
-
-  const serviceProcess = [
+  const quoteSteps = [
     {
       step: 1,
-      title: '계약서 업로드',
-      description: '분석할 계약서를 업로드하면 AI가 자동으로 계약서 유형과 복잡도를 분석합니다.'
+      title: '견적/의뢰 요청',
+      description: '간단한 정보 입력만으로 계약서 작성 또는 검토 의뢰를 시작합니다.'
     },
     {
       step: 2,
-      title: '견적 산출',
-      description: '계약서의 복잡도, 페이지 수, 업종 등을 종합하여 정확한 견적을 제공합니다.'
+      title: '상세 정보 확인 및 상담',
+      description: '담당 매니저가 입력하신 정보를 확인하고, 필요한 경우 추가 상담을 통해 요구사항을 파악합니다.'
     },
     {
       step: 3,
-      title: '전문가 분석',
-      description: '전문 변호사가 직접 검토하여 리스크 진단, 개선안, 협상 포인트를 제시합니다.'
+      title: '맞춤 견적 산출',
+      description: '계약서의 복잡도, 업종, 서비스 유형(작성/검토), 요구사항을 반영하여 투명하고 합리적인 맞춤 견적을 안내해 드립니다.'
     },
     {
       step: 4,
-      title: '상세 리포트',
-      description: '분석 결과를 상세한 PDF 리포트로 제공하며, 필요시 추가 상담도 가능합니다.'
+      title: '견적서 전달 및 확정',
+      description: '견적은 이메일 또는 문자로 신속하게 전달되며, 고객님의 확인 후 서비스가 시작됩니다.'
     }
-  ]
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white flex flex-col justify-center">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-blue-900 text-white py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            맞춤형 계약서 분석 서비스
-          </h1>
-          <p className="text-xl md:text-2xl text-indigo-100 mb-8">
-            계약서의 복잡도에 따라 <span className="font-bold text-yellow-300">정확한 견적</span>을 제공하는<br/>
-            전문 변호사 맞춤 분석 서비스
-          </p>
-          <div className="flex flex-col md:flex-row justify-center gap-6 mt-8">
-            <div className="bg-white/10 rounded-lg px-6 py-4 flex flex-col md:flex-row items-center gap-3">
-              <span className="font-semibold text-yellow-200">평균 견적</span>
-              <span className="font-bold text-white text-xl">₩300,000 ~ ₩1,000,000</span>
+      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white overflow-hidden flex items-center justify-center min-h-[320px]">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/20 to-transparent" />
+        <div className="relative max-w-4xl mx-auto w-full flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">견적 및 예상 비용 안내</h1>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-6">
+              계약서의 복잡도와 요구사항에 따라 맞춤 견적을 신속하게 안내해 드립니다.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+      {/* Stat Cards Section */}
+      <section className="pt-12 pb-4">
+        <div className="max-w-4xl mx-auto px-4">
+          {/* Header emphasizing transparency */}
+          <h2 className="text-center text-2xl md:text-3xl font-extrabold mb-5 text-indigo-900 leading-tight">
+            오킴스 법무법인은 귀하에게 최대한 <span className="text-indigo-600 font-extrabold">투명한</span> 견적을 산출합니다
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* 평균 견적 */}
+            <div className="bg-white rounded-xl shadow flex flex-col items-center justify-center py-3 px-2 border border-indigo-100">
+              <CalculatorIcon className="w-6 h-6 text-indigo-600 mb-1" />
+              <div className="text-lg font-bold text-indigo-800">₩450,000</div>
+              <div className="text-xs text-gray-500 mt-0.5">평균 견적</div>
             </div>
-            <div className="bg-white/10 rounded-lg px-6 py-4 flex flex-col md:flex-row items-center gap-3">
-              <span className="font-semibold text-yellow-200">고객 만족도</span>
-              <span className="font-bold text-white text-xl">97%</span>
+            {/* 누적 분석횟수 */}
+            <div className="bg-white rounded-xl shadow flex flex-col items-center justify-center py-3 px-2 border border-indigo-100">
+              <ChartBarIcon className="w-6 h-6 text-indigo-600 mb-1" />
+              <div className="text-lg font-bold text-indigo-800">12,000+</div>
+              <div className="text-xs text-gray-500 mt-0.5">누적 분석횟수</div>
             </div>
-            <div className="bg-white/10 rounded-lg px-6 py-4 flex flex-col md:flex-row items-center gap-3">
-              <span className="font-semibold text-yellow-200">누적 분석</span>
-              <span className="font-bold text-white text-xl">10,000+</span>
+            {/* 재구매율 */}
+            <div className="bg-white rounded-xl shadow flex flex-col items-center justify-center py-3 px-2 border border-indigo-100">
+              <ArrowPathIcon className="w-6 h-6 text-indigo-600 mb-1" />
+              <div className="text-lg font-bold text-indigo-800">80%</div>
+              <div className="text-xs text-gray-500 mt-0.5">재구매율</div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Service Features */}
-      <section className="py-16 px-4">
+      {/* Combined Premium Card Section */}
+      <section className="py-12 px-2 sm:px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              왜 LegalCare를 선택해야 할까요?
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              강남 최고 로펌 출신 변호사들이 제공하는 전문적이고 정확한 계약서 분석 서비스
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-indigo-600" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Service Process */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              서비스 이용 과정
-            </h2>
-            <p className="text-lg text-gray-600">
-              간단한 4단계로 전문적인 계약서 분석을 받아보세요
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {serviceProcess.map((process, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-bold text-xl">{process.step}</span>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{process.title}</h3>
-                <p className="text-gray-600 text-sm">{process.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Information */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              투명한 견적 시스템
-            </h2>
-            <p className="text-lg text-gray-600">
-              계약서의 복잡도에 따라 정확하고 공정한 견적을 제공합니다
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">견적 산출 기준</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">계약서 페이지 수 (5-50페이지)</span>
+          {/* Modern Two-Column Card */}
+          <div className="bg-gradient-to-br from-white via-indigo-50 to-blue-50 rounded-3xl shadow-2xl p-8 sm:p-12 md:p-16 border-2 border-indigo-100 flex flex-col gap-10 md:gap-16 mb-16">
+            {/* Title and Subtitle */}
+            <div className="text-center mb-4">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-indigo-800 mb-2">맞춤 견적 산출 방식</h2>
+              <p className="text-lg text-indigo-600 font-semibold mb-2">업계 최고 수준의 투명한 견적 프로세스</p>
+              <p className="text-base text-gray-700 max-w-2xl mx-auto">모든 견적은 계약서의 특성과 고객 요구에 따라 1:1 맞춤으로 산출됩니다. 20년 경력 변호사 직접 검토, 12,000건+ 누적 경험, 업종별 전문성 반영.</p>
+            </div>
+            {/* Two-Column Layout */}
+            <div className="flex flex-col md:flex-row gap-12 md:gap-0 items-stretch">
+              {/* Left: Estimate Criteria */}
+              <div className="flex-1 flex flex-col justify-start items-center md:pr-10 md:border-r-2 border-indigo-200 mb-10 md:mb-0">
+                <h3 className="text-xl font-bold text-indigo-700 mb-6 mt-0">견적 산출 기준</h3>
+                <ul className="space-y-8 w-full">
+                  <li className="flex items-start gap-4">
+                    <CalculatorIcon className="w-8 h-8 text-indigo-600 flex-shrink-0" />
+                    <div>
+                      <div className="text-lg font-semibold text-gray-800">서비스 유형 (작성/검토)</div>
+                      <div className="text-gray-700 text-base mt-1">작성(신규 계약서 초안) 또는 검토(기존 계약서 분석)에 따라 견적이 달라집니다. <br/>작성은 보통 검토보다 20~40% 높은 비용이 산정됩니다.</div>
+                    </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">계약서 복잡도 및 조항 수</span>
+                  <li className="flex items-start gap-4">
+                    <ChartBarIcon className="w-8 h-8 text-indigo-600 flex-shrink-0" />
+                    <div>
+                      <div className="text-lg font-semibold text-gray-800">계약서의 복잡도 및 분량</div>
+                      <div className="text-gray-700 text-base mt-1">페이지 수(5~50p), 조항 수, 특수 조항(예: 옵션, 부속합의 등) 유무에 따라 비용이 달라집니다. <br/>예: 10p 미만 단순 계약서 → 30~40만원, 30p 이상 복잡 계약서 → 70만원 이상</div>
+                    </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">업종별 특수성 및 규제 요건</span>
+                  <li className="flex items-start gap-4">
+                    <ShieldCheckIcon className="w-8 h-8 text-indigo-600 flex-shrink-0" />
+                    <div>
+                      <div className="text-lg font-semibold text-gray-800">업종별 특수성 및 규제 요건</div>
+                      <div className="text-gray-700 text-base mt-1">금융, 의료, IT, 제조 등 업종별 특수 규제나 산업별 리스크가 반영됩니다. <br/>예: 단순 용역계약(일반) vs. 의료기기/금융상품 계약(고난도)</div>
+                    </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">긴급성 및 납기 요구사항</span>
+                  <li className="flex items-start gap-4">
+                    <ClockIcon className="w-8 h-8 text-indigo-600 flex-shrink-0" />
+                    <div>
+                      <div className="text-lg font-semibold text-gray-800">긴급성 및 납기 요구사항</div>
+                      <div className="text-gray-700 text-base mt-1">일반(2~3일), 익일(익일/당일), 주말/야간 등 요청 시 추가 비용이 발생할 수 있습니다. <br/>예: 당일/익일 납기 +20~30% 가산</div>
+                    </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">추가 상담 및 협상 지원 필요성</span>
+                  <li className="flex items-start gap-4">
+                    <ArrowPathIcon className="w-8 h-8 text-indigo-600 flex-shrink-0" />
+                    <div>
+                      <div className="text-lg font-semibold text-gray-800">추가 상담 및 협상 지원</div>
+                      <div className="text-gray-700 text-base mt-1">계약서 협상, 추가 자문, 2회 이상 피드백 등 부가 서비스 요청 시 별도 견적이 산정됩니다. <br/>예: 1회 추가 협상 지원 +10만원</div>
+                    </div>
                   </li>
                 </ul>
               </div>
-              
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">견적 범위</h3>
-                <div className="space-y-4">
-                  <div className="bg-indigo-50 rounded-lg p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold text-gray-900">기본 분석</span>
-                      <span className="text-indigo-700 font-bold">₩300,000 ~ ₩500,000</span>
-                    </div>
-                    <p className="text-sm text-gray-600">단순한 계약서, 기본 리스크 분석</p>
+              {/* Right: Customer Input & Stepper */}
+              <div className="flex-1 flex flex-col justify-start items-center md:pl-10">
+                <h3 className="text-xl font-bold text-indigo-700 mb-6 mt-0">고객 입력 정보</h3>
+                <ol className="space-y-8 w-full">
+                  {quoteSteps.map((step, idx) => (
+                    <li key={step.step} className="flex items-start gap-4">
+                      <span className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md border-4 border-white mr-2 select-none">
+                        {step.step}
+                      </span>
+                      <div>
+                        <div className="text-lg font-semibold text-indigo-800">{step.title}</div>
+                        <div className="text-gray-700 text-base mt-1">{step.description}</div>
+                        {/* Example details for each step */}
+                        {step.step === 1 && (
+                          <div className="text-sm text-gray-500 mt-1">예: 계약서 검토 요청, 신규 작성 요청 등</div>
+                        )}
+                        {step.step === 2 && (
+                          <div className="text-sm text-gray-500 mt-1">예: 전화/이메일/메신저 상담, 추가 자료 요청 등</div>
+                        )}
+                        {step.step === 3 && (
+                          <div className="text-sm text-gray-500 mt-1">예: 15p, IT 업종, 당일 납기, 추가 협상 지원 등 입력 정보 기반 산출</div>
+                        )}
+                        {step.step === 4 && (
+                          <div className="text-sm text-gray-500 mt-1">예: 이메일/문자 견적서 발송, 확정 후 결제 진행</div>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+                {/* Trust Badge & Note */}
+                <div className="mt-10 flex flex-col items-center gap-4 w-full">
+                  <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-4 py-2">
+                    <StarIcon className="w-6 h-6 text-green-500" />
+                    <span className="text-green-700 font-semibold">고객 만족도 98% | 법무법인 오킴스 보증</span>
                   </div>
-                  
-                  <div className="bg-green-50 rounded-lg p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold text-gray-900">표준 분석</span>
-                      <span className="text-green-700 font-bold">₩500,000 ~ ₩800,000</span>
-                    </div>
-                    <p className="text-sm text-gray-600">일반적인 복잡도의 계약서, 상세 분석</p>
+                  <div className="p-5 bg-yellow-50 rounded-lg text-center w-full">
+                    <p className="text-base text-yellow-800">
+                      <strong>참고:</strong> 실제 견적은 입력하신 정보와 상담 결과에 따라 달라질 수 있습니다. 결제는 견적 확인 후 진행됩니다.
+                    </p>
                   </div>
-                  
-                  <div className="bg-purple-50 rounded-lg p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold text-gray-900">고급 분석</span>
-                      <span className="text-purple-700 font-bold">₩800,000 ~ ₩1,500,000</span>
-                    </div>
-                    <p className="text-sm text-gray-600">복잡한 계약서, 심층 분석 및 협상 지원</p>
-                  </div>
+                  <a href="/contract" className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold rounded-xl hover:from-indigo-700 hover:to-blue-700 transition-all shadow-lg text-lg mt-2">
+                    지금 견적 받기
+                    <ArrowRightIcon className="w-5 h-5 ml-2" />
+                  </a>
                 </div>
-                
-                <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
-                  <p className="text-sm text-yellow-800">
-                    <strong>참고:</strong> 정확한 견적은 계약서 업로드 후 AI 분석을 통해 제공됩니다.
+              </div>
+            </div>
+          </div>
+
+          {/* Vertical Step-by-Step Card (for mobile/sequential view) */}
+          <div className="block md:hidden mt-12">
+            <div className="bg-white rounded-3xl shadow-2xl p-6 border border-indigo-100 flex flex-col gap-8">
+              <h3 className="text-2xl font-bold text-indigo-800 mb-2">견적 산출 절차</h3>
+              <ol className="space-y-6">
+                {quoteSteps.map((step, idx) => (
+                  <li key={step.step} className="flex items-start gap-4">
+                    <span className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md border-4 border-white mr-2 select-none">
+                      {step.step}
+                    </span>
+                    <div>
+                      <div className="text-lg font-semibold text-indigo-800">{step.title}</div>
+                      <div className="text-gray-700 text-base mt-1">{step.description}</div>
+                      {/* Example details for each step */}
+                      {step.step === 1 && (
+                        <div className="text-sm text-gray-500 mt-1">예: 계약서 검토 요청, 신규 작성 요청 등</div>
+                      )}
+                      {step.step === 2 && (
+                        <div className="text-sm text-gray-500 mt-1">예: 전화/이메일/메신저 상담, 추가 자료 요청 등</div>
+                      )}
+                      {step.step === 3 && (
+                        <div className="text-sm text-gray-500 mt-1">예: 15p, IT 업종, 당일 납기, 추가 협상 지원 등 입력 정보 기반 산출</div>
+                      )}
+                      {step.step === 4 && (
+                        <div className="text-sm text-gray-500 mt-1">예: 이메일/문자 견적서 발송, 확정 후 결제 진행</div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <div className="mt-8 flex flex-col items-center gap-4 w-full">
+                <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-4 py-2">
+                  <StarIcon className="w-6 h-6 text-green-500" />
+                  <span className="text-green-700 font-semibold">고객 만족도 98% | 법무법인 오킴스 보증</span>
+                </div>
+                <div className="p-5 bg-yellow-50 rounded-lg text-center w-full">
+                  <p className="text-base text-yellow-800">
+                    <strong>참고:</strong> 실제 견적은 입력하신 정보와 상담 결과에 따라 달라질 수 있습니다. 결제는 견적 확인 후 진행됩니다.
                   </p>
                 </div>
+                <a href="/contract" className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold rounded-xl hover:from-indigo-700 hover:to-blue-700 transition-all shadow-lg text-lg mt-2">
+                  지금 견적 받기
+                  <ArrowRightIcon className="w-5 h-5 ml-2" />
+                </a>
               </div>
             </div>
-            
-            <div className="mt-8 text-center">
-              <Link
-                href="/upload"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg"
-              >
-                지금 견적 받기 <ArrowRightIcon className="w-5 h-5 ml-2" />
-              </Link>
-            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              고객 후기
-            </h2>
-            <p className="text-lg text-gray-600">
-              실제 고객들이 경험한 LegalCare의 서비스
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
-                  <div className="flex text-yellow-400">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <StarIcon key={i} className="w-5 h-5 fill-current" />
-                    ))}
-                  </div>
-                </div>
-                <p className="text-gray-700 mb-4 text-sm leading-relaxed">
-                  "{testimonial.content}"
-                </p>
-                <div className="border-t pt-4">
-                  <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-600">{testimonial.title}, {testimonial.company}</div>
-                  <div className="text-sm text-indigo-600 font-semibold mt-1">{testimonial.savings}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            지금 바로 시작하세요
-          </h2>
-          <p className="text-xl text-indigo-100 mb-8">
-            계약서를 업로드하고 정확한 견적을 받아보세요
-          </p>
-          <Link
-            href="/upload"
-            className="inline-flex items-center px-8 py-4 bg-white text-indigo-600 font-bold rounded-xl hover:bg-gray-100 transition-colors shadow-lg"
-          >
-            무료 견적 받기 <ArrowRightIcon className="w-5 h-5 ml-2" />
-          </Link>
-          <p className="text-sm text-indigo-200 mt-4">
-            * 견적은 무료이며, 결제는 견적 확인 후 진행됩니다
-          </p>
         </div>
       </section>
     </div>
-  )
+  );
 } 

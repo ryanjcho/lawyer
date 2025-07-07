@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'framer-motion'
 
 interface Case {
   id: string;
@@ -316,140 +317,97 @@ export default function Industries() {
             <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-3xl mx-auto">
               각 산업의 특성과 규제를 고려한 전문적인 계약 검토 서비스와 실제 성공 사례
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/pricing"
-                className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
-              >
-                요금제 보기
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center px-8 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
-              >
-                무료 상담 신청
-              </Link>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Industries Overview */}
+      {/* Combined Industry Cards and Reviews */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              산업별 전문 솔루션
+              산업별 전문 솔루션 및 성공 사례
             </h2>
             <p className="text-xl text-gray-600">
-              각 산업의 특성에 맞춘 맞춤형 계약 검토 서비스
+              각 산업의 특성에 맞춘 맞춤형 계약 검토 서비스와 실제 사례를 함께 확인하세요.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-16">
             {industries.map((industry) => (
-              <Link key={industry.id} href={`/industries/${industry.id}`} className="group">
-                <div className="bg-gray-50 rounded-xl p-8 hover:shadow-xl transition-all duration-300 hover:bg-white border border-transparent hover:border-indigo-200">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-indigo-200 transition-colors duration-300">
-                    {industry.icon}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">{industry.name}</h3>
-                  <p className="text-gray-600 mb-6">{industry.description}</p>
-                  
-                  {/* Contract Types */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-gray-900 mb-3">주요 계약 유형</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {industry.contractTypes.slice(0, 3).map((type, index) => (
-                        <span key={index} className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
-                          {type}
-                        </span>
-                      ))}
-                      {industry.contractTypes.length > 3 && (
-                        <span className="text-xs text-gray-500">+{industry.contractTypes.length - 3}개 더</span>
-                      )}
+              <div key={industry.id} className="bg-gray-50 rounded-2xl p-8 shadow-sm border border-gray-100">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-8">
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 bg-indigo-100 rounded-lg flex items-center justify-center">
+                      {industry.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{industry.name}</h3>
+                      <p className="text-gray-600 mb-2">{industry.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {industry.contractTypes.slice(0, 3).map((type, index) => (
+                          <span key={index} className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
+                            {type}
+                          </span>
+                        ))}
+                        {industry.contractTypes.length > 3 && (
+                          <span className="text-xs text-gray-500">+{industry.contractTypes.length - 3}개 더</span>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-indigo-600">{industry.metrics.riskReduction}</div>
+                          <div className="text-gray-600">리스크 감소</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-indigo-600">{industry.metrics.timeSaving}</div>
+                          <div className="text-gray-600">시간 단축</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Metrics */}
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-indigo-600">{industry.metrics.riskReduction}</div>
-                      <div className="text-gray-600">리스크 감소</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-indigo-600">{industry.metrics.timeSaving}</div>
-                      <div className="text-gray-600">시간 단축</div>
-                    </div>
-                  </div>
-
-                  {/* Case Count */}
-                  <div className="mt-4 text-center">
+                  <div className="text-center md:text-right">
                     <span className="text-sm text-gray-500">
                       {industry.cases.length}개의 성공 사례
                     </span>
                   </div>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Case Studies */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              주요 성공 사례
-            </h2>
-            <p className="text-xl text-gray-600">
-              실제 고객들의 계약 검토 성공 사례를 확인하세요
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cases.slice(0, 6).map((caseItem) => (
-              <div key={caseItem.id} className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-semibold text-indigo-600 bg-indigo-100 px-3 py-1 rounded-full">
-                    {caseItem.category}
-                  </span>
-                  <span className="text-sm text-gray-500">{caseItem.industry}</span>
-                </div>
-                
-                <h3 className="text-lg font-bold text-gray-900 mb-3">{caseItem.title}</h3>
-                <p className="text-gray-600 text-sm mb-4">{caseItem.description}</p>
-                
-                <div className="mb-4">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-2">주요 개선사항</h4>
-                  <ul className="space-y-1">
-                    {caseItem.details.slice(0, 3).map((detail, index) => (
-                      <li key={index} className="text-xs text-gray-600 flex items-start">
-                        <svg className="w-3 h-3 text-indigo-600 mt-0.5 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>{detail}</span>
-                      </li>
+                {/* Industry-specific reviews/case studies */}
+                {industry.cases.length > 0 && (
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {industry.cases.map((caseItem) => (
+                      <div key={caseItem.id} className="bg-white rounded-xl p-6 shadow hover:shadow-lg transition-shadow duration-300 border border-gray-100">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-semibold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full">
+                            {caseItem.category}
+                          </span>
+                          <span className="text-xs text-gray-500">{caseItem.industry}</span>
+                        </div>
+                        <h4 className="text-base font-bold text-gray-900 mb-1">{caseItem.title}</h4>
+                        <p className="text-gray-600 text-xs mb-2">{caseItem.description}</p>
+                        <div className="mb-2">
+                          <h5 className="text-xs font-semibold text-gray-900 mb-1">주요 개선사항</h5>
+                          <ul className="space-y-1">
+                            {caseItem.details.slice(0, 2).map((detail, index) => (
+                              <li key={index} className="text-xs text-gray-600 flex items-start">
+                                <svg className="w-3 h-3 text-indigo-600 mt-0.5 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>{detail}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="border-t pt-2 mt-2">
+                          <div className="text-xs font-semibold text-indigo-600 mb-0.5">결과</div>
+                          <div className="text-xs text-gray-600">{caseItem.result}</div>
+                        </div>
+                      </div>
                     ))}
-                  </ul>
-                </div>
-
-                <div className="border-t pt-4">
-                  <div className="text-sm font-semibold text-indigo-600 mb-1">결과</div>
-                  <div className="text-sm text-gray-600">{caseItem.result}</div>
-                </div>
+                  </div>
+                )}
               </div>
             ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link
-              href="/contact"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              더 많은 사례 보기
-            </Link>
           </div>
         </div>
       </section>

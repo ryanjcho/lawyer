@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { randomBytes } from 'crypto';
 import { sendEmail } from '@/lib/email';
+import { envConfig } from '@/config/env.config';
 
 export async function POST(req: Request) {
   try {
@@ -76,7 +77,7 @@ export async function POST(req: Request) {
       });
 
       // Send verification email
-      const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
+      const verificationUrl = `${envConfig.app.url}/verify-email?token=${token}`;
       await sendEmail({
         to: user.email,
         subject: '이메일 인증',

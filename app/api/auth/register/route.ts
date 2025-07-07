@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
 import { sendEmail } from '@/lib/email';
+import { envConfig } from '@/config/env.config';
 
 export const dynamic = "force-dynamic";
 
@@ -59,8 +60,10 @@ export async function POST(req: Request) {
       },
     });
 
+    // Create verification URL
+    const verificationUrl = `${envConfig.app.url}/verify-email?token=${token}`;
+
     // Send verification email
-    const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
     await sendEmail({
       to: user.email,
       subject: '이메일 인증',

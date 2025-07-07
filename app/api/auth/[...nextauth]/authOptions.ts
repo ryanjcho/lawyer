@@ -1,12 +1,11 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { NextAuthOptions } from "next-auth";
+import { envConfig } from "@/config/env.config";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as any,
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: envConfig.nextAuth.secret,
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -16,7 +15,6 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log(`[${new Date().toISOString()}] Login attempt: missing credentials`);
           throw new Error("이메일과 비밀번호를 입력해주세요.");
         }
 
@@ -25,7 +23,6 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user || !user.password) {
-          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - user not found`);
           throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
 
@@ -35,7 +32,6 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isPasswordValid) {
-          console.log(`[${new Date().toISOString()}] Login attempt: ${credentials.email} - invalid password`);
           throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
 

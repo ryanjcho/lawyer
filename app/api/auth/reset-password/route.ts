@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db'
 import { hash } from 'bcryptjs'
 import { sendEmail } from '@/lib/email'
 import { randomBytes } from 'crypto'
+import { envConfig } from '@/config/env.config'
 
 export async function POST(request: Request) {
   try {
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
       })
 
       // Send reset email
-      const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`
+      const resetUrl = `${envConfig.app.url}/reset-password?token=${token}`
       await sendEmail({
         to: user.email,
         subject: '비밀번호 재설정',

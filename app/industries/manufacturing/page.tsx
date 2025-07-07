@@ -13,7 +13,7 @@ export default function ManufacturingIndustry() {
               제조 기업을 위한 스마트 계약 검토
             </h1>
             <p className="text-xl text-blue-100 mb-8">
-              AI와 법률 전문가가 제조 기업의 계약 리스크를 최소화합니다
+              법률 전문가가 제조 기업의 계약 리스크를 최소화합니다
             </p>
             <div className="flex justify-center space-x-4">
               <Link

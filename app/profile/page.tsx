@@ -4,10 +4,17 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+interface UserProfile {
+  name: string;
+  company: string;
+  phone: string;
+  image: string;
+}
+
 export default function ProfilePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [profile, setProfile] = useState({ name: "", company: "", phone: "", image: "" });
+  const [profile, setProfile] = useState<UserProfile>({ name: "", company: "", phone: "", image: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -31,7 +38,10 @@ export default function ProfilePage() {
         });
         setError("");
       })
-      .catch((err) => setError(err.message || "프로필 정보를 불러오지 못했습니다."))
+      .catch((err) => {
+        setError(err.message || "프로필 정보를 불러오지 못했습니다.");
+        setProfile({ name: "", company: "", phone: "", image: "" });
+      })
       .finally(() => setLoading(false));
   }, [session, status, router]);
 
@@ -78,7 +88,7 @@ export default function ProfilePage() {
                 type="text"
                 id="name"
                 name="name"
-                value={profile?.name || ''}
+                value={profile.name}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
                 required
@@ -90,7 +100,7 @@ export default function ProfilePage() {
                 type="text"
                 id="company"
                 name="company"
-                value={profile?.company || ''}
+                value={profile.company}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />
@@ -101,7 +111,7 @@ export default function ProfilePage() {
                 type="text"
                 id="phone"
                 name="phone"
-                value={profile?.phone || ''}
+                value={profile.phone}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />
@@ -112,7 +122,7 @@ export default function ProfilePage() {
                 type="text"
                 id="image"
                 name="image"
-                value={profile?.image || ''}
+                value={profile.image}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 placeholder-gray-500"
               />

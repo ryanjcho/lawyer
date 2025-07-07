@@ -207,7 +207,7 @@ export default function PrestigeHome() {
       {/* Testimonial Snippet */}
       <section className="py-8 bg-white border-b border-indigo-100">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <blockquote className="text-xl italic text-indigo-800 font-semibold mb-2">"계약서 검토부터 분쟁까지, 온라인으로 이렇게 신속하고 믿을 수 있는 서비스는 처음이었습니다."</blockquote>
+          <blockquote className="text-xl italic text-indigo-800 font-semibold mb-2">&quot;계약서 검토부터 분쟁까지, 온라인으로 이렇게 신속하고 믿을 수 있는 서비스는 처음이었습니다.&quot;</blockquote>
           <div className="text-sm text-gray-500">- 실제 고객 후기 중에서</div>
         </div>
       </section>

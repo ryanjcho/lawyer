@@ -13,26 +13,18 @@ export function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center mb-6">
-              <span className="text-2xl font-bold text-indigo-400">LawScan</span>
+              <span className="text-2xl font-bold text-indigo-400">LawKit</span>
             </div>
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              계약서 검토부터 분쟁 예방까지,<br/>
-              실제 변호사가 직접 제공하는<br/>
-              온라인 법률 서비스입니다.
+            <p className="text-gray-300 mb-4 leading-relaxed">
+              데이터 기반, 신속, 전문 변호사 직접 검토<br/>
+              온라인으로 쉽고 빠른 계약서 서비스
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-indigo-400 transition-colors">
-                <span className="sr-only">LinkedIn</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-indigo-400 transition-colors">
-                <span className="sr-only">Twitter</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                </svg>
-              </a>
+            <div className="flex space-x-3 mt-2">
+              <a href="https://www.linkedin.com/company/ohkims" target="_blank" rel="noopener" aria-label="LinkedIn" className="hover:text-indigo-400 transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.29c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm13.5 10.29h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg></a>
+              <a href="https://pf.kakao.com/_xgCzjxb" target="_blank" rel="noopener" aria-label="KakaoTalk" className="hover:text-yellow-400 transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 5.797 2 10.111c0 2.697 1.963 5.06 5.01 6.47-.207.73-.746 2.626-.855 3.04-.133.51.187.507.396.37.162-.104 2.57-1.68 3.617-2.37.57.08 1.16.123 1.832.123 5.523 0 10-3.797 10-8.111C22 5.797 17.523 2 12 2z"/></svg></a>
+              <a href="https://www.youtube.com/@ohkims" target="_blank" rel="noopener" aria-label="YouTube" className="hover:text-red-400 transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+              <a href="https://www.instagram.com/ohkims_law" target="_blank" rel="noopener" aria-label="Instagram" className="hover:text-pink-400 transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.781c-.49 0-.928-.175-1.297-.49-.368-.315-.49-.753-.49-1.243 0-.49.122-.928.49-1.243.369-.315.807-.49 1.297-.49s.928.175 1.297.49c.368.315.49.753.49 1.243 0 .49-.122.928-.49 1.243-.369.315-.807.49-1.297.49z"/></svg></a>
+              <a href="https://blog.naver.com/ohkims" target="_blank" rel="noopener" aria-label="Naver Blog" className="hover:text-green-400 transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727v12.845z"/></svg></a>
             </div>
           </div>
 
@@ -41,18 +33,13 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-6 text-indigo-300">서비스</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/upload" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  계약서 업로드
-                </Link>
-              </li>
-              <li>
-                <Link href="/generate" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  계약서 초안 생성
-                </Link>
-              </li>
-              <li>
                 <Link href="/services" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
                   서비스 소개
+                </Link>
+              </li>
+              <li>
+                <Link href="/expertise" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  전문성/차별점
                 </Link>
               </li>
               <li>
@@ -65,25 +52,6 @@ export function Footer() {
                   요금 안내
                 </Link>
               </li>
-              <li>
-                <Link href="/dashboard" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  내 대시보드
-                </Link>
-              </li>
-              {isAdmin && (
-                <li>
-                  <Link href="/admin" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                    관리자 대시보드
-                  </Link>
-                </li>
-              )}
-              {isAdmin && (
-                <li>
-                  <Link href="/admin/auditlog" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                    감사 로그
-                  </Link>
-                </li>
-              )}
             </ul>
           </div>
 
@@ -107,8 +75,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/resources" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  법률 자료실
+                <Link href="/blog" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  블로그
                 </Link>
               </li>
             </ul>
@@ -134,7 +102,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="mailto:support@lawscan.co.kr" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                <a href="mailto:support@ohkcontract.com" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
                   이메일 문의
                 </a>
               </li>
@@ -149,21 +117,23 @@ export function Footer() {
 
         {/* Newsletter Signup */}
         <div className="border-t border-gray-700 pt-8 mb-8">
-          <div className="max-w-md">
-            <h3 className="text-lg font-semibold mb-4 text-indigo-300">법률 트렌드 구독</h3>
+          <div className="max-w-md bg-gray-800 rounded-2xl shadow-lg p-6">
+            <h3 className="text-lg font-semibold mb-4 text-indigo-300">법률 인사이트 뉴스레터</h3>
             <p className="text-gray-300 mb-4">
-              최신 계약법 동향과 법률 리스크 예방 팁을 받아보세요.
+              최신 계약법 동향, 실무 팁, 리스크 예방 전략 등<br/>
+              실질적인 법률 인사이트를 정기적으로 받아보실 수 있습니다.
             </p>
             <div className="flex">
               <input
                 type="email"
-                placeholder="이메일 주소"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-l-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder="이메일 주소 입력"
+                className="flex-1 px-4 py-2 bg-gray-900 border border-gray-700 rounded-l-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
               <button className="px-6 py-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                구독
+                구독 신청
               </button>
             </div>
+            <p className="text-xs text-gray-400 mt-2">* 언제든 구독 해지하실 수 있습니다.</p>
           </div>
         </div>
 
@@ -171,7 +141,7 @@ export function Footer() {
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-6 text-sm text-gray-400">
-              <span>© {new Date().getFullYear()} LawScan. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} LawKit. All rights reserved.</span>
               <Link href="/terms" className="hover:text-indigo-400 transition-colors">
                 이용약관
               </Link>
@@ -182,7 +152,7 @@ export function Footer() {
             <div className="flex items-center space-x-4 text-sm text-gray-400">
               <span>대한변협 등록 법률사무소</span>
               <span>•</span>
-              <span>Made with ❤️ in Korea</span>
+              <span>Seoul, Korea</span>
             </div>
           </div>
         </div>

@@ -23,8 +23,10 @@ export default function UsersPage() {
           <ClientHealthPanel />
           <UserFlagsPanel />
           <UserAuditTrail />
-          <NotificationsPanel limit={5} />
           <UserFinancialsPanel />
+        </div>
+        <div className="mb-8 max-w-2xl">
+          <NotificationsPanel limit={5} />
         </div>
       </main>
     </div>
