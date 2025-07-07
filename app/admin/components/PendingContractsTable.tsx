@@ -15,7 +15,9 @@ const contracts = [
   { id: '3', name: 'SLA - Gamma', client: 'Gamma Inc', type: '검토', status: '최종 완료', risk: '낮음', due: '2024-06-30', lawyer: 'Emily Lee' },
 ];
 
-export default function PendingContractsTable() {
+type PendingContractsTableProps = { limit?: number };
+export default function PendingContractsTable({ limit }: PendingContractsTableProps) {
+  const displayContracts = contracts.slice(0, limit ?? contracts.length);
   return (
     <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
       <div className="mb-4 flex items-center justify-between">
@@ -46,7 +48,7 @@ export default function PendingContractsTable() {
           </tr>
         </thead>
         <tbody>
-          {contracts.map((c, idx) => (
+          {displayContracts.map((c, idx) => (
             <tr key={c.id} className={`border-b ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50`}>
               <td className="py-2 px-3 text-black font-semibold flex items-center gap-2">
                 {c.name}

@@ -1,4 +1,5 @@
-export default function CriticalContractsPanel() {
+type CriticalContractsPanelProps = { limit?: number };
+export default function CriticalContractsPanel({ limit }: CriticalContractsPanelProps) {
   const contracts = [
     { id: 1, name: 'NDA - Acme', client: 'Acme Corp', risk: '높음', due: '2024-07-01', urgent: true },
     { id: 2, name: 'IP 계약 - Delta', client: 'Delta Ltd', risk: '높음', due: '2024-07-03', urgent: false },
@@ -8,7 +9,7 @@ export default function CriticalContractsPanel() {
     <div className="bg-white rounded-lg shadow p-6 mb-8">
       <div className="font-bold text-black mb-4">위험/임박 계약</div>
       <ul className="space-y-2">
-        {contracts.map(c => (
+        {contracts.slice(0, limit ?? contracts.length).map(c => (
           <li key={c.id} className="flex items-center gap-4">
             <span className="font-semibold text-black">{c.name}</span>
             <span className="text-gray-600">({c.client})</span>

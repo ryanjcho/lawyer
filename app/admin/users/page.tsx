@@ -1,3 +1,5 @@
+"use client";
+
 import Sidebar from '../components/Sidebar';
 import BulkUserActions from '../components/BulkUserActions';
 import UserDirectoryTable from '../components/UserDirectoryTable';
@@ -6,6 +8,7 @@ import ClientHealthPanel from '../components/ClientHealthPanel';
 import UserFlagsPanel from '../components/UserFlagsPanel';
 import UserAuditTrail from '../components/UserAuditTrail';
 import UserFinancialsPanel from '../components/UserFinancialsPanel';
+import NotificationsPanel from '../components/NotificationsPanel';
 
 export default function UsersPage() {
   return (
@@ -21,6 +24,9 @@ export default function UsersPage() {
           <UserFlagsPanel />
           <UserAuditTrail />
           <UserFinancialsPanel />
+        </div>
+        <div className="mb-8 max-w-2xl">
+          <NotificationsPanel limit={5} />
         </div>
       </main>
     </div>

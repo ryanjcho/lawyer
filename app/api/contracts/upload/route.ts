@@ -83,6 +83,24 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Create audit log for contract upload
+    await prisma.auditLog.create({
+      data: {
+        userId: session.user.id,
+        action: 'UPLOAD_CONTRACT',
+        details: `Uploaded contract(s): ${files.map((f: any) => f.name).join(', ')}`
+      }
+    });
+
+    // Create audit log for payment creation
+    await prisma.auditLog.create({
+      data: {
+        userId: session.user.id,
+        action: 'CREATE_PAYMENT',
+        details: `Created payment (ID: ${payment.id}) for contract (ID: ${contract.id}), amount: ${amount}`
+      }
+    });
+
     return NextResponse.json({
       success: true,
       contractId: contract.id,

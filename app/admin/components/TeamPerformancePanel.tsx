@@ -1,4 +1,5 @@
-export default function TeamPerformancePanel() {
+type TeamPerformancePanelProps = { limit?: number };
+export default function TeamPerformancePanel({ limit }: TeamPerformancePanelProps) {
   const lawyers = [
     { name: '김변호사', count: 7, avgTime: '3.1일', overdue: 1 },
     { name: '이변호사', count: 3, avgTime: '2.8일', overdue: 0 },
@@ -17,7 +18,7 @@ export default function TeamPerformancePanel() {
           </tr>
         </thead>
         <tbody>
-          {lawyers.map((l, idx) => (
+          {lawyers.slice(0, limit ?? lawyers.length).map((l, idx) => (
             <tr key={l.name} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
               <td className="py-2 px-3 text-black font-semibold">{l.name}</td>
               <td className="py-2 px-3 text-black">{l.count}건</td>

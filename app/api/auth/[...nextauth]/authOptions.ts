@@ -40,6 +40,15 @@ export const authOptions: NextAuthOptions = {
           throw new Error("이메일 인증이 필요합니다. 이메일을 확인하여 인증을 완료해주세요.");
         }
 
+        // Audit log for successful login
+        await prisma.auditLog.create({
+          data: {
+            userId: user.id,
+            action: 'LOGIN',
+            details: `User ${user.email} logged in successfully.`
+          }
+        });
+
         return {
           id: user.id,
           email: user.email,
