@@ -27,7 +27,11 @@
     "@prisma/client": "^5.22.0",
     "@sentry/nextjs": "^9.30.0",
     "@swc/helpers": "^0.5.17",
+<<<<<<< Updated upstream
     "@types/pdf-parse": "^1.1.5",
+=======
+    "agentkeepalive": "^4.6.0",
+>>>>>>> Stashed changes
     "ansi-regex": "^6.1.0",
     "are-we-there-yet": "^4.0.2",
     "axios": "^1.6.7",
@@ -50,6 +54,11 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-error-boundary": "^6.0.0",
+<<<<<<< Updated upstream
+=======
+    "react-icons": "^4.12.0",
+    "recharts": "^3.0.2",
+>>>>>>> Stashed changes
     "redis": "^4.6.13",
     "run-parallel": "^1.2.0",
     "styled-jsx": "^5.1.2",
@@ -66,7 +75,12 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^20.11.19",
     "@types/nodemailer": "^6.4.14",
+<<<<<<< Updated upstream
     "@types/react": "^18.3.23",
+=======
+    "@types/pdf-parse": "^1.1.5",
+    "@types/react": "18.3.23",
+>>>>>>> Stashed changes
     "@types/react-dom": "^18.3.7",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.56.0",
