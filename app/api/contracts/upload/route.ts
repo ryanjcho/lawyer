@@ -5,26 +5,26 @@ import { prisma } from '@/lib/prisma'
 import { uploadToS3 } from '@/lib/s3'
 import { VirusScanService } from '@/lib/virusScan'
 import { envConfig } from '@/config/env.config'
-import { RiskLevel } from '@prisma/client'
 
 export const dynamic = "force-dynamic";
 
-// Map riskLevel to enum value
+type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+// Map riskLevel to string union value
 function toRiskLevelEnum(val: any): RiskLevel {
-  if (!val) return RiskLevel.MEDIUM;
-  if (typeof val !== 'string') return RiskLevel.MEDIUM;
+  if (!val) return 'MEDIUM';
+  if (typeof val !== 'string') return 'MEDIUM';
   const map: Record<string, RiskLevel> = {
-    '낮음': RiskLevel.LOW,
-    'low': RiskLevel.LOW,
-    '보통': RiskLevel.MEDIUM,
-    'medium': RiskLevel.MEDIUM,
-    '중간': RiskLevel.MEDIUM,
-    '높음': RiskLevel.HIGH,
-    'high': RiskLevel.HIGH,
-    '위험': RiskLevel.CRITICAL,
-    'critical': RiskLevel.CRITICAL,
+    low: 'LOW',
+    medium: 'MEDIUM',
+    high: 'HIGH',
+    critical: 'CRITICAL',
+    LOW: 'LOW',
+    MEDIUM: 'MEDIUM',
+    HIGH: 'HIGH',
+    CRITICAL: 'CRITICAL',
   };
-  return map[val.toLowerCase()] || RiskLevel.MEDIUM;
+  return map[val] || 'MEDIUM';
 }
 
 export async function POST(request: NextRequest) {

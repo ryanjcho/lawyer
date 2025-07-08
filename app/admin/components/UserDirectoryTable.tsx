@@ -1,374 +1,385 @@
-import { useState } from 'react';
-import React, { useRef } from 'react';
+"use client";
+import { useState, useMemo, useEffect } from 'react';
+import { FaEye, FaEdit, FaUserCheck, FaComments, FaHistory, FaExclamationTriangle, FaCheckCircle, FaClock } from 'react-icons/fa';
 
-// Helper for avatar color
-function stringToColor(str: string) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const c = (hash & 0x00FFFFFF)
-    .toString(16)
-    .toUpperCase();
-  return '#' + '00000'.substring(0, 6 - c.length) + c;
-}
+// Enhanced mock data generation
+const generateMockUsers = (count = 100) => {
+  const companies = [
+    'Acme Corporation', 'Beta LLC', 'Gamma Industries', 'Delta Partners', 'Epsilon Ltd',
+    'Zeta Solutions', 'Eta Technologies', 'Theta Systems', 'Iota Networks', 'Kappa Corp',
+    'Lambda Labs', 'Mu Enterprises', 'Nu Ventures', 'Xi Holdings', 'Omicron Group'
+  ];
+  
+  const roles = ['USER', 'ADMIN', 'LAWYER'];
+  const statuses = ['active', 'inactive', 'suspended'];
+  const specializations = [
+    'Corporate Law', 'Intellectual Property', 'Employment Law', 'Contract Law',
+    'Tax Law', 'Real Estate Law', 'Technology Law', 'International Law'
+  ];
 
-function Avatar({ name, email }: { name: string; email: string }) {
-  const initials = name ? name[0] : email[0];
-  const bg = stringToColor(email);
-  return (
-    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full text-white font-bold mr-2" style={{ background: bg }}>
-      {initials}
-    </span>
-  );
-}
-
-function Badge({ text, color }: { text: string; color: string }) {
-  return (
-    <span className={`px-2 py-1 rounded text-xs font-semibold`} style={{ background: color, color: '#fff' }}>
-      {text}
-    </span>
-  );
-}
-
-type User = {
-  name: string;
-  role: string;
-  status: string;
-  email: string;
-  lastLogin: string;
-  onboarding?: string;
+  return Array.from({ length: count }, (_, i) => {
+    const isLawyer = Math.random() < 0.2;
+    const role = isLawyer ? 'LAWYER' : Math.random() < 0.1 ? 'ADMIN' : 'USER';
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
+    const lastLogin = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000);
+    
+    return {
+      id: `U-${String(i + 1).padStart(3, '0')}`,
+      name: `User ${i + 1}`,
+      email: `user${i + 1}@example.com`,
+      company: companies[Math.floor(Math.random() * companies.length)],
+      role,
+      status,
+      lastLogin: lastLogin.toISOString(),
+      contractsAnalyzed: Math.floor(Math.random() * 50),
+      specialization: isLawyer ? specializations[Math.floor(Math.random() * specializations.length)] : null,
+      phone: `010-${String(Math.floor(Math.random() * 9000) + 1000)}-${String(Math.floor(Math.random() * 9000) + 1000)}`,
+      createdAt: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
+      isVerified: Math.random() > 0.1,
+      hasActiveSubscription: Math.random() > 0.2
+    };
+  });
 };
 
-const allUsers: User[] = [
-  { name: '홍길동', role: '변호사', status: '활성', email: 'hong@example.com', lastLogin: '2024-06-25' },
-  { name: '김철수', role: '고객', status: '비활성', email: 'kim@example.com', lastLogin: '2024-06-20' },
-  { name: '이영희', role: '관리자', status: '활성', email: 'lee@example.com', lastLogin: '2024-06-24' },
-];
+const roleMap = {
+  'USER': { label: '사용자', color: 'bg-blue-100 text-blue-800', icon: '👤' },
+  'ADMIN': { label: '관리자', color: 'bg-purple-100 text-purple-800', icon: '👑' },
+  'LAWYER': { label: '변호사', color: 'bg-green-100 text-green-800', icon: '⚖️' }
+};
 
-const roles = ['전체', '변호사', '고객', '관리자'];
-const statuses = ['전체', '활성', '비활성'];
-const segments = [
-  { label: '전체', value: 'all' },
-  { label: '변호사', value: '변호사' },
-  { label: '고객', value: '고객' },
-  { label: '관리자', value: '관리자' },
-  { label: '비활성', value: '비활성' },
-];
+const statusMap = {
+  'active': { label: '활성', color: 'bg-green-100 text-green-800', icon: <FaCheckCircle className="inline mr-1" /> },
+  'inactive': { label: '비활성', color: 'bg-gray-100 text-gray-800', icon: <FaClock className="inline mr-1" /> },
+  'suspended': { label: '정지', color: 'bg-red-100 text-red-800', icon: <FaExclamationTriangle className="inline mr-1" /> }
+};
+
+// Add UserType interface
+interface UserType {
+  id: string;
+  name: string;
+  email: string;
+  company: string;
+  role: string;
+  status: string;
+  lastLogin: string;
+  contractsAnalyzed: number;
+  specialization: string | null;
+  phone: string;
+  createdAt: string;
+  isVerified: boolean;
+  hasActiveSubscription: boolean;
+}
+
+const mockUsers = generateMockUsers();
 
 export default function UserDirectoryTable() {
+  const [users, setUsers] = useState(mockUsers);
   const [search, setSearch] = useState('');
-  const [role, setRole] = useState('전체');
-  const [status, setStatus] = useState('전체');
-  const [segment, setSegment] = useState('all');
-  const [users, setUsers] = useState<User[]>(allUsers);
-  const [detailUser, setDetailUser] = useState<User | null>(null);
-  const [showInvite, setShowInvite] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState('고객');
-  const [inviteName, setInviteName] = useState('');
-  const [inviteError, setInviteError] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [importError, setImportError] = useState('');
-  const [importSuccess, setImportSuccess] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('lastLogin');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+  const [selectedRows, setSelectedRows] = useState(new Set());
 
-  const filteredUsers = users.filter(u => {
-    const matchesSearch =
-      u.name.includes(search) ||
-      u.email.includes(search);
-    const matchesRole = role === '전체' || u.role === role;
-    const matchesStatus = status === '전체' || u.status === status;
-    const matchesSegment =
-      segment === 'all' ||
-      (segment === '비활성' ? u.status === '비활성' : u.role === segment);
-    return matchesSearch && matchesRole && matchesStatus && matchesSegment;
-  });
+  useEffect(() => {
+    // setUsers(generateMockUsers()); // Remove this line to avoid re-randomizing on mount
+  }, []);
 
-  const handleRoleChange = (email, newRole) => {
-    setUsers(users => users.map(u => u.email === email ? { ...u, role: newRole } : u));
-  };
+  // Enhanced filtering and sorting
+  const filteredUsers = useMemo(() => {
+    if (users.length === 0) return [];
+    let filtered = users.filter(user => {
+      const matchesSearch = !search || 
+        user.name.toLowerCase().includes(search.toLowerCase()) ||
+        user.email.toLowerCase().includes(search.toLowerCase()) ||
+        user.company.toLowerCase().includes(search.toLowerCase()) ||
+        (user.specialization && user.specialization.toLowerCase().includes(search.toLowerCase()));
+      
+      const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+      const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
+      
+      return matchesSearch && matchesRole && matchesStatus;
+    });
 
-  const handleInvite = () => {
-    setInviteEmail('');
-    setInviteRole('고객');
-    setInviteName('');
-    setInviteError('');
-    setShowInvite(true);
-  };
-
-  const submitInvite = () => {
-    if (!inviteEmail || !inviteEmail.includes('@')) {
-      setInviteError('유효한 이메일을 입력하세요.');
-      return;
-    }
-    if (users.some(u => u.email === inviteEmail)) {
-      setInviteError('이미 등록된 이메일입니다.');
-      return;
-    }
-    setUsers([
-      ...users,
-      {
-        name: inviteName || inviteEmail.split('@')[0],
-        role: inviteRole,
-        status: '초대됨',
-        email: inviteEmail,
-        lastLogin: '-',
-        onboarding: '대기',
-      },
-    ]);
-    setShowInvite(false);
-  };
-
-  const resendInvite = (email) => {
-    // Mock resend logic
-    alert(`${email}로 초대 메일을 재전송했습니다.`);
-  };
-
-  // CSV Export
-  const exportCSV = () => {
-    const header = ['이름', '역할', '상태', '이메일', '최근 로그인', '온보딩'];
-    const rows = users.map(u => [u.name, u.role, u.status, u.email, u.lastLogin, u.onboarding || '-']);
-    const csvContent = [header, ...rows].map(r => r.map(x => `"${x ?? ''}"`).join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'users.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // CSV Import
-  const handleImportClick = () => {
-    setImportError('');
-    setImportSuccess('');
-    fileInputRef.current?.click();
-  };
-
-  const handleImport = (e) => {
-    setImportError('');
-    setImportSuccess('');
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      if (!evt.target) return;
-      const text = (evt.target as FileReader).result;
-      if (typeof text !== 'string') return;
-      try {
-        const lines = text.split(/\r?\n/).filter(Boolean);
-        const [header, ...rows] = lines;
-        const idx = {
-          name: header.indexOf('이름'),
-          role: header.indexOf('역할'),
-          status: header.indexOf('상태'),
-          email: header.indexOf('이메일'),
-          lastLogin: header.indexOf('최근 로그인'),
-          onboarding: header.indexOf('온보딩'),
-        };
-        if (Object.values(idx).some(i => i === -1)) throw new Error('CSV 헤더가 올바르지 않습니다.');
-        const imported = rows.map(row => {
-          const cols = row.split(',').map(x => x.replace(/^"|"$/g, ''));
-          return {
-            name: cols[idx.name],
-            role: cols[idx.role],
-            status: cols[idx.status],
-            email: cols[idx.email],
-            lastLogin: cols[idx.lastLogin],
-            onboarding: cols[idx.onboarding],
-          };
-        });
-        setUsers(prev => [...prev, ...imported.filter(u => !prev.some(p => p.email === u.email))]);
-        setImportSuccess('사용자 CSV를 성공적으로 가져왔습니다.');
-      } catch (err) {
-        setImportError('CSV 파일을 읽는 중 오류가 발생했습니다.');
+    // Enhanced sorting
+    filtered = filtered.sort((a, b) => {
+      let aVal, bVal;
+      
+      switch (sortBy) {
+        case 'lastLogin':
+          aVal = new Date(a.lastLogin).getTime();
+          bVal = new Date(b.lastLogin).getTime();
+          break;
+        case 'createdAt':
+          aVal = new Date(a.createdAt).getTime();
+          bVal = new Date(b.createdAt).getTime();
+          break;
+        case 'contractsAnalyzed':
+          aVal = a.contractsAnalyzed;
+          bVal = b.contractsAnalyzed;
+          break;
+        case 'name':
+          aVal = a.name.localeCompare(b.name);
+          bVal = b.name.localeCompare(a.name);
+          break;
+        default:
+          aVal = a[sortBy];
+          bVal = b[sortBy];
       }
-    };
-    reader.readAsText(file);
+      
+      return sortDir === 'asc' ? aVal - bVal : bVal - aVal;
+    });
+
+    return filtered;
+  }, [users, search, roleFilter, statusFilter, sortBy, sortDir]);
+
+  // Safely compute selectedUsers
+  const selectedUsers = users.filter(u => selectedRows.has(u.id));
+
+  const handleSort = (key) => {
+    setSortBy(key);
+    setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
   };
+
+  const handleRowSelect = (userId) => {
+    setSelectedRows(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(userId)) {
+        newSet.delete(userId);
+      } else {
+        newSet.add(userId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = (checked) => {
+    if (checked) {
+      setSelectedRows(new Set(filteredUsers.map(u => u.id)));
+    } else {
+      setSelectedRows(new Set());
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getDaysSinceLastLogin = (lastLogin) => {
+    const days = Math.floor((Date.now() - new Date(lastLogin).getTime()) / (1000 * 60 * 60 * 24));
+    if (days === 0) return '오늘';
+    if (days === 1) return '어제';
+    if (days < 7) return `${days}일 전`;
+    if (days < 30) return `${Math.floor(days / 7)}주 전`;
+    return `${Math.floor(days / 30)}개월 전`;
+  };
+
+  if (users.length === 0) {
+    return <div className="py-12 text-center text-gray-400">사용자가 없습니다.</div>;
+  }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 mb-10 overflow-x-auto border border-gray-100">
-      <div className="flex flex-wrap gap-3 mb-6 items-center bg-blue-50 p-4 rounded-xl border border-blue-100">
-        <input
-          type="text"
-          placeholder="이름, 이메일 검색..."
-          className="border border-gray-300 rounded-lg px-4 py-2 w-56 focus:ring-2 focus:ring-blue-200 transition"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-        <select
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-200 transition"
-          value={role}
-          onChange={e => setRole(e.target.value)}
-        >
-          {roles.map(r => <option key={r} value={r}>{r}</option>)}
-        </select>
-        <select
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-200 transition"
-          value={status}
-          onChange={e => setStatus(e.target.value)}
-        >
-          {statuses.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-        <div className="flex gap-2 ml-4 flex-wrap">
-          {segments.map(seg => (
-            <button
-              key={seg.value}
-              className={`px-4 py-1 rounded-full text-sm font-semibold border transition ${segment === seg.value ? 'bg-blue-600 text-white border-blue-600 shadow' : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-blue-50'}`}
-              onClick={() => setSegment(seg.value)}
-            >
-              {seg.label}
-            </button>
-          ))}
-        </div>
-        <div className="flex gap-2 ml-auto flex-wrap">
-          <button
-            className="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold shadow hover:bg-green-700 focus:ring-2 focus:ring-green-300 transition"
-            onClick={handleInvite}
-          >
-            사용자 초대
-          </button>
-          <button
-            className="bg-gray-600 text-white px-5 py-2 rounded-lg font-semibold shadow hover:bg-gray-700 focus:ring-2 focus:ring-gray-300 transition"
-            onClick={exportCSV}
-          >
-            CSV 내보내기
-          </button>
-          <button
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 transition"
-            onClick={handleImportClick}
-          >
-            CSV 가져오기
-          </button>
+    <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
+      {/* Enhanced Search & Filters */}
+      <div className="space-y-4 mb-6">
+        {/* Search Bar */}
+        <div className="relative">
           <input
-            type="file"
-            accept=".csv"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleImport}
+            type="text"
+            placeholder="이름, 이메일, 회사, 전문분야 검색..."
+            className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
           />
+          {search && (
+            <div className="absolute top-full left-0 right-0 bg-white border rounded-lg shadow-lg z-10 mt-1">
+              {filteredUsers.slice(0, 5).map(user => (
+                <div key={user.id} className="p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0">
+                  <div className="font-medium">{user.name}</div>
+                  <div className="text-sm text-gray-600">{user.email} • {user.company}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Filter Controls */}
+        <div className="flex flex-wrap gap-4">
+          <select
+            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={roleFilter}
+            onChange={e => setRoleFilter(e.target.value)}
+          >
+            <option value="all">전체 역할</option>
+            {Object.entries(roleMap).map(([key, val]) => (
+              <option key={key} value={key}>{val.label}</option>
+            ))}
+          </select>
+
+          <select
+            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+          >
+            <option value="all">전체 상태</option>
+            {Object.entries(statusMap).map(([key, val]) => (
+              <option key={key} value={key}>{val.label}</option>
+            ))}
+          </select>
+
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={selectedRows.size > 0}
+              onChange={(e) => handleSelectAll(e.target.checked)}
+              className="rounded focus:ring-2 focus:ring-blue-500"
+            />
+            <span className="text-sm">전체 선택</span>
+          </label>
+        </div>
+
+        {/* Quick Actions */}
+        {selectedRows.size > 0 && (
+          <div className="border-t pt-4">
+            <div className="flex gap-2 flex-wrap">
+              <button className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                일괄 이메일 발송
+              </button>
+              <button className="px-3 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                상태 변경
+              </button>
+              <button className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+                CSV 내보내기
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-      {importError && <div className="text-red-600 mb-2 text-sm font-semibold">{importError}</div>}
-      {importSuccess && <div className="text-green-600 mb-2 text-sm font-semibold">{importSuccess}</div>}
-      <div className="overflow-x-auto rounded-xl border border-gray-100 bg-white">
-        <table className="min-w-full text-base">
-          <thead>
-            <tr className="text-left text-black border-b bg-gray-50">
-              <th className="py-3 px-4 font-bold text-black">이름</th>
-              <th className="py-3 px-4 font-bold text-black">역할</th>
-              <th className="py-3 px-4 font-bold text-black">상태</th>
-              <th className="py-3 px-4 font-bold text-black">이메일</th>
-              <th className="py-3 px-4 font-bold text-black">최근 로그인</th>
-              <th className="py-3 px-4 font-bold text-black">온보딩</th>
-              <th className="py-3 px-4 font-bold text-black">작업</th>
+
+      {/* Enhanced Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead className="sticky top-0 bg-white z-10">
+            <tr className="text-left text-black border-b">
+              <th className="py-3 px-3 font-semibold">
+                <input
+                  type="checkbox"
+                  checked={selectedRows.size === filteredUsers.length && filteredUsers.length > 0}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  className="rounded focus:ring-2 focus:ring-blue-500"
+                />
+              </th>
+              <th 
+                className="py-3 px-3 font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleSort('name')}
+              >
+                사용자 {sortBy === 'name' && (sortDir === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className="py-3 px-3 font-semibold">이메일</th>
+              <th className="py-3 px-3 font-semibold">회사</th>
+              <th className="py-3 px-3 font-semibold">역할</th>
+              <th className="py-3 px-3 font-semibold">상태</th>
+              <th 
+                className="py-3 px-3 font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleSort('lastLogin')}
+              >
+                최근 로그인 {sortBy === 'lastLogin' && (sortDir === 'asc' ? '↑' : '↓')}
+              </th>
+              <th 
+                className="py-3 px-3 font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleSort('contractsAnalyzed')}
+              >
+                계약 수 {sortBy === 'contractsAnalyzed' && (sortDir === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className="py-3 px-3 font-semibold">작업</th>
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((u, idx) => (
-              <tr key={u.email} className={`transition ${idx % 2 === 0 ? 'bg-blue-50/40' : 'bg-white'} hover:bg-blue-100/60`}>
-                <td className="py-3 px-4 text-black font-semibold flex items-center">
-                  <Avatar name={u.name} email={u.email} />
-                  {u.name}
+            {filteredUsers.length === 0 ? (
+              <tr>
+                <td colSpan={9} className="py-8 text-center text-gray-400">
+                  검색 조건에 맞는 사용자가 없습니다.
                 </td>
-                <td className="py-3 px-4 text-black">
-                  <Badge text={u.role} color={u.role === '관리자' ? '#6366f1' : u.role === '변호사' ? '#10b981' : '#3b82f6'} />
+              </tr>
+            ) : filteredUsers.map((user, idx) => (
+              <tr
+                key={user.id}
+                className={`border-b transition-colors ${
+                  selectedRows.has(user.id) ? 'bg-blue-100' : 
+                  idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                } hover:bg-blue-50 cursor-pointer`}
+              >
+                <td className="py-3 px-3" onClick={(e) => e.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    checked={selectedRows.has(user.id)}
+                    onChange={() => handleRowSelect(user.id)}
+                    className="rounded focus:ring-2 focus:ring-blue-500"
+                  />
                 </td>
-                <td className="py-3 px-4 text-black">
-                  <Badge text={u.status} color={u.status === '활성' ? '#10b981' : u.status === '비활성' ? '#f59e42' : '#6366f1'} />
+                <td className="py-3 px-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm font-medium">
+                      {user.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-black">{user.name}</div>
+                      <div className="text-xs text-gray-500">{user.id}</div>
+                    </div>
+                  </div>
                 </td>
-                <td className="py-3 px-4 text-black">{u.email}</td>
-                <td className="py-3 px-4 text-black">{u.lastLogin}</td>
-                <td className="py-3 px-4 text-black">{u.status === '초대됨' ? (u.onboarding || '대기') : '-'}</td>
-                <td className="py-3 px-4">
-                  <button className="text-blue-600 hover:underline mr-2 font-semibold focus:underline" onClick={() => setDetailUser(u)}>상세</button>
-                  <button className="text-green-600 hover:underline font-semibold focus:underline" disabled={u.status === '초대됨'}>수정</button>
-                  {u.status === '초대됨' && (
-                    <button className="ml-2 text-indigo-600 hover:underline font-semibold focus:underline" onClick={() => resendInvite(u.email)}>초대 재전송</button>
+                <td className="py-3 px-3 text-black">{user.email}</td>
+                <td className="py-3 px-3 text-black">{user.company}</td>
+                <td className="py-3 px-3">
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${roleMap[user.role].color}`}>
+                    {roleMap[user.role].icon} {roleMap[user.role].label}
+                  </span>
+                  {user.specialization && (
+                    <div className="text-xs text-gray-500 mt-1">{user.specialization}</div>
                   )}
+                </td>
+                <td className="py-3 px-3">
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusMap[user.status].color}`}>
+                    {statusMap[user.status].icon}
+                    {statusMap[user.status].label}
+                  </span>
+                  {!user.isVerified && (
+                    <div className="text-xs text-red-500 mt-1">미인증</div>
+                  )}
+                </td>
+                <td className="py-3 px-3 text-black">
+                  <div>{formatDate(user.lastLogin)}</div>
+                  <div className="text-xs text-gray-500">{getDaysSinceLastLogin(user.lastLogin)}</div>
+                </td>
+                <td className="py-3 px-3 text-black">
+                  <div className="font-medium">{user.contractsAnalyzed}</div>
+                  <div className="text-xs text-gray-500">계약 분석</div>
+                </td>
+                <td className="py-3 px-3">
+                  <div className="flex space-x-2 items-center">
+                    <FaEye size={16} className="text-blue-600 hover:text-blue-800" />
+                    <FaEdit size={16} className="text-green-600 hover:text-green-800" />
+                    <FaUserCheck size={16} className="text-indigo-600 hover:text-indigo-800" />
+                    <FaComments size={16} className="text-yellow-600 hover:text-yellow-800" />
+                    <FaHistory size={16} className="text-gray-600 hover:text-gray-800" />
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {detailUser && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
-            <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl" onClick={() => setDetailUser(null)}>&times;</button>
-            <div className="font-bold text-lg mb-2">{detailUser.name} 상세 정보</div>
-            <div className="mb-2"><span className="font-semibold">역할:</span> {detailUser.role}</div>
-            <div className="mb-2"><span className="font-semibold">상태:</span> {detailUser.status}</div>
-            <div className="mb-2"><span className="font-semibold">이메일:</span> {detailUser.email}</div>
-            <div className="mb-2"><span className="font-semibold">최근 로그인:</span> {detailUser.lastLogin}</div>
-            <div className="mt-4">
-              <div className="font-semibold mb-1">최근 활동 (모의):</div>
-              <ul className="list-disc ml-5 text-sm text-gray-700">
-                <li>계약 초안 업로드 (2024-06-25)</li>
-                <li>AI 검토 요청 (2024-06-24)</li>
-                <li>계약 승인 (2024-06-23)</li>
-              </ul>
-            </div>
-            <div className="mt-4">
-              <div className="font-semibold mb-1">재무 정보 (모의):</div>
-              <ul className="list-disc ml-5 text-sm text-gray-700">
-                <li>총 결제: ₩10,000,000</li>
-                <li>미수금: ₩1,000,000</li>
-                <li>연체: ₩500,000</li>
-              </ul>
-            </div>
-            <div className="mt-4 flex gap-2">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">권한 변경</button>
-              <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">비활성화</button>
-            </div>
-          </div>
-        </div>
-      )}
-      {showInvite && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
-            <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl" onClick={() => setShowInvite(false)}>&times;</button>
-            <div className="font-bold text-lg mb-4">사용자 초대</div>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold mb-1">이메일</label>
-              <input
-                type="email"
-                className="border rounded px-3 py-2 w-full"
-                value={inviteEmail}
-                onChange={e => setInviteEmail(e.target.value)}
-                placeholder="user@example.com"
-              />
-            </div>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold mb-1">이름 (선택)</label>
-              <input
-                type="text"
-                className="border rounded px-3 py-2 w-full"
-                value={inviteName}
-                onChange={e => setInviteName(e.target.value)}
-                placeholder="이름 입력 (선택)"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-semibold mb-1">역할</label>
-              <select
-                className="border rounded px-3 py-2 w-full"
-                value={inviteRole}
-                onChange={e => setInviteRole(e.target.value)}
-              >
-                {roles.filter(r => r !== '전체').map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </div>
-            {inviteError && <div className="text-red-600 mb-2 text-sm">{inviteError}</div>}
-            <div className="flex gap-2 justify-end">
-              <button className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300" onClick={() => setShowInvite(false)}>취소</button>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onClick={submitInvite}>초대</button>
-            </div>
-          </div>
-        </div>
-      )}
+
+      {/* Results Summary */}
+      <div className="mt-4 text-sm text-gray-600">
+        총 {filteredUsers.length}명 사용자 중 {selectedRows.size}명 선택됨
+      </div>
     </div>
   );
 } 

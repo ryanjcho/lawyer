@@ -1,8 +1,10 @@
-export const revenue = [
-  { month: '2024-01', value: 10000000 },
-  { month: '2024-02', value: 12000000 },
-  { month: '2024-03', value: 9000000 },
-  { month: '2024-04', value: 15000000 },
-  { month: '2024-05', value: 17000000 },
-  { month: '2024-06', value: 20000000 },
-]; 
+export function generateMockRevenue(months = 12) {
+  const now = new Date();
+  return Array.from({ length: months }, (_, i) => {
+    const date = new Date(now.getFullYear(), now.getMonth() - (months - 1 - i), 1);
+    return {
+      month: date.toISOString().slice(0, 7),
+      value: Math.floor(Math.random() * 20000000) + 5000000
+    };
+  });
+} 

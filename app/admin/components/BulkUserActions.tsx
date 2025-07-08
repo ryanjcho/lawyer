@@ -23,9 +23,12 @@ export default function BulkUserActions() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 flex flex-wrap gap-4 items-center relative border border-gray-100">
-      <input type="checkbox" className="mr-2 scale-110 accent-blue-600" />
-      <span className="text-black mr-6 text-lg font-bold">전체 선택</span>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 flex flex-wrap gap-4 items-center relative">
+      <div className="flex items-center gap-3">
+        <input type="checkbox" className="scale-110 accent-blue-600" />
+        <span className="text-gray-900 font-semibold">전체 선택</span>
+        <span className="text-sm text-gray-500">(선택된 사용자: 0명)</span>
+      </div>
       <button className="bg-blue-600 text-white py-2 px-5 rounded-lg font-semibold shadow hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 transition" onClick={() => handleAction('역할 변경')}>역할 변경</button>
       <button className="bg-red-600 text-white py-2 px-5 rounded-lg font-semibold shadow hover:bg-red-700 focus:ring-2 focus:ring-red-300 transition" onClick={() => handleAction('비활성화')}>비활성화</button>
       <button className="bg-indigo-600 text-white py-2 px-5 rounded-lg font-semibold shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-300 transition" onClick={() => handleAction('메시지 보내기')}>메시지 보내기</button>

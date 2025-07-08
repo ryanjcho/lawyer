@@ -1,17 +1,68 @@
 "use client";
-import { FaEye, FaEdit, FaUserCheck, FaComments, FaHistory } from 'react-icons/fa';
-import { useState } from 'react';
+import { FaEye, FaEdit, FaUserCheck, FaComments, FaHistory, FaExclamationTriangle, FaClock, FaCheckCircle } from 'react-icons/fa';
+import { useState, useMemo, useEffect } from 'react';
 import { HiOutlineDocumentText, HiOutlinePencilAlt } from 'react-icons/hi';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+// Enhanced mock data with realistic scenarios
+const generateMockContracts = (count = 50) => {
+  const clients = [
+    'Acme Corporation', 'Beta LLC', 'Gamma Industries', 'Delta Partners', 'Epsilon Ltd',
+    'Zeta Solutions', 'Eta Technologies', 'Theta Systems', 'Iota Networks', 'Kappa Corp'
+  ];
+  const lawyers = [
+    'Jane Smith', 'John Doe', 'Emily Lee', 'Michael Chen', 'Sarah Johnson',
+    'David Kim', 'Lisa Park', 'Robert Wilson', 'Maria Garcia', 'James Brown'
+  ];
+  const contractTypes = [
+    'NDA', 'MSA', 'SLA', 'Consulting Agreement', 'IP Agreement',
+    'Employment Contract', 'Service Agreement', 'License Agreement', 'Partnership Agreement', 'Vendor Contract'
+  ];
+  const statuses = ['awaiting_ai', 'ai_complete', 'lawyer_review', 'needs_info', 'complete'];
+  const riskLevels = ['low', 'medium', 'high', 'critical'];
+  const tags = ['Technology', 'Finance', 'Healthcare', 'Manufacturing', 'Retail', 'Real Estate', 'Education', 'Legal'];
+
+  return Array.from({ length: count }, (_, i) => {
+    const isUrgent = Math.random() < 0.15;
+    const riskLevel = riskLevels[Math.floor(Math.random() * riskLevels.length)];
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
+    const contractType = contractTypes[Math.floor(Math.random() * contractTypes.length)];
+    const client = clients[Math.floor(Math.random() * clients.length)];
+    const lawyer = lawyers[Math.floor(Math.random() * lawyers.length)];
+    
+    // Generate realistic dates
+    const uploadedDate = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000);
+    const lastUpdated = new Date(uploadedDate.getTime() + Math.random() * 7 * 24 * 60 * 60 * 1000);
+    const keyDate = new Date(Date.now() + Math.random() * 14 * 24 * 60 * 60 * 1000);
+    
+    return {
+      id: `C-2024-${String(i + 1).padStart(3, '0')}`,
+      name: `${contractType} - ${client}`,
+      client,
+      type: Math.random() > 0.5 ? 'review' : 'draft',
+      status,
+      lastUpdated: lastUpdated.toISOString(),
+      lawyer,
+      keyDate: keyDate.toISOString().split('T')[0],
+      urgent: isUrgent,
+      riskLevel,
+      value: Math.floor(Math.random() * 10000000) + 1000000,
+      tags: tags.slice(0, Math.floor(Math.random() * 3) + 1),
+      clientContact: `${lawyer.toLowerCase().replace(' ', '.')}@${client.toLowerCase().replace(' ', '')}.com`,
+      estimatedCompletion: new Date(keyDate.getTime() - Math.random() * 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      slaDeadline: new Date(lastUpdated.getTime() + (5 + Math.random() * 5) * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    };
+  });
+};
+
 const statusMap = {
-  'awaiting_ai': { label: 'AI 검토 대기', color: 'bg-yellow-100 text-yellow-800' },
-  'ai_complete': { label: 'AI 검토 완료', color: 'bg-blue-100 text-blue-800' },
-  'lawyer_review': { label: '변호사 검토 중', color: 'bg-indigo-100 text-indigo-800' },
-  'drafting': { label: '작성 중', color: 'bg-purple-100 text-purple-800' },
-  'needs_info': { label: '추가 정보 필요', color: 'bg-red-100 text-red-800' },
-  'complete': { label: '완료', color: 'bg-green-100 text-green-800' },
+  'awaiting_ai': { label: 'AI 검토 대기', color: 'bg-yellow-100 text-yellow-800', icon: <FaClock className="inline mr-1" /> },
+  'ai_complete': { label: 'AI 검토 완료', color: 'bg-blue-100 text-blue-800', icon: <FaCheckCircle className="inline mr-1" /> },
+  'lawyer_review': { label: '변호사 검토 중', color: 'bg-indigo-100 text-indigo-800', icon: <FaUserCheck className="inline mr-1" /> },
+  'drafting': { label: '작성 중', color: 'bg-purple-100 text-purple-800', icon: <HiOutlinePencilAlt className="inline mr-1" /> },
+  'needs_info': { label: '추가 정보 필요', color: 'bg-red-100 text-red-800', icon: <FaExclamationTriangle className="inline mr-1" /> },
+  'complete': { label: '완료', color: 'bg-green-100 text-green-800', icon: <FaCheckCircle className="inline mr-1" /> },
 };
 
 const typeMap = {
@@ -19,124 +70,430 @@ const typeMap = {
   'draft': { label: '작성', icon: <HiOutlinePencilAlt className="inline mr-1 text-purple-500" /> },
 };
 
-const mockContracts = [
-  { id: 'C-2024-001', name: 'NDA - Acme', client: 'Acme Corp', type: 'review', status: 'awaiting_ai', lastUpdated: '2024-07-01', lawyer: 'Jane Smith', keyDate: '2024-07-03', urgent: false },
-  { id: 'C-2024-002', name: 'MSA - Beta', client: 'Beta LLC', type: 'draft', status: 'ai_complete', lastUpdated: '2024-06-30', lawyer: 'John Doe', keyDate: '2024-07-10', urgent: true },
-  { id: 'C-2024-003', name: 'SLA - Gamma', client: 'Gamma Inc', type: 'review', status: 'lawyer_review', lastUpdated: '2024-06-29', lawyer: 'Emily Lee', keyDate: '2024-07-05', urgent: false },
-  { id: 'C-2024-004', name: 'Consulting - Delta', client: 'Delta Partners', type: 'draft', status: 'needs_info', lastUpdated: '2024-06-28', lawyer: 'Jane Smith', keyDate: '2024-07-07', urgent: true },
-  { id: 'C-2024-005', name: 'IP Agreement - Epsilon', client: 'Epsilon Ltd', type: 'review', status: 'complete', lastUpdated: '2024-06-25', lawyer: 'John Doe', keyDate: '2024-06-30', urgent: false },
-];
+const riskLevelMap = {
+  'low': { label: '낮음', color: 'bg-green-100 text-green-800' },
+  'medium': { label: '보통', color: 'bg-yellow-100 text-yellow-800' },
+  'high': { label: '높음', color: 'bg-orange-100 text-orange-800' },
+  'critical': { label: '위험', color: 'bg-red-100 text-red-800' },
+};
+
+// Status indicator component
+const ContractStatusIndicator = ({ contract }) => {
+  const statusSteps = [
+    { key: 'awaiting_ai', label: 'AI 분석', icon: 'brain' },
+    { key: 'ai_complete', label: 'AI 완료', icon: 'check' },
+    { key: 'lawyer_review', label: '변호사 검토', icon: 'user-check' },
+    { key: 'complete', label: '완료', icon: 'check-circle' }
+  ];
+
+  const currentStepIndex = statusSteps.findIndex(step => step.key === contract.status);
+  const isCompleted = contract.status === 'complete';
+
+  return (
+    <div className="flex items-center space-x-1">
+      {statusSteps.map((step, index) => (
+        <div key={step.key} className="flex items-center">
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+            index <= currentStepIndex ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+          }`}>
+            {index < currentStepIndex ? '✓' : step.icon === 'brain' ? '🧠' : step.icon === 'check' ? '✓' : step.icon === 'user-check' ? '👤' : '✓'}
+          </div>
+          {index < statusSteps.length - 1 && (
+            <div className={`w-8 h-0.5 mx-1 ${
+              index < currentStepIndex ? 'bg-blue-500' : 'bg-gray-200'
+            }`} />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Quick actions component
+const QuickActions = ({ selectedContracts }) => {
+  const actions = useMemo(() => {
+    const actions: Array<{ label: string; action: string; icon: string; color: string }> = [];
+    
+    if (selectedContracts.length === 1) {
+      actions.push({ label: '상세 보기', action: 'view', icon: 'eye', color: 'blue' });
+      actions.push({ label: '변호사 배정', action: 'assign', icon: 'user', color: 'indigo' });
+    }
+    
+    if (selectedContracts.length > 0) {
+      actions.push({ label: '상태 변경', action: 'status', icon: 'edit', color: 'green' });
+      actions.push({ label: '일괄 내보내기', action: 'export', icon: 'download', color: 'gray' });
+    }
+    
+    if (selectedContracts.some(c => c.urgent)) {
+      actions.push({ label: '긴급 처리', action: 'urgent', icon: 'alert', color: 'red' });
+    }
+    
+    return actions;
+  }, [selectedContracts]);
+
+  const getColorClasses = (color) => {
+    const colorMap = {
+      blue: 'bg-blue-100 text-blue-700 hover:bg-blue-200',
+      indigo: 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200',
+      green: 'bg-green-100 text-green-700 hover:bg-green-200',
+      gray: 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+      red: 'bg-red-100 text-red-700 hover:bg-red-200'
+    };
+    return colorMap[color] || colorMap.gray;
+  };
+
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {actions.map(action => (
+        <button
+          key={action.action}
+          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${getColorClasses(action.color)}`}
+        >
+          {action.label}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+interface ContractType {
+  id: string;
+  name: string;
+  client: string;
+  type: string;
+  status: string;
+  lastUpdated: string;
+  lawyer: string;
+  keyDate: string;
+  urgent: boolean;
+  riskLevel: string;
+  value: number;
+  tags: string[];
+  clientContact: string;
+  estimatedCompletion: string;
+  slaDeadline: string;
+  createdAt?: string;
+  completedAt?: string | null;
+  slaViolated?: boolean;
+  risk?: string;
+}
 
 type ContractsTableProps = { limit?: number };
+const mockContracts = generateMockContracts();
+
 export default function ContractsTable({ limit }: ContractsTableProps) {
+  const [contracts, setContracts] = useState<ContractType[]>(mockContracts);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [riskFilter, setRiskFilter] = useState('all');
+  const [lawyerFilter, setLawyerFilter] = useState('all');
+  const [urgentFilter, setUrgentFilter] = useState(false);
   const [sortBy, setSortBy] = useState('lastUpdated');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+  const [selectedRows, setSelectedRows] = useState(new Set());
   const router = useRouter();
 
-  // Filter and sort logic (mock)
-  let filtered = mockContracts.filter(c =>
-    (statusFilter === 'all' || c.status === statusFilter) &&
-    (c.id.includes(search) || c.name.includes(search) || c.client.includes(search))
-  );
-  filtered = filtered.sort((a, b) => {
-    if (sortBy === 'lastUpdated') {
-      return sortDir === 'asc'
-        ? a.lastUpdated.localeCompare(b.lastUpdated)
-        : b.lastUpdated.localeCompare(a.lastUpdated);
+  useEffect(() => {
+    // setContracts(generateMockContracts()); // Remove this line to avoid re-randomizing on mount
+  }, []);
+
+  // Enhanced filtering and sorting
+  const filteredContracts = useMemo(() => {
+    if (contracts.length === 0) return [];
+    let filtered = contracts.filter(c => {
+      const matchesSearch = !search || 
+        c.id.toLowerCase().includes(search.toLowerCase()) ||
+        c.name.toLowerCase().includes(search.toLowerCase()) ||
+        c.client.toLowerCase().includes(search.toLowerCase()) ||
+        c.lawyer.toLowerCase().includes(search.toLowerCase());
+      
+      const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
+      const matchesRisk = riskFilter === 'all' || c.riskLevel === riskFilter;
+      const matchesLawyer = lawyerFilter === 'all' || c.lawyer === lawyerFilter;
+      const matchesUrgent = !urgentFilter || c.urgent;
+      
+      return matchesSearch && matchesStatus && matchesRisk && matchesLawyer && matchesUrgent;
+    });
+
+    // Enhanced sorting
+    filtered = filtered.sort((a, b) => {
+      let aVal, bVal;
+      
+      switch (sortBy) {
+        case 'lastUpdated':
+          aVal = new Date(a.lastUpdated).getTime();
+          bVal = new Date(b.lastUpdated).getTime();
+          break;
+        case 'keyDate':
+          aVal = new Date(a.keyDate).getTime();
+          bVal = new Date(b.keyDate).getTime();
+          break;
+        case 'value':
+          aVal = a.value;
+          bVal = b.value;
+          break;
+        case 'riskLevel':
+          const riskOrder = { low: 1, medium: 2, high: 3, critical: 4 };
+          aVal = riskOrder[a.riskLevel];
+          bVal = riskOrder[b.riskLevel];
+          break;
+        default:
+          aVal = a[sortBy];
+          bVal = b[sortBy];
+      }
+      
+      return sortDir === 'asc' ? aVal - bVal : bVal - aVal;
+    });
+
+    return filtered;
+  }, [contracts, search, statusFilter, riskFilter, lawyerFilter, urgentFilter, sortBy, sortDir]);
+
+  // Safely compute selectedContracts and uniqueLawyers
+  const selectedContracts = contracts.filter(c => selectedRows.has(c.id));
+  const uniqueLawyers = Array.from(new Set(contracts.map(c => c.lawyer))).sort();
+
+  if (contracts.length === 0) {
+    return <div className="py-12 text-center text-gray-400">계약이 없습니다.</div>;
+  }
+
+  const handleSort = (key) => {
+    setSortBy(key);
+    setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
+  };
+
+  const handleRowSelect = (contractId) => {
+    setSelectedRows(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(contractId)) {
+        newSet.delete(contractId);
+      } else {
+        newSet.add(contractId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = (checked) => {
+    if (checked) {
+      setSelectedRows(new Set(filteredContracts.map(c => c.id)));
+    } else {
+      setSelectedRows(new Set());
     }
-    return 0;
-  });
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('ko-KR', {
+      style: 'currency',
+      currency: 'KRW'
+    }).format(amount);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('ko-KR', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   return (
     <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
-      {/* Search & Filters */}
-      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-        <input
-          type="text"
-          placeholder="계약 ID, 이름, 고객사 검색..."
-          className="border rounded px-3 py-2 w-full md:w-64"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-        <select
-          className="border rounded px-3 py-2 w-full md:w-48"
-          value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value)}
-        >
-          <option value="all">전체 상태</option>
-          {Object.entries(statusMap).map(([key, val]) => (
-            <option key={key} value={key}>{val.label}</option>
-          ))}
-        </select>
-        <div className="flex gap-2 items-center">
-          <span className="text-sm text-gray-500">정렬:</span>
-          <button
-            className={`px-2 py-1 rounded ${sortBy === 'lastUpdated' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700'}`}
-            onClick={() => setSortBy('lastUpdated')}
-          >최종 수정일</button>
-          <button
-            className="px-2 py-1 rounded border border-gray-200"
-            onClick={() => setSortDir(sortDir === 'asc' ? 'desc' : 'asc')}
-            title="정렬 방향 변경"
-          >{sortDir === 'asc' ? '▲' : '▼'}</button>
+      {/* Enhanced Search & Filters */}
+      <div className="space-y-4 mb-6">
+        {/* Search Bar */}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="계약 ID, 이름, 고객사, 변호사 검색..."
+            className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          {search && (
+            <div className="absolute top-full left-0 right-0 bg-white border rounded-lg shadow-lg z-10 mt-1">
+              {filteredContracts.slice(0, 5).map(contract => (
+                <div key={contract.id} className="p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0">
+                  <div className="font-medium">{contract.name}</div>
+                  <div className="text-sm text-gray-600">{contract.client} • {contract.lawyer}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Filter Controls */}
+        <div className="flex flex-wrap gap-4">
+          <select
+            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+          >
+            <option value="all">전체 상태</option>
+            {Object.entries(statusMap).map(([key, val]) => (
+              <option key={key} value={key}>{val.label}</option>
+            ))}
+          </select>
+
+          <select
+            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+            value={riskFilter}
+            onChange={e => setRiskFilter(e.target.value)}
+          >
+            <option value="all">전체 위험도</option>
+            {Object.entries(riskLevelMap).map(([key, val]) => (
+              <option key={key} value={key}>{val.label}</option>
+            ))}
+          </select>
+
+          <select
+            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+            value={lawyerFilter}
+            onChange={e => setLawyerFilter(e.target.value)}
+          >
+            <option value="all">전체 변호사</option>
+            {uniqueLawyers.map(lawyer => (
+              <option key={lawyer} value={lawyer}>{lawyer}</option>
+            ))}
+          </select>
+
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={urgentFilter}
+              onChange={e => setUrgentFilter(e.target.checked)}
+              className="rounded focus:ring-2 focus:ring-blue-500"
+            />
+            <span className="text-sm">긴급만</span>
+          </label>
+        </div>
+
+        {/* Quick Actions */}
+        {selectedRows.size > 0 && (
+          <div className="border-t pt-4">
+            <QuickActions selectedContracts={selectedContracts} />
+          </div>
+        )}
       </div>
+
+      {/* Enhanced Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
           <thead className="sticky top-0 bg-white z-10">
             <tr className="text-left text-black border-b">
-              <th className="py-2 px-3 font-semibold">ID</th>
-              <th className="py-2 px-3 font-semibold">계약명/구분</th>
-              <th className="py-2 px-3 font-semibold">고객사</th>
-              <th className="py-2 px-3 font-semibold">상태</th>
-              <th className="py-2 px-3 font-semibold">최종 수정일</th>
-              <th className="py-2 px-3 font-semibold">담당 변호사</th>
-              <th className="py-2 px-3 font-semibold">주요 일정</th>
-              <th className="py-2 px-3 font-semibold">작업</th>
+              <th className="py-3 px-3 font-semibold">
+                <input
+                  type="checkbox"
+                  checked={selectedRows.size === filteredContracts.length && filteredContracts.length > 0}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  className="rounded focus:ring-2 focus:ring-blue-500"
+                />
+              </th>
+              <th 
+                className="py-3 px-3 font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleSort('id')}
+              >
+                ID {sortBy === 'id' && (sortDir === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className="py-3 px-3 font-semibold">계약명/구분</th>
+              <th className="py-3 px-3 font-semibold">고객사</th>
+              <th className="py-3 px-3 font-semibold">상태</th>
+              <th className="py-3 px-3 font-semibold">위험도</th>
+              <th 
+                className="py-3 px-3 font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleSort('lastUpdated')}
+              >
+                최종 수정일 {sortBy === 'lastUpdated' && (sortDir === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className="py-3 px-3 font-semibold">담당 변호사</th>
+              <th 
+                className="py-3 px-3 font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleSort('keyDate')}
+              >
+                주요 일정 {sortBy === 'keyDate' && (sortDir === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className="py-3 px-3 font-semibold">작업</th>
             </tr>
           </thead>
           <tbody>
-            {filtered.length === 0 ? (
+            {filteredContracts.length === 0 ? (
               <tr>
-                <td colSpan={8} className="py-8 text-center text-gray-400">계약이 없습니다.</td>
+                <td colSpan={10} className="py-8 text-center text-gray-400">
+                  검색 조건에 맞는 계약이 없습니다.
+                </td>
               </tr>
-            ) : filtered.slice(0, limit ?? filtered.length).map((c, idx) => (
+            ) : filteredContracts.slice(0, limit ?? filteredContracts.length).map((contract, idx) => (
               <tr
-                key={c.id}
-                className={`border-b transition-colors ${c.urgent ? 'bg-red-50' : idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 cursor-pointer`}
-                tabIndex={0}
-                title="상세 보기"
-                onClick={() => window.open(`/admin/contracts/${c.id}`, '_blank')}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') window.open(`/admin/contracts/${c.id}`, '_blank'); }}
-                role="button"
-                aria-label={`계약 상세 보기: ${c.name}`}
+                key={contract.id}
+                className={`border-b transition-colors ${
+                  selectedRows.has(contract.id) ? 'bg-blue-100' : 
+                  contract.urgent ? 'bg-red-50' : 
+                  idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                } hover:bg-blue-50 cursor-pointer`}
+                onClick={() => window.open(`/admin/contracts/${contract.id}`, '_blank')}
               >
-                <td className="py-2 px-3 font-mono font-bold text-black">{c.id}</td>
-                <td className="py-2 px-3 font-semibold text-black flex items-center gap-2">
-                  {typeMap[c.type].icon}
-                  {c.name}
-                  <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700">{typeMap[c.type].label}</span>
+                <td className="py-3 px-3" onClick={(e) => e.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    checked={selectedRows.has(contract.id)}
+                    onChange={() => handleRowSelect(contract.id)}
+                    className="rounded focus:ring-2 focus:ring-blue-500"
+                  />
                 </td>
-                <td className="py-2 px-3 text-black">{c.client}</td>
-                <td className="py-2 px-3">
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusMap[c.status].color}`}>{statusMap[c.status].label}</span>
+                <td className="py-3 px-3 font-mono font-bold text-black">{contract.id}</td>
+                <td className="py-3 px-3">
+                  <div className="flex items-center space-x-2">
+                    {typeMap[contract.type].icon}
+                    <span className="font-semibold text-black">{contract.name}</span>
+                    <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+                      {typeMap[contract.type].label}
+                    </span>
+                    {contract.urgent && (
+                      <span className="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
+                        긴급
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {contract.tags.join(' • ')}
+                  </div>
                 </td>
-                <td className="py-2 px-3 text-black">{c.lastUpdated}</td>
-                <td className="py-2 px-3 text-black">{c.lawyer}</td>
-                <td className="py-2 px-3 text-black">{c.keyDate}</td>
-                <td className="py-2 px-3 flex gap-2 items-center">
-                  <FaEye size={16} className="text-blue-600" />
-                  <button title="수정" className="text-green-600 hover:text-green-900"><FaEdit size={16} /></button>
-                  <button title="배정" className="text-indigo-600 hover:text-indigo-900"><FaUserCheck size={16} /></button>
-                  <button title="메시지" className="text-yellow-600 hover:text-yellow-900"><FaComments size={16} /></button>
-                  <button title="타임라인" className="text-gray-600 hover:text-gray-900"><FaHistory size={16} /></button>
+                <td className="py-3 px-3 text-black">{contract.client}</td>
+                <td className="py-3 px-3">
+                  <div className="flex items-center space-x-2">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusMap[contract.status].color}`}>
+                      {statusMap[contract.status].icon}
+                      {statusMap[contract.status].label}
+                    </span>
+                  </div>
+                  <ContractStatusIndicator contract={contract} />
+                </td>
+                <td className="py-3 px-3">
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${riskLevelMap[contract.riskLevel].color}`}>
+                    {riskLevelMap[contract.riskLevel].label}
+                  </span>
+                </td>
+                <td className="py-3 px-3 text-black">{formatDate(contract.lastUpdated)}</td>
+                <td className="py-3 px-3 text-black">{contract.lawyer}</td>
+                <td className="py-3 px-3 text-black">{contract.keyDate}</td>
+                <td className="py-3 px-3">
+                  <div className="flex space-x-2 items-center">
+                    <FaEye size={16} className="text-blue-600 hover:text-blue-800" />
+                    <FaEdit size={16} className="text-green-600 hover:text-green-800" />
+                    <FaUserCheck size={16} className="text-indigo-600 hover:text-indigo-800" />
+                    <FaComments size={16} className="text-yellow-600 hover:text-yellow-800" />
+                    <FaHistory size={16} className="text-gray-600 hover:text-gray-800" />
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Results Summary */}
+      <div className="mt-4 text-sm text-gray-600">
+        총 {filteredContracts.length}개 계약 중 {selectedRows.size}개 선택됨
       </div>
     </div>
   );

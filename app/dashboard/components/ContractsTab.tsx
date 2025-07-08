@@ -90,6 +90,18 @@ const ContractsTab: React.FC = () => {
 
   return (
     <div>
+      {/* Debug: Plain link and button to test new tab opening */}
+      <div className="mb-4 flex gap-4">
+        <a href="/dashboard/contracts/1012" target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>
+          Test Open Contract in New Tab (Link)
+        </a>
+        <button
+          onClick={() => window.open('/dashboard/contracts/1012', '_blank')}
+          style={{ color: 'blue', textDecoration: 'underline', background: 'none', border: '1px solid #ccc', padding: '4px 8px', borderRadius: '4px' }}
+        >
+          Test Open Contract in New Tab (Button)
+        </button>
+      </div>
       <h1 className="text-3xl font-extrabold mb-2 text-black">내 계약서</h1>
       <div className="mb-6 text-lg text-black font-medium">계약 현황을 한눈에 확인하고, 필요한 작업을 빠르게 진행하세요.</div>
       {/* ...search/filter/export as before... */}
@@ -139,28 +151,86 @@ const ContractsTab: React.FC = () => {
                 className={`border-b transition-colors ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-indigo-50 ${c.urgent ? 'bg-red-50' : ''}`}
               >
                 <td className="py-2 px-3"><input type="checkbox" title="선택" /></td>
-                <td className="py-2 px-3 font-mono font-bold text-black">{c.id}</td>
-                <td className="py-2 px-3 font-semibold text-black">{c.name}</td>
-                <td className="py-2 px-3">
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${typeColors[c.type] || 'bg-gray-100 text-gray-800'}`}>{c.type}</span>
-                </td>
-                <td className="py-2 px-3">
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[c.status] || 'bg-gray-100 text-gray-800'}`}>{c.status}</span>
-                  {c.urgent && <span className="ml-2 px-2 py-0.5 rounded bg-red-600 text-white text-xs">긴급</span>}
-                </td>
-                <td className="py-2 px-3 text-black">{c.lastUpdated}</td>
-                <td className="py-2 px-3 text-black">{c.lawyer}</td>
-                <td className="py-2 px-3 text-black">{c.keyDates}</td>
-                <td className="py-2 px-3 flex gap-3 items-center">
-                  <Link
+                <td className="py-2 px-3 font-mono font-bold text-black">
+                  <a
                     href={`/dashboard/contracts/${c.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    style={{ display: 'block', width: '100%', height: '100%' }}
+                  >
+                    {c.id}
+                  </a>
+                </td>
+                <td className="py-2 px-3 font-semibold text-black">
+                  <a
+                    href={`/dashboard/contracts/${c.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'block', width: '100%', height: '100%' }}
+                  >
+                    {c.name}
+                  </a>
+                </td>
+                <td className="py-2 px-3">
+                  <a
+                    href={`/dashboard/contracts/${c.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'block', width: '100%', height: '100%' }}
+                  >
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${typeColors[c.type] || 'bg-gray-100 text-gray-800'}`}>{c.type}</span>
+                  </a>
+                </td>
+                <td className="py-2 px-3">
+                  <a
+                    href={`/dashboard/contracts/${c.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'block', width: '100%', height: '100%' }}
+                  >
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[c.status] || 'bg-gray-100 text-gray-800'}`}>{c.status}</span>
+                    {c.urgent && <span className="ml-2 px-2 py-0.5 rounded bg-red-600 text-white text-xs">긴급</span>}
+                  </a>
+                </td>
+                <td className="py-2 px-3 text-black">
+                  <a
+                    href={`/dashboard/contracts/${c.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'block', width: '100%', height: '100%' }}
+                  >
+                    {c.lastUpdated}
+                  </a>
+                </td>
+                <td className="py-2 px-3 text-black">
+                  <a
+                    href={`/dashboard/contracts/${c.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'block', width: '100%', height: '100%' }}
+                  >
+                    {c.lawyer}
+                  </a>
+                </td>
+                <td className="py-2 px-3 text-black">
+                  <a
+                    href={`/dashboard/contracts/${c.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'block', width: '100%', height: '100%' }}
+                  >
+                    {c.keyDates}
+                  </a>
+                </td>
+                <td className="py-2 px-3 flex gap-3 items-center">
+                  <button
+                    type="button"
                     title="계약 보기"
                     className="px-3 py-1 bg-indigo-600 text-white rounded shadow text-xs font-semibold hover:bg-indigo-700 transition"
+                    onClick={() => window.open(`/dashboard/contracts/${c.id}`, '_blank')}
                   >
                     상세보기
-                  </Link>
+                  </button>
                 </td>
               </tr>
             ))}

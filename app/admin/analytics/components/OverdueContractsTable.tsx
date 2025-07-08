@@ -1,17 +1,49 @@
 "use client";
 
-import { contracts } from '../mock/contracts';
+import { useState, useEffect } from 'react';
+import { generateMockContracts } from '../mock/contracts';
 
-const overdueContracts = contracts
-  .filter(c => c.status === 'overdue')
-  .map(c => ({
-    ...c,
-    daysOverdue: Math.max(0, Math.floor((new Date().getTime() - new Date(c.completedAt || c.createdAt).getTime()) / (1000 * 60 * 60 * 24)))
-  }))
-  .sort((a, b) => b.daysOverdue - a.daysOverdue)
-  .slice(0, 5);
+interface ContractType {
+  id: string;
+  name: string;
+  client: string;
+  type: string;
+  status: string;
+  lastUpdated: string;
+  lawyer: string;
+  keyDate: string;
+  urgent: boolean;
+  riskLevel: string;
+  value: number;
+  tags: string[];
+  clientContact: string;
+  estimatedCompletion: string;
+  slaDeadline: string;
+  createdAt: string;
+  completedAt: string | null;
+  slaViolated: boolean;
+  risk: string;
+}
+
+const mockContracts = generateMockContracts();
 
 export default function OverdueContractsTable() {
+  const [contracts, setContracts] = useState<ContractType[] | null>(null);
+  useEffect(() => {
+    setContracts(mockContracts);
+  }, []);
+  if (!contracts) {
+    return <div className="py-12 text-center text-gray-400">로딩 중...</div>;
+  }
+  const overdueContracts = contracts
+    .filter(c => c.status === 'overdue')
+    .map(c => ({
+      ...c,
+      daysOverdue: Math.max(0, Math.floor((new Date().getTime() - new Date(c.completedAt || c.createdAt).getTime()) / (1000 * 60 * 60 * 24)))
+    }))
+    .sort((a, b) => b.daysOverdue - a.daysOverdue)
+    .slice(0, 5);
+
   return (
     <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
       <div className="font-bold text-black mb-2">상위 연체 계약</div>
