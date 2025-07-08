@@ -1,6 +1,9 @@
 "use client";
 import { useState, useMemo, useEffect } from 'react';
 import { FaEye, FaEdit, FaUserCheck, FaComments, FaHistory, FaExclamationTriangle, FaCheckCircle, FaClock } from 'react-icons/fa';
+import seedrandom from 'seedrandom';
+
+const rng = seedrandom('users-seed');
 
 // Enhanced mock data generation
 const generateMockUsers = (count = 100) => {
@@ -17,26 +20,27 @@ const generateMockUsers = (count = 100) => {
     'Tax Law', 'Real Estate Law', 'Technology Law', 'International Law'
   ];
 
+  const baseDate = new Date('2024-07-07T09:00:00+09:00'); // Fixed base date
   return Array.from({ length: count }, (_, i) => {
-    const isLawyer = Math.random() < 0.2;
-    const role = isLawyer ? 'LAWYER' : Math.random() < 0.1 ? 'ADMIN' : 'USER';
-    const status = statuses[Math.floor(Math.random() * statuses.length)];
-    const lastLogin = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000);
+    const isLawyer = rng() < 0.2;
+    const role = isLawyer ? 'LAWYER' : rng() < 0.1 ? 'ADMIN' : 'USER';
+    const status = statuses[Math.floor(rng() * statuses.length)];
+    const lastLogin = new Date(baseDate.getTime() - Math.floor(rng() * 30 * 24 * 60 * 60 * 1000));
     
     return {
       id: `U-${String(i + 1).padStart(3, '0')}`,
       name: `User ${i + 1}`,
       email: `user${i + 1}@example.com`,
-      company: companies[Math.floor(Math.random() * companies.length)],
+      company: companies[Math.floor(rng() * companies.length)],
       role,
       status,
       lastLogin: lastLogin.toISOString(),
-      contractsAnalyzed: Math.floor(Math.random() * 50),
-      specialization: isLawyer ? specializations[Math.floor(Math.random() * specializations.length)] : null,
-      phone: `010-${String(Math.floor(Math.random() * 9000) + 1000)}-${String(Math.floor(Math.random() * 9000) + 1000)}`,
-      createdAt: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
-      isVerified: Math.random() > 0.1,
-      hasActiveSubscription: Math.random() > 0.2
+      contractsAnalyzed: Math.floor(rng() * 50),
+      specialization: isLawyer ? specializations[Math.floor(rng() * specializations.length)] : null,
+      phone: `010-${String(Math.floor(rng() * 9000) + 1000)}-${String(Math.floor(rng() * 9000) + 1000)}`,
+      createdAt: new Date(baseDate.getTime() - Math.floor(rng() * 365 * 24 * 60 * 60 * 1000)).toISOString(),
+      isVerified: rng() > 0.1,
+      hasActiveSubscription: rng() > 0.2
     };
   });
 };
@@ -167,7 +171,8 @@ export default function UserDirectoryTable() {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Asia/Seoul'
     });
   };
 
@@ -212,7 +217,7 @@ export default function UserDirectoryTable() {
         {/* Filter Controls */}
         <div className="flex flex-wrap gap-4">
           <select
-            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
             value={roleFilter}
             onChange={e => setRoleFilter(e.target.value)}
           >
@@ -223,7 +228,7 @@ export default function UserDirectoryTable() {
           </select>
 
           <select
-            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
           >
@@ -240,7 +245,7 @@ export default function UserDirectoryTable() {
               onChange={(e) => handleSelectAll(e.target.checked)}
               className="rounded focus:ring-2 focus:ring-blue-500"
             />
-            <span className="text-sm">전체 선택</span>
+            <span className="text-sm text-black">전체 선택</span>
           </label>
         </div>
 

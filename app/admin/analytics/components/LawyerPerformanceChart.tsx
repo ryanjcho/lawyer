@@ -3,9 +3,10 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const data = [
-  { name: 'Jane Smith', contracts: 12 },
-  { name: 'John Doe', contracts: 8 },
-  { name: 'Emily Lee', contracts: 10 },
+  { name: '오성헌', contracts: 12 },
+  { name: '김용범', contracts: 8 },
+  { name: '엄태섭', contracts: 10 },
+  { name: '조진석', contracts: 7 },
 ];
 
 export default function LawyerPerformanceChart() {

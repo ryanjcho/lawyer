@@ -56,107 +56,48 @@ export default function AuditLogPage() {
       router.replace("/dashboard");
       return;
     }
-    fetch("/api/admin/auditlog")
-      .then((res) => res.json())
-      .then((data) => {
-        let logs = data.logs || [];
-        // If no logs, use mock data for demo
-        if (logs.length === 0) {
-          logs = [
-            {
-              id: "1",
-              user: { name: "홍길동", email: "hong@lawscan.com" },
-              action: "LOGIN",
-              details: "User 홍길동 logged in successfully.",
-              createdAt: new Date().toISOString(),
-            },
-            {
-              id: "2",
-              user: { name: "김변호사", email: "kim@lawscan.com" },
-              action: "UPLOAD_CONTRACT",
-              details: "Uploaded contract: NDA.pdf",
-              createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-            },
-            {
-              id: "3",
-              user: { name: "이영희", email: "lee@lawscan.com" },
-              action: "CREATE_PAYMENT",
-              details: "Created payment for contract NDA.pdf, amount: 500,000",
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-            },
-            // --- More diverse actions ---
-            {
-              id: "4",
-              user: { name: "박지성", email: "park@lawscan.com" },
-              action: "RESET_PASSWORD",
-              details: "Password reset for user lee@lawscan.com",
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-            },
-            {
-              id: "5",
-              user: { name: "최민수", email: "choi@lawscan.com" },
-              action: "PERMISSION_CHANGE",
-              details: JSON.stringify({ before: { role: "USER" }, after: { role: "ADMIN" }, ip: "192.168.1.10" }),
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-            },
-            {
-              id: "6",
-              user: { name: "홍길동", email: "hong@lawscan.com" },
-              action: "FAILED_LOGIN",
-              details: JSON.stringify({ error: "Invalid password", ip: "203.0.113.5", device: "Chrome on Windows" }),
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-            },
-            {
-              id: "7",
-              user: { name: "김변호사", email: "kim@lawscan.com" },
-              action: "DELETE_CONTRACT",
-              details: JSON.stringify({ before: { contract: "NDA.pdf" }, ip: "203.0.113.7" }),
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-            },
-            {
-              id: "8",
-              user: { name: "이영희", email: "lee@lawscan.com" },
-              action: "USER_CREATED",
-              details: "Created new user: park@lawscan.com",
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 7).toISOString(),
-            },
-            {
-              id: "9",
-              user: { name: "최민수", email: "choi@lawscan.com" },
-              action: "EXPORT_AUDIT_LOG",
-              details: "Audit log exported as CSV by choi@lawscan.com",
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
-            },
-            {
-              id: "10",
-              user: { name: "박지성", email: "park@lawscan.com" },
-              action: "UPDATE_PROFILE",
-              details: JSON.stringify({ before: { name: "박지성" }, after: { name: "박지성2" }, device: "Safari on iOS" }),
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 9).toISOString(),
-            },
-            {
-              id: "11",
-              user: { name: "홍길동", email: "hong@lawscan.com" },
-              action: "LOGOUT",
-              details: "User 홍길동 logged out.",
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
-            },
-            {
-              id: "12",
-              user: { name: "이영희", email: "lee@lawscan.com" },
-              action: "FAILED_EXPORT",
-              details: JSON.stringify({ error: "Permission denied", ip: "203.0.113.8" }),
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 11).toISOString(),
-            },
-          ];
-        }
-        setLogs(logs);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("감사 로그를 불러오지 못했습니다.");
-        setLoading(false);
-      });
+    // Always use mock data for demo/dev
+    const fixedBaseDate = new Date('2024-07-07T09:00:00+09:00');
+    const mockUsers = [
+      { name: '오성헌', email: 'shoh@ohkimslaw.com' },
+      { name: '김용범', email: 'ybkim@ohkimslaw.com' },
+      { name: '엄태섭', email: 'tsum@ohkimslaw.com' },
+      { name: '조진석', email: 'jscho@ohkimslaw.com' },
+      { name: 'Beta LLC', email: 'kim@betallc.com' },
+      { name: 'Admin', email: 'admin@lawkit.com' }
+    ];
+    const mockActions = [
+      '계약서 업로드',
+      '계약서 수정',
+      'AI 검토 요청',
+      'AI 검토 완료',
+      '변호사 검토 시작',
+      '변호사 검토 완료',
+      '클라이언트 피드백 등록',
+      '계약 승인',
+      '계약 반려',
+      '전자서명 완료',
+      '파일 다운로드',
+      '알림 발송',
+      '계정 생성',
+      '계정 비밀번호 변경',
+      '로그인',
+      '로그아웃'
+    ];
+    const mockAuditLogs = Array.from({ length: 30 }, (_, i) => {
+      const user = mockUsers[i % mockUsers.length];
+      const action = mockActions[i % mockActions.length];
+      // Spread entries over the last 30 days
+      const createdAt = new Date(fixedBaseDate.getTime() - i * 24 * 60 * 60 * 1000).toISOString();
+      return {
+        id: String(i + 1), // id as string
+        action,
+        createdAt,
+        user
+      };
+    });
+    setLogs(mockAuditLogs);
+    setLoading(false);
   }, [session, status, router]);
 
   // Filtering, then sorting
@@ -210,7 +151,7 @@ export default function AuditLogPage() {
   const exportCSV = () => {
     const header = ["시간", "사용자", "이메일", "행동", "세부 정보"];
     const rows = filteredLogs.map(l => [
-      new Date(l.createdAt).toLocaleString(),
+      new Date(l.createdAt).toLocaleString('Asia/Seoul'),
       l.user?.name || "-",
       l.user?.email || "-",
       l.action,
@@ -238,7 +179,7 @@ export default function AuditLogPage() {
     <div className="flex min-h-screen">
       <Sidebar />
       <main className="flex-1 p-8 bg-gray-50">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900">감사 로그 (Audit Log)</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-900">감사 로그</h1>
               <div className="flex flex-wrap gap-4 mb-6 items-end">
           <input
             className="border rounded px-3 py-2 text-black w-56"
@@ -298,7 +239,7 @@ export default function AuditLogPage() {
                 className={`border-b transition-colors ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 cursor-pointer`}
                 onClick={() => setShowDetail(log)}
               >
-                <td className="py-2 px-3 text-black whitespace-nowrap">{new Date(log.createdAt).toLocaleString()}</td>
+                <td className="py-2 px-3 text-black whitespace-nowrap">{new Date(log.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}</td>
                 <td className="py-2 px-3 text-black">{log.user?.name || "-"}</td>
                 <td className="py-2 px-3 text-black">{log.user?.email || "-"}</td>
                 <td className="py-2 px-3">
@@ -339,7 +280,7 @@ export default function AuditLogPage() {
                           <div className="space-y-3">
                 <div>
                   <label className="font-semibold text-gray-900">시간:</label>
-                  <p className="text-black">{new Date(showDetail.createdAt).toLocaleString()}</p>
+                  <p className="text-black">{new Date(showDetail.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}</p>
                 </div>
                 <div>
                   <label className="font-semibold text-gray-900">사용자:</label>

@@ -24,10 +24,10 @@ export default function AnalyticsFilters({ onChange }: { onChange?: (filters: an
     onChange && onChange(filters);
   };
 
+  const fixedBaseDate = new Date('2024-07-07T09:00:00+09:00');
   const applyPreset = (preset: string) => {
-    // Only use new Date() here, not for initial state
-    const today = new Date();
-    let from = new Date();
+    const today = new Date(fixedBaseDate);
+    let from = new Date(fixedBaseDate);
     
     switch (preset) {
       case 'this-week':

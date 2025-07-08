@@ -9,10 +9,14 @@ import {
   FaDownload, FaFilter, FaCalendarAlt, FaChartLine, FaChartBar, 
   FaChartPie, FaTable, FaFileExport, FaEye, FaEyeSlash 
 } from 'react-icons/fa';
+import seedrandom from 'seedrandom';
+const rng = seedrandom('advanced-analytics-seed');
+
+const fixedBaseDate = new Date('2024-07-07T09:00:00+09:00');
 
 // Enhanced mock data with more granular information
 const generateAdvancedMockData = () => {
-  const now = new Date();
+  const now = fixedBaseDate;
   const data: any[] = [];
   
   // Generate 90 days of data
@@ -25,9 +29,9 @@ const generateAdvancedMockData = () => {
     const isMonthEnd = date.getDate() >= 25;
     
     // Base values with realistic variations
-    const baseContracts = isWeekend ? 2 : Math.floor(Math.random() * 8) + 3;
-    const baseRevenue = isWeekend ? 500000 : Math.floor(Math.random() * 2000000) + 800000;
-    const baseUsers = isWeekend ? 1 : Math.floor(Math.random() * 4) + 2;
+    const baseContracts = isWeekend ? 2 : Math.floor(rng() * 8) + 3;
+    const baseRevenue = isWeekend ? 500000 : Math.floor(rng() * 2000000) + 800000;
+    const baseUsers = isWeekend ? 1 : Math.floor(rng() * 4) + 2;
     
     // Add trends and patterns
     const trendMultiplier = 1 + (Math.sin(i / 7) * 0.3) + (Math.sin(i / 30) * 0.2);
@@ -35,7 +39,7 @@ const generateAdvancedMockData = () => {
     
     data.push({
       date: date.toISOString().split('T')[0],
-      formattedDate: date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }),
+      formattedDate: date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', timeZone: 'Asia/Seoul' }),
       contracts: Math.floor(baseContracts * trendMultiplier * seasonalMultiplier),
       revenue: Math.floor(baseRevenue * trendMultiplier * seasonalMultiplier),
       users: Math.floor(baseUsers * trendMultiplier * seasonalMultiplier),
@@ -43,8 +47,8 @@ const generateAdvancedMockData = () => {
       lawyerReviews: Math.floor(baseContracts * 0.6 * trendMultiplier),
       urgentContracts: Math.floor(baseContracts * 0.15),
       highRiskContracts: Math.floor(baseContracts * 0.25),
-      averageProcessingTime: 2.3 + (Math.random() - 0.5) * 0.8,
-      customerSatisfaction: 4.5 + (Math.random() - 0.5) * 0.6,
+      averageProcessingTime: 2.3 + (rng() - 0.5) * 0.8,
+      customerSatisfaction: 4.5 + (rng() - 0.5) * 0.6,
       dayOfWeek: date.getDay(),
       month: date.getMonth(),
       quarter: Math.floor(date.getMonth() / 3) + 1,
@@ -68,10 +72,10 @@ const generateDrillDownData = (type: string, filter: any) => {
   categories[type]?.forEach((category, index) => {
     data.push({
       category,
-      value: Math.floor(Math.random() * 100) + 20,
-      percentage: Math.floor(Math.random() * 30) + 10,
+      value: Math.floor(rng() * 100) + 20,
+      percentage: Math.floor(rng() * 30) + 10,
       trend: Math.random() > 0.5 ? 'up' : 'down',
-      change: Math.floor(Math.random() * 15) + 1
+      change: Math.floor(rng() * 15) + 1
     });
   });
   

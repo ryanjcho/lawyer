@@ -35,11 +35,12 @@ export default function OverdueContractsTable() {
   if (!contracts) {
     return <div className="py-12 text-center text-gray-400">로딩 중...</div>;
   }
+  const fixedNow = new Date('2024-07-07T09:00:00+09:00');
   const overdueContracts = contracts
     .filter(c => c.status === 'overdue')
     .map(c => ({
       ...c,
-      daysOverdue: Math.max(0, Math.floor((new Date().getTime() - new Date(c.completedAt || c.createdAt).getTime()) / (1000 * 60 * 60 * 24)))
+      daysOverdue: Math.max(0, Math.floor((fixedNow.getTime() - new Date(c.completedAt || c.createdAt).getTime()) / (1000 * 60 * 60 * 24)))
     }))
     .sort((a, b) => b.daysOverdue - a.daysOverdue)
     .slice(0, 5);

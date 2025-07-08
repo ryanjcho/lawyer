@@ -61,7 +61,7 @@ const mockCase = {
   status: 'ai_complete',
   priority: 'medium',
   lastUpdated: '2024-06-30',
-  lawyer: 'John Doe',
+  lawyer: '오성헌',
   keyDate: '2024-07-10',
   value: '₩500,000,000',
   industry: 'Technology',
@@ -106,14 +106,14 @@ const mockCase = {
   },
   timeline: [
     { date: '2024-06-30 14:30', action: 'AI 검토 완료', by: '시스템', status: 'completed' },
-    { date: '2024-06-30 10:15', action: '변호사 검토 시작', by: 'John Doe', status: 'completed' },
+    { date: '2024-06-30 10:15', action: '변호사 검토 시작', by: '오성헌', status: 'completed' },
     { date: '2024-06-29 16:45', action: '계약 업로드', by: 'Beta LLC', status: 'completed' },
     { date: '2024-06-28 09:30', action: '프로젝트 생성', by: 'Admin', status: 'completed' }
   ],
   comments: [
     { 
       id: 1,
-      author: 'John Doe', 
+      author: '오성헌', 
       role: '변호사',
       text: 'AI 검토 결과를 확인했습니다. 관할 법원 조항과 지적재산권 조항에 대한 추가 검토가 필요합니다. 클라이언트와 논의 후 수정하겠습니다.', 
       date: '2024-06-30 15:00',
@@ -154,9 +154,9 @@ const mockCase = {
     founded: '2018'
   },
   nextActions: [
-    { action: '클라이언트 피드백 수집', due: '2024-07-02', assigned: 'John Doe', priority: 'high' },
-    { action: '관할 법원 조항 수정', due: '2024-07-03', assigned: 'John Doe', priority: 'medium' },
-    { action: '최종 검토 및 승인', due: '2024-07-05', assigned: 'Beta LLC', priority: 'high' }
+    { action: '클라이언트 피드백 수집', due: '2024-07-02', assigned: '김용범', priority: 'high' },
+    { action: '관할 법원 조항 수정', due: '2024-07-03', assigned: '엄태섭', priority: 'medium' },
+    { action: '최종 검토 및 승인', due: '2024-07-05', assigned: '조진석', priority: 'high' }
   ]
 };
 
@@ -182,7 +182,7 @@ export default function AdminContractDetail() {
   const [showMentions, setShowMentions] = useState(false);
   const [notification, setNotification] = useState('');
   const [approvals, setApprovals] = useState([
-    { name: 'John Doe', role: '변호사', status: 'pending', signed: false },
+    { name: '오성헌', role: '변호사', status: 'pending', signed: false },
     { name: 'Beta LLC', role: '클라이언트', status: 'pending', signed: false }
   ]);
   const [signatureNotification, setSignatureNotification] = useState('');
@@ -810,7 +810,7 @@ export default function AdminContractDetail() {
                   {/* Mention dropdown (mock) */}
                   {showMentions && (
                     <div className="absolute bg-white border border-gray-300 rounded shadow mt-1 z-10">
-                      {['Beta LLC', 'Admin', 'John Doe'].map(user => (
+                      {['Beta LLC', 'Admin', '오성헌', '김용범', '엄태섭', '조진석'].map(user => (
                         <div key={user} className="px-3 py-1 hover:bg-indigo-100 cursor-pointer" onClick={() => handleMention(user)}>
                           @{user}
                         </div>

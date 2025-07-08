@@ -4,6 +4,9 @@ import { useState, useMemo, useEffect } from 'react';
 import { HiOutlineDocumentText, HiOutlinePencilAlt } from 'react-icons/hi';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import seedrandom from 'seedrandom';
+
+const rng = seedrandom('contracts-seed');
 
 // Enhanced mock data with realistic scenarios
 const generateMockContracts = (count = 50) => {
@@ -12,8 +15,7 @@ const generateMockContracts = (count = 50) => {
     'Zeta Solutions', 'Eta Technologies', 'Theta Systems', 'Iota Networks', 'Kappa Corp'
   ];
   const lawyers = [
-    'Jane Smith', 'John Doe', 'Emily Lee', 'Michael Chen', 'Sarah Johnson',
-    'David Kim', 'Lisa Park', 'Robert Wilson', 'Maria Garcia', 'James Brown'
+    '오성헌', '김용범', '엄태섭', '조진석'
   ];
   const contractTypes = [
     'NDA', 'MSA', 'SLA', 'Consulting Agreement', 'IP Agreement',
@@ -23,35 +25,36 @@ const generateMockContracts = (count = 50) => {
   const riskLevels = ['low', 'medium', 'high', 'critical'];
   const tags = ['Technology', 'Finance', 'Healthcare', 'Manufacturing', 'Retail', 'Real Estate', 'Education', 'Legal'];
 
+  const now = new Date('2024-07-07T09:00:00+09:00'); // Fixed base date
   return Array.from({ length: count }, (_, i) => {
-    const isUrgent = Math.random() < 0.15;
-    const riskLevel = riskLevels[Math.floor(Math.random() * riskLevels.length)];
-    const status = statuses[Math.floor(Math.random() * statuses.length)];
-    const contractType = contractTypes[Math.floor(Math.random() * contractTypes.length)];
-    const client = clients[Math.floor(Math.random() * clients.length)];
-    const lawyer = lawyers[Math.floor(Math.random() * lawyers.length)];
+    const isUrgent = rng() < 0.15;
+    const riskLevel = riskLevels[Math.floor(rng() * riskLevels.length)];
+    const status = statuses[Math.floor(rng() * statuses.length)];
+    const contractType = contractTypes[Math.floor(rng() * contractTypes.length)];
+    const client = clients[Math.floor(rng() * clients.length)];
+    const lawyer = lawyers[Math.floor(rng() * lawyers.length)];
     
     // Generate realistic dates
-    const uploadedDate = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000);
-    const lastUpdated = new Date(uploadedDate.getTime() + Math.random() * 7 * 24 * 60 * 60 * 1000);
-    const keyDate = new Date(Date.now() + Math.random() * 14 * 24 * 60 * 60 * 1000);
+    const uploadedDate = new Date(now.getTime() - Math.floor(rng() * 30 * 24 * 60 * 60 * 1000));
+    const lastUpdated = new Date(uploadedDate.getTime() + Math.floor(rng() * 7 * 24 * 60 * 60 * 1000));
+    const keyDate = new Date(now.getTime() + Math.floor(rng() * 14 * 24 * 60 * 60 * 1000));
     
     return {
       id: `C-2024-${String(i + 1).padStart(3, '0')}`,
       name: `${contractType} - ${client}`,
       client,
-      type: Math.random() > 0.5 ? 'review' : 'draft',
+      type: rng() > 0.5 ? 'review' : 'draft',
       status,
       lastUpdated: lastUpdated.toISOString(),
       lawyer,
       keyDate: keyDate.toISOString().split('T')[0],
       urgent: isUrgent,
       riskLevel,
-      value: Math.floor(Math.random() * 10000000) + 1000000,
-      tags: tags.slice(0, Math.floor(Math.random() * 3) + 1),
+      value: Math.floor(rng() * 10000000) + 1000000,
+      tags: tags.slice(0, Math.floor(rng() * 3) + 1),
       clientContact: `${lawyer.toLowerCase().replace(' ', '.')}@${client.toLowerCase().replace(' ', '')}.com`,
-      estimatedCompletion: new Date(keyDate.getTime() - Math.random() * 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      slaDeadline: new Date(lastUpdated.getTime() + (5 + Math.random() * 5) * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      estimatedCompletion: new Date(keyDate.getTime() - Math.floor(rng() * 3 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
+      slaDeadline: new Date(lastUpdated.getTime() + Math.floor((5 + rng() * 5) * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
     };
   });
 };
@@ -293,7 +296,8 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Asia/Seoul'
     });
   };
 
@@ -364,7 +368,7 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
               onChange={e => setUrgentFilter(e.target.checked)}
               className="rounded focus:ring-2 focus:ring-blue-500"
             />
-            <span className="text-sm">긴급만</span>
+            <span className="text-sm text-black">긴급만</span>
           </label>
         </div>
 
@@ -397,7 +401,7 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
               </th>
               <th className="py-3 px-3 font-semibold">계약명/구분</th>
               <th className="py-3 px-3 font-semibold">고객사</th>
-              <th className="py-3 px-3 font-semibold">상태</th>
+              <th className="py-3 px-3 font-semibold text-center">상태</th>
               <th className="py-3 px-3 font-semibold">위험도</th>
               <th 
                 className="py-3 px-3 font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
@@ -412,7 +416,6 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
               >
                 주요 일정 {sortBy === 'keyDate' && (sortDir === 'asc' ? '↑' : '↓')}
               </th>
-              <th className="py-3 px-3 font-semibold">작업</th>
             </tr>
           </thead>
           <tbody>
@@ -460,13 +463,17 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
                 </td>
                 <td className="py-3 px-3 text-black">{contract.client}</td>
                 <td className="py-3 px-3">
-                  <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusMap[contract.status].color}`}>
-                      {statusMap[contract.status].icon}
-                      {statusMap[contract.status].label}
-                    </span>
+                  <div className="flex flex-col items-center">
+                    <div className="flex justify-center w-full mb-2">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusMap[contract.status].color} text-center w-max`}>
+                        {statusMap[contract.status].icon}
+                        {statusMap[contract.status].label}
+                      </span>
+                    </div>
+                    <div className="flex justify-center mt-1 w-full">
+                      <ContractStatusIndicator contract={contract} />
+                    </div>
                   </div>
-                  <ContractStatusIndicator contract={contract} />
                 </td>
                 <td className="py-3 px-3">
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${riskLevelMap[contract.riskLevel].color}`}>
@@ -476,15 +483,6 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
                 <td className="py-3 px-3 text-black">{formatDate(contract.lastUpdated)}</td>
                 <td className="py-3 px-3 text-black">{contract.lawyer}</td>
                 <td className="py-3 px-3 text-black">{contract.keyDate}</td>
-                <td className="py-3 px-3">
-                  <div className="flex space-x-2 items-center">
-                    <FaEye size={16} className="text-blue-600 hover:text-blue-800" />
-                    <FaEdit size={16} className="text-green-600 hover:text-green-800" />
-                    <FaUserCheck size={16} className="text-indigo-600 hover:text-indigo-800" />
-                    <FaComments size={16} className="text-yellow-600 hover:text-yellow-800" />
-                    <FaHistory size={16} className="text-gray-600 hover:text-gray-800" />
-                  </div>
-                </td>
               </tr>
             ))}
           </tbody>

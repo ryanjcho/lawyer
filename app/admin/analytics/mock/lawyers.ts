@@ -1,5 +1,6 @@
 export const lawyers = [
-  { name: 'Jane Smith', team: 'A', email: 'jane@law.com' },
-  { name: 'John Doe', team: 'B', email: 'john@law.com' },
-  { name: 'Emily Lee', team: 'A', email: 'emily@law.com' },
+  { name: '오성헌', team: 'A', email: 'shoh@ohkimslaw.com' },
+  { name: '김용범', team: 'B', email: 'ybkim@ohkimslaw.com' },
+  { name: '엄태섭', team: 'A', email: 'tsum@ohkimslaw.com' },
+  { name: '조진석', team: 'B', email: 'jscho@ohkimslaw.com' },
 ]; 

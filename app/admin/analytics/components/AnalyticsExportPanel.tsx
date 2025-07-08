@@ -32,7 +32,7 @@ export default function AnalyticsExportPanel() {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-900">보고서 및 내보내기</h2>
         <div className="flex items-center gap-2 text-sm text-gray-500">
-          <span>마지막 업데이트: {new Date().toLocaleString('ko-KR')}</span>
+          <span>마지막 업데이트: 2024-07-07 오전 09:00</span>
         </div>
       </div>
 

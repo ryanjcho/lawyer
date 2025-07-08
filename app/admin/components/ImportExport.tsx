@@ -5,11 +5,15 @@ import {
   FaCheck, FaTimes, FaExclamationTriangle, FaInfoCircle, 
   FaSpinner, FaEye, FaTrash, FaCog 
 } from 'react-icons/fa';
+import seedrandom from 'seedrandom';
+
+const rng = seedrandom('export-seed');
+const fixedBaseDate = new Date('2024-07-07T09:00:00+09:00');
 
 // Mock data for export
 const generateExportData = (type: string) => {
   const data: any[] = [];
-  const count = Math.floor(Math.random() * 100) + 50;
+  const count = Math.floor(rng() * 100) + 50;
   
   for (let i = 0; i < count; i++) {
     switch (type) {
@@ -18,12 +22,12 @@ const generateExportData = (type: string) => {
           id: `C-2024-${String(i + 1).padStart(3, '0')}`,
           name: `Contract ${i + 1}`,
           client: `Client ${i + 1}`,
-          status: ['awaiting_ai', 'ai_complete', 'lawyer_review', 'complete'][Math.floor(Math.random() * 4)],
-          type: ['review', 'draft'][Math.floor(Math.random() * 2)],
-          lawyer: `Lawyer ${Math.floor(Math.random() * 10) + 1}`,
-          createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
-          value: Math.floor(Math.random() * 10000000) + 1000000,
-          riskLevel: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)]
+          status: ['awaiting_ai', 'ai_complete', 'lawyer_review', 'complete'][Math.floor(rng() * 4)],
+          type: ['review', 'draft'][Math.floor(rng() * 2)],
+          lawyer: `Lawyer ${Math.floor(rng() * 10) + 1}`,
+          createdAt: new Date(fixedBaseDate.getTime() - rng() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+          value: Math.floor(rng() * 10000000) + 1000000,
+          riskLevel: ['low', 'medium', 'high', 'critical'][Math.floor(rng() * 4)]
         });
         break;
       case 'users':
@@ -32,20 +36,20 @@ const generateExportData = (type: string) => {
           name: `User ${i + 1}`,
           email: `user${i + 1}@example.com`,
           company: `Company ${i + 1}`,
-          role: ['USER', 'ADMIN', 'LAWYER'][Math.floor(Math.random() * 3)],
-          status: ['active', 'inactive', 'suspended'][Math.floor(Math.random() * 3)],
-          lastLogin: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
-          contractsAnalyzed: Math.floor(Math.random() * 50)
+          role: ['USER', 'ADMIN', 'LAWYER'][Math.floor(rng() * 3)],
+          status: ['active', 'inactive', 'suspended'][Math.floor(rng() * 3)],
+          lastLogin: new Date(fixedBaseDate.getTime() - rng() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+          contractsAnalyzed: Math.floor(rng() * 50)
         });
         break;
       case 'analytics':
         data.push({
-          date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          contracts: Math.floor(Math.random() * 10) + 1,
-          revenue: Math.floor(Math.random() * 2000000) + 500000,
-          users: Math.floor(Math.random() * 5) + 1,
-          aiReviews: Math.floor(Math.random() * 8) + 1,
-          lawyerReviews: Math.floor(Math.random() * 6) + 1
+          date: new Date(fixedBaseDate.getTime() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          contracts: Math.floor(rng() * 10) + 1,
+          revenue: Math.floor(rng() * 2000000) + 500000,
+          users: Math.floor(rng() * 5) + 1,
+          aiReviews: Math.floor(rng() * 8) + 1,
+          lawyerReviews: Math.floor(rng() * 6) + 1
         });
         break;
     }

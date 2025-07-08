@@ -196,6 +196,9 @@ export default function ContractDiffViewer() {
 
   return (
     <main className="min-h-screen bg-gray-50 text-gray-900">
+      <div className="max-w-7xl mx-auto pt-8 pb-4">
+        <h1 className="text-3xl font-bold text-center mb-8 text-blue-800 tracking-tight">계약서 워크샾</h1>
+      </div>
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 p-4">
         {/* Clause Navigation Sidebar */}
         <aside className={`w-full md:w-64 flex-shrink-0 ${showSidebar ? '' : 'hidden md:block'}`}>

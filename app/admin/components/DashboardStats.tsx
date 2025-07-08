@@ -2,10 +2,15 @@
 import { useState, useEffect } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { FaUsers, FaFileContract, FaMoneyBillWave, FaClock, FaExclamationTriangle, FaCheckCircle } from 'react-icons/fa';
+import seedrandom from 'seedrandom';
+
+const rng = seedrandom('dashboard-stats-seed');
+const fixedBaseDate = new Date('2024-07-07T09:00:00+09:00');
 
 // Enhanced mock data generation
 const generateMockStats = () => {
-  const now = new Date();
+  // Use fixedBaseDate instead of new Date()
+  const now = fixedBaseDate;
   const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   
   return {
@@ -26,7 +31,7 @@ const generateMockStats = () => {
 
 const generateMockChartData = (type) => {
   const data: Array<{ date: string; value: number; formattedDate: string }> = [];
-  const now = new Date();
+  const now = fixedBaseDate;
   
   for (let i = 29; i >= 0; i--) {
     const date = new Date(now);
@@ -35,22 +40,22 @@ const generateMockChartData = (type) => {
     let value;
     switch (type) {
       case 'contracts':
-        value = Math.floor(Math.random() * 8) + 2;
+        value = Math.floor(rng() * 8) + 2;
         break;
       case 'revenue':
-        value = Math.floor(Math.random() * 2000000) + 500000;
+        value = Math.floor(rng() * 2000000) + 500000;
         break;
       case 'users':
-        value = Math.floor(Math.random() * 5) + 1;
+        value = Math.floor(rng() * 5) + 1;
         break;
       default:
-        value = Math.floor(Math.random() * 100);
+        value = Math.floor(rng() * 100);
     }
     
     data.push({
       date: date.toISOString().split('T')[0],
       value,
-      formattedDate: date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })
+      formattedDate: date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', timeZone: 'Asia/Seoul' })
     });
   }
   
@@ -78,19 +83,7 @@ export default function DashboardStats() {
   const [revenueData] = useState(mockRevenueData);
   const [pieData] = useState(mockPieData);
 
-  // Simulate real-time updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Update some stats randomly
-      setStats(prev => ({
-        ...prev,
-        urgentContracts: Math.max(0, prev.urgentContracts + (Math.random() > 0.5 ? 1 : -1)),
-        activeUsers: Math.max(0, prev.activeUsers + (Math.random() > 0.5 ? 1 : -1))
-      }));
-    }, 30000); // Update every 30 seconds
-
-    return () => clearInterval(interval);
-  }, []);
+  // Remove the useEffect interval that updates stats
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('ko-KR', {
@@ -312,29 +305,11 @@ export default function DashboardStats() {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip 
-                formatter={(value, name) => [value, name]}
-                labelFormatter={(label) => `상태: ${label}`}
-              />
+              <Tooltip />
             </PieChart>
           </ResponsiveContainer>
-          
-          <div className="flex flex-col justify-center space-y-4">
-            {pieData.map((item, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div 
-                    className="w-4 h-4 rounded-full" 
-                    style={{ backgroundColor: item.color }}
-                  ></div>
-                  <span className="text-sm font-medium text-gray-700">{item.name}</span>
-                </div>
-                <span className="text-sm font-bold text-gray-900">{item.value}개</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
   );
-} 
+}

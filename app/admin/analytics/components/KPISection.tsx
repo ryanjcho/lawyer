@@ -46,13 +46,10 @@ export default function KPISection() {
     const totalContracts = contracts.length;
     const reviewed = contracts.filter(c => c.type === 'review').length;
     const drafted = contracts.filter(c => c.type === 'draft').length;
-    const avgReviewTime = (
-      contracts
-        .filter(c => c.completedAt && c.createdAt)
-        .map(c => (new Date(c.completedAt!).getTime() - new Date(c.createdAt!).getTime()) / (1000 * 60 * 60 * 24))
-        .reduce((a, b) => a + b, 0) /
-      contracts.filter(c => c.completedAt && c.createdAt).length
-    ).toFixed(1);
+    const completedContracts = contracts.filter(c => c.completedAt && c.createdAt);
+    const avgReviewTime = completedContracts.length > 0
+      ? (completedContracts.map(c => (new Date(c.completedAt!).getTime() - new Date(c.createdAt!).getTime()) / (1000 * 60 * 60 * 24)).reduce((a, b) => a + b, 0) / completedContracts.length).toFixed(1)
+      : '-';
     const overdue = contracts.filter(c => c.status === 'overdue').length;
     const highRisk = contracts.filter(c => c.risk === 'high').length;
     const slaTotal = contracts.length;
@@ -63,7 +60,7 @@ export default function KPISection() {
     return [
       { label: '총 계약', value: totalContracts, trend: '+12%', trendDirection: 'up', icon: <FaFileAlt className="text-blue-600" />, color: 'blue' },
       { label: '검토 완료', value: reviewed, trend: '+8%', trendDirection: 'up', icon: <FaCheckCircle className="text-green-600" />, color: 'green' },
-      { label: '평균 검토 시간', value: `${avgReviewTime}일`, trend: '-15%', trendDirection: 'down', icon: <FaClock className="text-purple-600" />, color: 'purple' },
+      { label: '평균 검토 시간', value: avgReviewTime !== '-' ? `${avgReviewTime}일` : '-', trend: '-15%', trendDirection: 'down', icon: <FaClock className="text-purple-600" />, color: 'purple' },
       { label: '이번 달 수익', value: `₩${revenueThisPeriod.toLocaleString()}`, trend: '+23%', trendDirection: 'up', icon: <FaMoneyBillWave className="text-yellow-600" />, color: 'yellow' },
       { label: '연체 계약', value: overdue, trend: '-5%', trendDirection: 'down', icon: <FaExclamationTriangle className="text-red-600" />, color: 'red' },
       { label: 'SLA 준수율', value: `${slaCompliance}%`, trend: '+2%', trendDirection: 'up', icon: <FaBullseye className="text-indigo-600" />, color: 'indigo' },

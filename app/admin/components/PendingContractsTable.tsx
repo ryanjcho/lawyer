@@ -10,9 +10,10 @@ const riskColors = {
   '높음': 'bg-red-100 text-red-800',
 };
 const contracts = [
-  { id: '1', name: 'NDA - Acme', client: 'Acme Corp', type: '검토', status: '진행 중', risk: '높음', due: '2024-07-01', lawyer: 'Jane Smith' },
-  { id: '2', name: 'MSA - Beta', client: 'Beta LLC', type: '작성', status: '검토 대기', risk: '중간', due: '2024-07-10', lawyer: 'John Doe' },
-  { id: '3', name: 'SLA - Gamma', client: 'Gamma Inc', type: '검토', status: '최종 완료', risk: '낮음', due: '2024-06-30', lawyer: 'Emily Lee' },
+  { id: '1', name: 'NDA - Acme', client: 'Acme Corp', type: '검토', status: '진행 중', risk: '높음', due: '2024-07-01', lawyer: '오성헌' },
+  { id: '2', name: 'MSA - Beta', client: 'Beta LLC', type: '작성', status: '검토 대기', risk: '중간', due: '2024-07-10', lawyer: '김용범' },
+  { id: '3', name: 'SLA - Gamma', client: 'Gamma Inc', type: '검토', status: '최종 완료', risk: '낮음', due: '2024-06-30', lawyer: '엄태섭' },
+  { id: '4', name: 'IP Agreement - Delta', client: 'Delta Partners', type: '검토', status: '진행 중', risk: '높음', due: '2024-07-12', lawyer: '조진석' },
 ];
 
 type PendingContractsTableProps = { limit?: number };

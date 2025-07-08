@@ -4,6 +4,9 @@ import {
   FaBell, FaEnvelope, FaTimes, FaCheck, FaExclamationTriangle, 
   FaInfoCircle, FaCog, FaEye, FaEyeSlash, FaTrash, FaDownload 
 } from 'react-icons/fa';
+import seedrandom from 'seedrandom';
+
+const rng = seedrandom('notification-seed');
 
 // Mock notification data
 const generateMockNotifications = () => {
@@ -21,15 +24,15 @@ const generateMockNotifications = () => {
     '새로운 리뷰가 등록되었습니다.',
     '데이터베이스 백업이 완료되었습니다.'
   ];
+  const baseDate = new Date('2024-07-07T09:00:00+09:00');
 
   return Array.from({ length: 50 }, (_, i) => {
-    const type = types[Math.floor(Math.random() * types.length)];
-    const category = categories[Math.floor(Math.random() * categories.length)];
-    const message = messages[Math.floor(Math.random() * messages.length)];
-    const createdAt = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000);
-    const isRead = Math.random() > 0.3;
+    const type = types[Math.floor(rng() * types.length)];
+    const category = categories[Math.floor(rng() * categories.length)];
+    const message = messages[Math.floor(rng() * messages.length)];
+    const createdAt = new Date(baseDate.getTime() - Math.floor(rng() * 30 * 24 * 60 * 60 * 1000));
+    const isRead = rng() > 0.3;
     const isUrgent = type === 'urgent';
-    
     return {
       id: `notif-${i + 1}`,
       type,
@@ -38,10 +41,10 @@ const generateMockNotifications = () => {
       createdAt: createdAt.toISOString(),
       isRead,
       isUrgent,
-      priority: isUrgent ? 'high' : Math.random() > 0.7 ? 'medium' : 'low',
-      actionRequired: isUrgent && Math.random() > 0.5,
-      relatedId: `item-${Math.floor(Math.random() * 1000)}`,
-      sender: ['System', 'Admin', 'Lawyer', 'Client'][Math.floor(Math.random() * 4)]
+      priority: isUrgent ? 'high' : (rng() > 0.7 ? 'medium' : 'low'),
+      actionRequired: isUrgent && rng() > 0.5,
+      relatedId: `item-${Math.floor(rng() * 1000)}`,
+      sender: ['System', 'Admin', 'Lawyer', 'Client'][Math.floor(rng() * 4)]
     };
   });
 };
@@ -154,13 +157,13 @@ export default function NotificationCenter() {
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     
     if (diffDays === 0) {
-      return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Seoul' });
     } else if (diffDays === 1) {
       return '어제';
     } else if (diffDays < 7) {
       return `${diffDays}일 전`;
     } else {
-      return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+      return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', timeZone: 'Asia/Seoul' });
     }
   };
 
