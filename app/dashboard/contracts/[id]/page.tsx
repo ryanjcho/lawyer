@@ -98,6 +98,14 @@ export default function ContractDetailPage() {
           <button className="px-5 py-2 bg-indigo-600 text-white rounded font-bold hover:bg-indigo-700 transition text-lg shadow">자료 업로드</button>
           <button className="px-5 py-2 bg-white border-2 border-indigo-600 text-indigo-700 rounded font-bold hover:bg-indigo-50 transition text-lg shadow">피드백 제출</button>
           <button className="px-5 py-2 bg-white border-2 border-gray-400 text-gray-700 rounded font-bold hover:bg-gray-50 transition text-lg shadow">상담 요청</button>
+          <a
+            href={`/dashboard/contracts/${contract.id}/diff`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-5 py-2 bg-yellow-100 border-2 border-yellow-400 text-yellow-900 rounded font-bold hover:bg-yellow-200 transition text-lg shadow flex items-center gap-2"
+          >
+            <FaHistory className="mr-1" /> 버전 비교/변경내역
+          </a>
         </div>
         {/* History */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">

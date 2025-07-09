@@ -157,7 +157,11 @@ const mockCase = {
     { action: '클라이언트 피드백 수집', due: '2024-07-02', assigned: '김용범', priority: 'high' },
     { action: '관할 법원 조항 수정', due: '2024-07-03', assigned: '엄태섭', priority: 'medium' },
     { action: '최종 검토 및 승인', due: '2024-07-05', assigned: '조진석', priority: 'high' }
-  ]
+  ],
+  initialServices: [
+    '계약 검토',
+    '계약서 작성'
+  ],
 };
 
 type UploadedFile = { name: string; url: string; type: string; size: string; uploaded: string; version: string };
@@ -399,20 +403,7 @@ export default function AdminContractDetail() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">진행률</span>
-            <span className="text-sm text-gray-500">{Math.round(getProgressPercentage())}%</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-indigo-600 h-2 rounded-full transition-all duration-300" 
-              style={{ width: `${getProgressPercentage()}%` }}
-            ></div>
-          </div>
-        </div>
-
+        {/* Removed 진행률 progress bar */}
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Main Content */}
@@ -454,178 +445,7 @@ export default function AdminContractDetail() {
               </div>
             </div>
 
-            {/* Next Actions / Task Management Section (Jira-style list) */}
-            <div className="bg-white rounded-lg border border-gray-200 mt-6">
-              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-                  <FaClock className="mr-2 text-yellow-600" />
-                  다음 작업 및 워크플로우
-                </h2>
-              </div>
-              <div className="p-6">
-                {/* Add new action row */}
-                <div className="mb-4">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-gray-500">
-                        <th className="text-left font-medium pb-2">작업 내용</th>
-                        <th className="text-left font-medium pb-2">담당자</th>
-                        <th className="text-left font-medium pb-2">마감일</th>
-                        <th className="text-left font-medium pb-2">우선순위</th>
-                        <th className="text-left font-medium pb-2">상태</th>
-                        <th className="text-left font-medium pb-2"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input
-                            type="text"
-                            className="border border-gray-300 rounded-md px-2 py-1 w-full text-black"
-                            placeholder="작업 내용"
-                            value={newAction.action}
-                            onChange={e => setNewAction({ ...newAction, action: e.target.value })}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="text"
-                            className="border border-gray-300 rounded-md px-2 py-1 w-full text-black"
-                            placeholder="담당자"
-                            value={newAction.assigned}
-                            onChange={e => setNewAction({ ...newAction, assigned: e.target.value })}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="date"
-                            className="border border-gray-300 rounded-md px-2 py-1 w-full text-black"
-                            value={newAction.due}
-                            onChange={e => setNewAction({ ...newAction, due: e.target.value })}
-                          />
-                        </td>
-                        <td>
-                          <select
-                            className="border border-gray-300 rounded-md px-2 py-1 w-full text-black"
-                            value={newAction.priority}
-                            onChange={e => setNewAction({ ...newAction, priority: e.target.value })}
-                          >
-                            <option value="high">높음</option>
-                            <option value="medium">보통</option>
-                            <option value="low">낮음</option>
-                          </select>
-                        </td>
-                        <td></td>
-                        <td>
-                          <button
-                            className="px-3 py-1 bg-indigo-600 text-white rounded text-xs font-medium hover:bg-indigo-700"
-                            onClick={handleAddAction}
-                          >
-                            추가
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                {/* Task List Table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-gray-50 text-gray-500">
-                        <th className="text-left font-medium py-2">작업 내용</th>
-                        <th className="text-left font-medium py-2">담당자</th>
-                        <th className="text-left font-medium py-2">마감일</th>
-                        <th className="text-left font-medium py-2">우선순위</th>
-                        <th className="text-left font-medium py-2">상태</th>
-                        <th className="text-left font-medium py-2">작업</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {nextActions.map((a, idx) => (
-                        <tr key={idx} className={a.completed ? 'bg-green-50 text-black' : 'bg-white text-black'}>
-                          <td className={`py-2 ${a.completed ? 'line-through' : ''}`}>{editIdx === idx ? (
-                            <input
-                              type="text"
-                              className="border border-gray-300 rounded-md px-2 py-1 w-full text-black"
-                              value={editAction.action}
-                              onChange={e => setEditAction({ ...editAction, action: e.target.value })}
-                            />
-                          ) : a.action}</td>
-                          <td className="py-2">{editIdx === idx ? (
-                            <input
-                              type="text"
-                              className="border border-gray-300 rounded-md px-2 py-1 w-full text-black"
-                              value={editAction.assigned}
-                              onChange={e => setEditAction({ ...editAction, assigned: e.target.value })}
-                            />
-                          ) : a.assigned}</td>
-                          <td className="py-2">{editIdx === idx ? (
-                            <input
-                              type="date"
-                              className="border border-gray-300 rounded-md px-2 py-1 w-full text-black"
-                              value={editAction.due}
-                              onChange={e => setEditAction({ ...editAction, due: e.target.value })}
-                            />
-                          ) : a.due}</td>
-                          <td className="py-2">
-                            {editIdx === idx ? (
-                              <select
-                                className="border border-gray-300 rounded-md px-2 py-1 w-full text-black"
-                                value={editAction.priority}
-                                onChange={e => setEditAction({ ...editAction, priority: e.target.value })}
-                              >
-                                <option value="high">높음</option>
-                                <option value="medium">보통</option>
-                                <option value="low">낮음</option>
-                              </select>
-                            ) : (
-                              <span className={`px-2 py-1 rounded-full text-xs font-semibold ${priorityMap[a.priority]?.color || 'bg-gray-200 text-gray-700'}`}>{priorityMap[a.priority]?.label || a.priority}</span>
-                            )}
-                          </td>
-                          <td className="py-2">
-                            {a.completed ? (
-                              <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">완료</span>
-                            ) : (
-                              <span className="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">진행중</span>
-                            )}
-                          </td>
-                          <td className="py-2">
-                            {editIdx === idx ? (
-                              <>
-                                <button className="px-2 py-1 bg-green-600 text-white rounded text-xs font-semibold mr-1" onClick={handleSaveEdit}>저장</button>
-                                <button className="px-2 py-1 bg-gray-300 text-gray-700 rounded text-xs font-semibold" onClick={handleCancelEdit}>취소</button>
-                              </>
-                            ) : (
-                              <div className="flex gap-1">
-                                {!a.completed && <button className="px-2 py-1 bg-green-600 text-white rounded text-xs font-semibold" onClick={() => handleCompleteAction(idx)}>완료</button>}
-                                {!a.completed && <button className="px-2 py-1 bg-blue-600 text-white rounded text-xs font-semibold" onClick={() => handleEditAction(idx)}>수정</button>}
-                                <button className="px-2 py-1 bg-red-600 text-white rounded text-xs font-semibold" onClick={() => handleDeleteAction(idx)}>삭제</button>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                {/* Progress Bar for Tasks */}
-                <div className="mt-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-medium text-black">작업 진행률</span>
-                    <span className="text-xs text-black">{Math.round((nextActions.filter(a => a.completed).length / (nextActions.length || 1)) * 100)}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${(nextActions.filter(a => a.completed).length / (nextActions.length || 1)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Files Section */}
+            {/* Move Contract Files Card here */}
             <div className="bg-white rounded-lg border border-gray-200">
               {/* File Card Header: 계약서 워크샾 */}
               <div className="px-6 py-4 border-b border-gray-200">
@@ -770,6 +590,65 @@ export default function AdminContractDetail() {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Service & Payment Request Card (now below contract files) */}
+            <div className="bg-white rounded-lg border border-gray-200 mt-6">
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <FaCheckCircle className="mr-2 text-indigo-600" />
+                  서비스 및 결제 요청
+                </h2>
+              </div>
+              <div className="p-6 space-y-6">
+                {/* Payment Status */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-1">결제 상태</h4>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">기본 서비스 결제 완료</span>
+                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">추가 서비스 결제 대기</span>
+                  </div>
+                </div>
+                {/* Initial Client Request */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-1">초기 클라이언트 요청</h4>
+                  {/* Show initial paid services as tags */}
+                  <div className="mb-2 flex flex-wrap gap-2">
+                    {mockCase.initialServices && mockCase.initialServices.length > 0 ? (
+                      mockCase.initialServices.map((service, idx) => (
+                        <span key={idx} className="px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">{service}</span>
+                      ))
+                    ) : (
+                      <span className="text-xs text-gray-400">초기 결제 서비스 정보 없음</span>
+                    )}
+                  </div>
+                </div>
+                {/* Service/Payment Request Form */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-1">서비스/결제 요청</h4>
+                  <form className="space-y-3" onSubmit={e => { e.preventDefault(); /* handle submit here */ }}>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">요청 서비스</label>
+                      <select className="border rounded px-3 py-2 w-full text-black">
+                        <option value="">서비스 선택</option>
+                        <option value="review">계약 검토 추가</option>
+                        <option value="draft">계약서 작성 추가</option>
+                        <option value="consult">법률 자문 추가</option>
+                        <option value="other">기타</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">상세 요청 내용</label>
+                      <textarea className="border rounded px-3 py-2 w-full text-black" rows={3} placeholder="상세 요청 내용을 입력하세요." />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">결제 금액 (₩)</label>
+                      <input type="number" className="border rounded px-3 py-2 w-full text-black" placeholder="예: 100000" />
+                    </div>
+                    <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded font-semibold hover:bg-indigo-700">요청 제출</button>
+                  </form>
+                </div>
               </div>
             </div>
 
@@ -967,61 +846,7 @@ export default function AdminContractDetail() {
               </div>
             </div>
 
-            {/* Approval & Signature Workflow Section */}
-            <div className="bg-white rounded-lg border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-                  <FaCheckCircle className="mr-2 text-green-600" />
-                  승인 및 전자서명
-                </h2>
-              </div>
-              <div className="p-6">
-                {signatureNotification && (
-                  <div className="mb-4 px-4 py-2 bg-green-100 text-green-800 rounded text-sm font-semibold">
-                    {signatureNotification}
-                  </div>
-                )}
-                <ul className="divide-y divide-gray-200">
-                  {approvals.map((a, idx) => (
-                    <li key={a.name} className="flex flex-col md:flex-row md:items-center justify-between py-3 gap-2">
-                      {/* Reviewer Info - name/role on top, status/signature below */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-row flex-wrap items-center gap-2 min-w-0">
-                          <span className="font-bold text-gray-900 text-sm truncate max-w-[120px]">{a.name}</span>
-                          <span className="text-xs text-gray-500 truncate max-w-[80px]">{a.role}</span>
-                        </div>
-                        <div className="flex flex-row flex-wrap items-center gap-2 mt-1">
-                          <span className={`px-2 py-1 rounded-full text-xs font-semibold w-fit truncate max-w-[70px] ${
-                            a.status === 'approved' ? 'bg-green-100 text-green-800' :
-                            a.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                            'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {a.status === 'approved' ? '승인' : a.status === 'rejected' ? '반려' : '대기'}
-                          </span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-semibold w-fit truncate max-w-[90px] ${
-                            a.signed ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-700'
-                          }`}>
-                            {a.signed ? '전자서명 완료' : '미서명'}
-                          </span>
-                        </div>
-                      </div>
-                      {/* Action Buttons - compact and wrap if needed */}
-                      <div className="flex flex-row flex-wrap gap-2 md:justify-end md:items-center min-w-[120px]">
-                        {a.status === 'pending' && (
-                          <>
-                            <button className="px-2 py-1 bg-green-600 text-white rounded text-xs font-semibold hover:bg-green-700 transition-colors" onClick={() => handleApprove(idx)}>승인</button>
-                            <button className="px-2 py-1 bg-red-600 text-white rounded text-xs font-semibold hover:bg-red-700 transition-colors" onClick={() => handleReject(idx)}>반려</button>
-                          </>
-                        )}
-                        {!a.signed && a.status === 'approved' && (
-                          <button className="px-2 py-1 bg-blue-600 text-white rounded text-xs font-semibold hover:bg-blue-700 transition-colors" onClick={() => handleSign(idx)}>전자서명</button>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            {/* Remove Approval & Signature Workflow Section */}
           </div>
         </div>
       </div>

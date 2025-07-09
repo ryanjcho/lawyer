@@ -39,6 +39,8 @@ const generateMockContracts = (count = 50) => {
     const lastUpdated = new Date(uploadedDate.getTime() + Math.floor(rng() * 7 * 24 * 60 * 60 * 1000));
     const keyDate = new Date(now.getTime() + Math.floor(rng() * 14 * 24 * 60 * 60 * 1000));
     
+    // Generate deterministic mockDaysLeft
+    const mockDaysLeft = Math.floor(rng() * 16) - 2; // Range: -2 to 13
     return {
       id: `C-2024-${String(i + 1).padStart(3, '0')}`,
       name: `${contractType} - ${client}`,
@@ -54,7 +56,8 @@ const generateMockContracts = (count = 50) => {
       tags: tags.slice(0, Math.floor(rng() * 3) + 1),
       clientContact: `${lawyer.toLowerCase().replace(' ', '.')}@${client.toLowerCase().replace(' ', '')}.com`,
       estimatedCompletion: new Date(keyDate.getTime() - Math.floor(rng() * 3 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
-      slaDeadline: new Date(lastUpdated.getTime() + Math.floor((5 + rng() * 5) * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
+      slaDeadline: new Date(lastUpdated.getTime() + Math.floor((5 + rng() * 5) * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
+      mockDaysLeft,
     };
   });
 };
@@ -179,6 +182,7 @@ interface ContractType {
   completedAt?: string | null;
   slaViolated?: boolean;
   risk?: string;
+  mockDaysLeft: number;
 }
 
 type ContractsTableProps = { limit?: number };
@@ -211,11 +215,19 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
         c.lawyer.toLowerCase().includes(search.toLowerCase());
       
       const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
-      const matchesRisk = riskFilter === 'all' || c.riskLevel === riskFilter;
+      let matchesDeadline = true;
+      if (riskFilter !== 'all') {
+        const mockDaysLeft = c.mockDaysLeft;
+        if (riskFilter === 'today') matchesDeadline = mockDaysLeft === 0;
+        else if (riskFilter === '1-3') matchesDeadline = mockDaysLeft >= 1 && mockDaysLeft <= 3;
+        else if (riskFilter === '4-7') matchesDeadline = mockDaysLeft >= 4 && mockDaysLeft <= 7;
+        else if (riskFilter === '1w+') matchesDeadline = mockDaysLeft > 7;
+        else if (riskFilter === 'overdue') matchesDeadline = mockDaysLeft < 0;
+      }
       const matchesLawyer = lawyerFilter === 'all' || c.lawyer === lawyerFilter;
       const matchesUrgent = !urgentFilter || c.urgent;
       
-      return matchesSearch && matchesStatus && matchesRisk && matchesLawyer && matchesUrgent;
+      return matchesSearch && matchesStatus && matchesDeadline && matchesLawyer && matchesUrgent;
     });
 
     // Enhanced sorting
@@ -344,10 +356,12 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
             value={riskFilter}
             onChange={e => setRiskFilter(e.target.value)}
           >
-            <option value="all">전체 위험도</option>
-            {Object.entries(riskLevelMap).map(([key, val]) => (
-              <option key={key} value={key}>{val.label}</option>
-            ))}
+            <option value="all">마감일 현황</option>
+            <option value="today">오늘 마감</option>
+            <option value="1-3">1-3일 남음</option>
+            <option value="4-7">4-7일 남음</option>
+            <option value="1w+">1주+ 남음</option>
+            <option value="overdue">마감 지남</option>
           </select>
 
           <select
@@ -402,7 +416,7 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
               <th className="py-3 px-3 font-semibold">계약명/구분</th>
               <th className="py-3 px-3 font-semibold">고객사</th>
               <th className="py-3 px-3 font-semibold text-center">상태</th>
-              <th className="py-3 px-3 font-semibold">위험도</th>
+              <th className="py-3 px-3 font-semibold text-center">마감일 현황</th>
               <th 
                 className="py-3 px-3 font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
                 onClick={() => handleSort('lastUpdated')}
@@ -475,10 +489,35 @@ export default function ContractsTable({ limit }: ContractsTableProps) {
                     </div>
                   </div>
                 </td>
-                <td className="py-3 px-3">
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${riskLevelMap[contract.riskLevel].color}`}>
-                    {riskLevelMap[contract.riskLevel].label}
-                  </span>
+                {/* Deadline Proximity Indicator */}
+                <td className="py-3 px-3 text-center">
+                  {(() => {
+                    const mockDaysLeft = contract.mockDaysLeft;
+                    let label = '';
+                    let color = '';
+                    if (mockDaysLeft < 0) {
+                      label = `마감 지남`;
+                      color = 'bg-gray-300 text-gray-700';
+                    } else if (mockDaysLeft === 0) {
+                      label = `오늘 마감`;
+                      color = 'bg-red-100 text-red-700';
+                    } else if (mockDaysLeft === 1) {
+                      label = `D-1`;
+                      color = 'bg-orange-100 text-orange-700';
+                    } else if (mockDaysLeft <= 3) {
+                      label = `D-${mockDaysLeft}`;
+                      color = 'bg-yellow-100 text-yellow-700';
+                    } else if (mockDaysLeft <= 7) {
+                      label = `D-${mockDaysLeft}`;
+                      color = 'bg-green-100 text-green-700';
+                    } else {
+                      label = '1주+ 남음';
+                      color = 'bg-blue-100 text-blue-700';
+                    }
+                    return (
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${color}`}>{label}</span>
+                    );
+                  })()}
                 </td>
                 <td className="py-3 px-3 text-black">{formatDate(contract.lastUpdated)}</td>
                 <td className="py-3 px-3 text-black">{contract.lawyer}</td>

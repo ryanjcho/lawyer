@@ -146,8 +146,8 @@ export default function ContractPage() {
         { text: `총 견적: ₩${total.toLocaleString()}`, style: 'total' },
       ],
       styles: {
-        header: { fontSize: 22, bold: true, alignment: 'center', margin: [0, 0, 0, 20] },
-        total: { fontSize: 16, bold: true, color: 'blue', margin: [0, 20, 0, 0] },
+        header: { fontSize: 22, bold: true, alignment: 'center' as const, margin: [0, 0, 0, 20] as [number, number, number, number] },
+        total: { fontSize: 16, bold: true, color: 'blue', margin: [0, 20, 0, 0] as [number, number, number, number] },
       }
     };
     pdfMake.createPdf(docDefinition).download('견적서.pdf');
