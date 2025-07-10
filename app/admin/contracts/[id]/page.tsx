@@ -27,7 +27,13 @@ import {
   FaMapMarkerAlt,
   FaGlobe,
   FaLinkedin,
-  FaTwitter
+  FaTwitter,
+  FaPlus,
+  FaReply,
+  FaCheck,
+  FaArchive,
+  FaAt,
+  FaInfoCircle
 } from 'react-icons/fa';
 import { HiOutlineDocumentText, HiOutlinePencilAlt, HiOutlineCurrencyDollar } from 'react-icons/hi';
 import Link from 'next/link';
@@ -190,6 +196,32 @@ export default function AdminContractDetail() {
     { name: 'Beta LLC', role: '클라이언트', status: 'pending', signed: false }
   ]);
   const [signatureNotification, setSignatureNotification] = useState('');
+
+  // Calculate days until deadline (matching contracts table format)
+  const getDaysUntilDeadline = () => {
+    const today = new Date();
+    const deadline = new Date(mockCase.keyDate);
+    const diffTime = deadline.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const getDeadlineLabel = () => {
+    const daysLeft = getDaysUntilDeadline();
+    if (daysLeft < 0) {
+      return { label: '마감 지남', color: 'text-red-600' };
+    } else if (daysLeft === 0) {
+      return { label: '오늘 마감', color: 'text-red-600' };
+    } else if (daysLeft === 1) {
+      return { label: 'D-1', color: 'text-orange-600' };
+    } else if (daysLeft <= 3) {
+      return { label: `D-${daysLeft}`, color: 'text-orange-600' };
+    } else if (daysLeft <= 7) {
+      return { label: `D-${daysLeft}`, color: 'text-green-600' };
+    } else {
+      return { label: '1주+ 남음', color: 'text-blue-600' };
+    }
+  };
 
   // Add new action
   const handleAddAction = () => {
@@ -371,95 +403,160 @@ export default function AdminContractDetail() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* Enhanced Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-6">
+          <div className="py-8">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Link href="/admin/contracts" className="text-gray-400 hover:text-gray-600">
-                  <FaEye className="h-5 w-5" />
+              <div className="flex items-center space-x-6">
+                <Link href="/admin/contracts" className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                  <FaEye className="h-5 w-5 text-gray-600" />
                 </Link>
-                <div>
-                  <div className="flex items-center space-x-3">
-                    <h1 className="text-2xl font-bold text-gray-900">{mockCase.name}</h1>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${typeMap[mockCase.type].color}`}>
-                      {typeMap[mockCase.type].icon} {typeMap[mockCase.type].label}
-                    </span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${priorityMap[mockCase.priority].color}`}>
-                      {priorityMap[mockCase.priority].label} 우선순위
-                    </span>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-4 mb-2">
+                    <h1 className="text-3xl font-bold text-gray-900">{mockCase.name}</h1>
+                    <div className="flex items-center space-x-2">
+                      <span className={`px-4 py-2 rounded-full text-sm font-semibold ${typeMap[mockCase.type].color} flex items-center`}>
+                        {typeMap[mockCase.type].icon} {typeMap[mockCase.type].label}
+                      </span>
+                      <span className={`px-4 py-2 rounded-full text-sm font-semibold ${priorityMap[mockCase.priority].color}`}>
+                        {priorityMap[mockCase.priority].label} 우선순위
+                      </span>
+                    </div>
                   </div>
-                  <div className="mt-1 text-sm text-gray-500">
-                    계약 ID: {mockCase.id} • {mockCase.contractType} • {mockCase.industry}
+                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                    <span className="flex items-center">
+                      <FaFileAlt className="mr-2 text-gray-400" />
+                      계약 ID: {mockCase.id}
+                    </span>
+                    <span className="flex items-center">
+                      <FaBuilding className="mr-2 text-gray-400" />
+                      {mockCase.contractType}
+                    </span>
+                    <span className="flex items-center">
+                      <FaGlobe className="mr-2 text-gray-400" />
+                      {mockCase.industry}
+                    </span>
                   </div>
                 </div>
               </div>
-              {/* Removed top right buttons: share, notification, AI/status */}
+              <div className="flex items-center space-x-3">
+                <button className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                  <FaShare className="mr-2" />
+                  공유
+                </button>
+                <button className="flex items-center px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                  <FaBell className="mr-2" />
+                  알림
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Removed 진행률 progress bar */}
-        {/* Main Content Grid */}
+        {/* Enhanced Status Indicator */}
+        <div className="mb-8">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-6">
+                <div className={`p-4 rounded-full shadow-sm ${
+                  mockCase.status === 'awaiting_ai' ? 'bg-yellow-100' :
+                  mockCase.status === 'ai_complete' ? 'bg-blue-100' :
+                  mockCase.status === 'lawyer_review' ? 'bg-indigo-100' :
+                  mockCase.status === 'drafting' ? 'bg-purple-100' :
+                  mockCase.status === 'needs_info' ? 'bg-red-100' :
+                  'bg-green-100'
+                }`}>
+                  {mockCase.status === 'awaiting_ai' ? <FaClock className="h-8 w-8 text-yellow-600" /> :
+                   mockCase.status === 'ai_complete' ? <FaCheckCircle className="h-8 w-8 text-blue-600" /> :
+                   mockCase.status === 'lawyer_review' ? <FaUserCheck className="h-8 w-8 text-indigo-600" /> :
+                   mockCase.status === 'drafting' ? <HiOutlinePencilAlt className="h-8 w-8 text-purple-600" /> :
+                   mockCase.status === 'needs_info' ? <FaExclamationTriangle className="h-8 w-8 text-red-600" /> :
+                   <FaCheckCircle className="h-8 w-8 text-green-600" />}
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    {statusMap[mockCase.status]?.label || '상태 없음'}
+                  </h2>
+                  <p className="text-lg text-gray-600">
+                    {mockCase.status === 'awaiting_ai' ? 'AI가 계약서를 분석하고 있습니다' :
+                     mockCase.status === 'ai_complete' ? 'AI 분석이 완료되었습니다. 변호사 검토를 기다립니다' :
+                     mockCase.status === 'lawyer_review' ? '변호사가 계약서를 검토하고 있습니다' :
+                     mockCase.status === 'drafting' ? '계약서 수정 작업이 진행 중입니다' :
+                     mockCase.status === 'needs_info' ? '추가 정보가 필요합니다' :
+                     '계약서 검토가 완료되었습니다'}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-gray-500 mb-1">마지막 업데이트</div>
+                <div className="text-lg font-semibold text-gray-900">{mockCase.lastUpdated}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Enhanced Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
+          <div className="lg:col-span-2 space-y-8">
+            {/* Enhanced Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <HiOutlineCurrencyDollar className="h-6 w-6 text-blue-600" />
+                  <div className="p-3 bg-blue-100 rounded-xl">
+                    <HiOutlineCurrencyDollar className="h-7 w-7 text-blue-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">계약 가치</p>
-                    <p className="text-2xl font-bold text-gray-900">{mockCase.value}</p>
+                    <p className="text-xs font-medium text-gray-500 mb-1">고객 납부액</p>
+                    <p className="text-xl font-bold text-gray-900">₩350,000,000</p>
+                    <p className="text-xs text-gray-500">총 ₩500,000,000 중</p>
                   </div>
                 </div>
               </div>
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <FaCalendarAlt className="h-6 w-6 text-green-600" />
+                  <div className="p-3 bg-green-100 rounded-xl">
+                    <FaCalendarAlt className="h-7 w-7 text-green-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">마감일</p>
-                    <p className="text-2xl font-bold text-gray-900">{mockCase.keyDate}</p>
+                    <p className="text-sm font-medium text-gray-500 mb-1">마감일 현황</p>
+                    <p className={`text-2xl font-bold ${getDeadlineLabel().color}`}>
+                      {getDeadlineLabel().label}
+                    </p>
                   </div>
                 </div>
               </div>
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <FaUser className="h-6 w-6 text-purple-600" />
+                  <div className="p-3 bg-purple-100 rounded-xl">
+                    <FaUser className="h-7 w-7 text-purple-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">담당 변호사</p>
-                    <p className="text-lg font-semibold text-gray-900">{mockCase.lawyer}</p>
+                    <p className="text-sm font-medium text-gray-500 mb-1">담당 변호사</p>
+                    <p className="text-xl font-semibold text-gray-900">{mockCase.lawyer}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Move Contract Files Card here */}
-            <div className="bg-white rounded-lg border border-gray-200">
-              {/* File Card Header: 계약서 워크샾 */}
-              <div className="px-6 py-4 border-b border-gray-200">
+            {/* Enhanced Contract Files Card */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="px-8 py-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-                    <FaFileAlt className="mr-2 text-indigo-600" />
+                  <h2 className="text-xl font-bold text-gray-900 flex items-center">
+                    <FaFileAlt className="mr-3 text-indigo-600" />
                     계약 파일
                   </h2>
-                  <div className="flex gap-2">
+                  <div className="flex gap-3">
                     <button
-                      className="flex items-center px-3 py-1 bg-indigo-600 text-white rounded text-sm font-medium hover:bg-indigo-700"
+                      className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
                       onClick={() => fileInputRef.current && fileInputRef.current.click()}
                     >
-                      <FaUpload className="mr-1" /> 파일 업로드
+                      <FaUpload className="mr-2" /> 파일 업로드
                     </button>
                     <input
                       type="file"
@@ -471,21 +568,30 @@ export default function AdminContractDetail() {
                   </div>
                 </div>
               </div>
-              <div className="p-6" onDrop={handleDrop} onDragOver={e => e.preventDefault()}>
+              <div className="p-8" onDrop={handleDrop} onDragOver={e => e.preventDefault()}>
                 <div className="space-y-4">
                   {uploadedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <div key={index} className="flex items-center justify-between p-6 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                       <div className="flex items-center space-x-4">
-                        <div className="p-2 bg-gray-100 rounded-lg">
-                          <FaFileAlt className="h-5 w-5 text-gray-600" />
+                        <div className="p-3 bg-gray-100 rounded-xl">
+                          <FaFileAlt className="h-6 w-6 text-gray-600" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-gray-900">{file.name}</h4>
-                          <div className="flex items-center space-x-4 text-sm text-gray-500">
-                            <span>{file.size}</span>
-                            <span>버전 {file.version}</span>
-                            <span>{file.uploaded}</span>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          <h4 className="font-semibold text-gray-900 text-lg mb-1">{file.name}</h4>
+                          <div className="flex items-center space-x-4 text-xs text-gray-400">
+                            <span className="flex items-center">
+                              <FaDownload className="mr-1" />
+                              {file.size}
+                            </span>
+                            <span className="flex items-center">
+                              <FaHistory className="mr-1" />
+                              v{file.version}
+                            </span>
+                            <span className="flex items-center">
+                              <FaCalendarAlt className="mr-1" />
+                              {file.uploaded}
+                            </span>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                               file.type === 'original' ? 'bg-blue-100 text-blue-800' :
                               file.type === 'draft' ? 'bg-green-100 text-green-800' :
                               'bg-purple-100 text-purple-800'
@@ -496,18 +602,18 @@ export default function AdminContractDetail() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <button className="p-2 text-gray-400 hover:text-indigo-600" onClick={() => handleDownload(file)}>
-                          <FaDownload />
+                      <div className="flex items-center space-x-3">
+                        <button className="p-3 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={() => handleDownload(file)}>
+                          <FaDownload className="h-5 w-5" />
                         </button>
-                        <button className="p-2 text-gray-400 hover:text-blue-600" onClick={() => handlePreview(file)}>
-                          <FaEye />
+                        <button className="p-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" onClick={() => handlePreview(file)}>
+                          <FaEye className="h-5 w-5" />
                         </button>
-                        <button className="p-2 text-gray-400 hover:text-green-600" onClick={() => handleCopy(file)}>
-                          <FaCopy />
+                        <button className="p-3 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors" onClick={() => handleCopy(file)}>
+                          <FaCopy className="h-5 w-5" />
                         </button>
-                        <button className="p-2 text-gray-400 hover:text-red-600" onClick={() => handleDelete(index)}>
-                          <FaTrash />
+                        <button className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={() => handleDelete(index)}>
+                          <FaTrash className="h-5 w-5" />
                         </button>
                         <button className="p-2 text-gray-400 hover:text-purple-600" onClick={() => setShowVersionHistory(index)}>
                           <FaHistory />
@@ -593,84 +699,284 @@ export default function AdminContractDetail() {
               </div>
             </div>
 
-            {/* Service & Payment Request Card (now below contract files) */}
+            {/* Client Service Selection Card */}
             <div className="bg-white rounded-lg border border-gray-200 mt-6">
-              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="px-6 py-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900 flex items-center">
                   <FaCheckCircle className="mr-2 text-indigo-600" />
-                  서비스 및 결제 요청
+                  클라이언트 서비스 선택
                 </h2>
               </div>
-              <div className="p-6 space-y-6">
-                {/* Payment Status */}
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">결제 상태</h4>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">기본 서비스 결제 완료</span>
-                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">추가 서비스 결제 대기</span>
+              <div className="p-6">
+                {/* Contract Information */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+                    <FaFileAlt className="mr-2 text-gray-500" />
+                    계약 정보
+                  </h4>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">계약 유형</span>
+                          <span className="text-sm font-medium text-gray-900">{mockCase.contractType}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">산업 분야</span>
+                          <span className="text-sm font-medium text-gray-900">{mockCase.industry}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">계약 가치</span>
+                          <span className="text-sm font-semibold text-gray-900">{mockCase.value}</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">서비스 유형</span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${typeMap[mockCase.type]?.color || 'bg-gray-100 text-gray-800'}`}>
+                            {typeMap[mockCase.type]?.label || '기타'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">우선순위</span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityMap[mockCase.priority]?.color || 'bg-gray-100 text-gray-800'}`}>
+                            {priorityMap[mockCase.priority]?.label || '보통'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">마감일</span>
+                          <span className="text-sm font-medium text-gray-900">{mockCase.keyDate}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                {/* Initial Client Request */}
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">초기 클라이언트 요청</h4>
-                  {/* Show initial paid services as tags */}
-                  <div className="mb-2 flex flex-wrap gap-2">
-                    {mockCase.initialServices && mockCase.initialServices.length > 0 ? (
-                      mockCase.initialServices.map((service, idx) => (
-                        <span key={idx} className="px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">{service}</span>
-                      ))
-                    ) : (
-                      <span className="text-xs text-gray-400">초기 결제 서비스 정보 없음</span>
-                    )}
-                  </div>
-                </div>
-                {/* Service/Payment Request Form */}
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">서비스/결제 요청</h4>
-                  <form className="space-y-3" onSubmit={e => { e.preventDefault(); /* handle submit here */ }}>
+
+                {/* Selected Services */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+                    <FaCheckCircle className="mr-2 text-gray-500" />
+                    선택된 서비스
+                  </h4>
+                  <div className="space-y-4">
+                    {/* Basic Services */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">요청 서비스</label>
-                      <select className="border rounded px-3 py-2 w-full text-black">
+                      <h5 className="text-sm font-medium text-gray-700 mb-3">기본 서비스</h5>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-2 rounded-lg text-sm font-medium bg-green-50 text-green-700 border border-green-200 flex items-center">
+                          <FaCheckCircle className="mr-2 text-green-600" />
+                          계약 검토
+                        </span>
+                        <span className="px-3 py-2 rounded-lg text-sm font-medium bg-green-50 text-green-700 border border-green-200 flex items-center">
+                          <FaCheckCircle className="mr-2 text-green-600" />
+                          AI 분석
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Additional Services */}
+                    <div>
+                      <h5 className="text-sm font-medium text-gray-700 mb-3">추가 서비스</h5>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200 flex items-center">
+                          <FaCheckCircle className="mr-2 text-blue-600" />
+                          법률 자문
+                        </span>
+                        <span className="px-3 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200 flex items-center">
+                          <FaCheckCircle className="mr-2 text-blue-600" />
+                          협상 지원
+                        </span>
+                        <span className="px-3 py-2 rounded-lg text-sm font-medium bg-gray-50 text-gray-500 border border-gray-200 flex items-center">
+                          <FaTimesCircle className="mr-2 text-gray-400" />
+                          계약서 작성
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Status */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+                    <HiOutlineCurrencyDollar className="mr-2 text-gray-500" />
+                    결제 상태
+                  </h4>
+                  <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">기본 서비스</span>
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">결제 완료</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">추가 서비스</span>
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">결제 대기</span>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                      <span className="text-sm font-medium text-gray-700">총 예상 금액</span>
+                      <span className="text-lg font-semibold text-gray-900">₩2,500,000</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Additional Service Request */}
+                <div className="border-t border-gray-200 pt-6">
+                  <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
+                    <FaPlus className="mr-2 text-gray-500" />
+                    추가 서비스 요청
+                  </h4>
+                  <form className="space-y-4" onSubmit={e => { e.preventDefault(); /* handle submit here */ }}>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">요청 서비스</label>
+                      <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <option value="">서비스 선택</option>
-                        <option value="review">계약 검토 추가</option>
-                        <option value="draft">계약서 작성 추가</option>
+                        <option value="draft">계약서 작성</option>
+                        <option value="negotiation">협상 지원</option>
                         <option value="consult">법률 자문 추가</option>
+                        <option value="review">계약 검토 추가</option>
                         <option value="other">기타</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">상세 요청 내용</label>
-                      <textarea className="border rounded px-3 py-2 w-full text-black" rows={3} placeholder="상세 요청 내용을 입력하세요." />
+                      <label className="block text-sm font-medium text-gray-700 mb-2">상세 요청 내용</label>
+                      <textarea 
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+                        rows={3} 
+                        placeholder="상세 요청 내용을 입력하세요." 
+                      />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">결제 금액 (₩)</label>
-                      <input type="number" className="border rounded px-3 py-2 w-full text-black" placeholder="예: 100000" />
+                      <label className="block text-sm font-medium text-gray-700 mb-2">예상 금액 (₩)</label>
+                      <input 
+                        type="number" 
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+                        placeholder="예: 500000" 
+                      />
                     </div>
-                    <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded font-semibold hover:bg-indigo-700">요청 제출</button>
+                    <button type="submit" className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                      요청 제출
+                    </button>
                   </form>
                 </div>
               </div>
             </div>
 
-            {/* Comments Section */}
-            <div className="bg-white rounded-lg border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-                  <FaComments className="mr-2 text-green-600" />
-                  메시지 & 댓글
-                </h2>
+          </div>
+
+          {/* Enhanced Right Column - Sidebar */}
+          <div className="space-y-8">
+            {/* Enhanced Client Information */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="px-8 py-6 border-b border-gray-200">
+                <h3 className="text-xl font-bold text-gray-900 flex items-center">
+                  <FaBuilding className="mr-3 text-blue-600" />
+                  클라이언트 정보
+                </h3>
               </div>
-              <div className="p-6">
+              <div className="p-8">
+                <div className="space-y-6">
+                  <div className="text-center pb-6 border-b border-gray-100">
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <FaBuilding className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900 mb-1">{mockCase.clientInfo.name}</h4>
+                    <p className="text-sm text-gray-500">{mockCase.clientInfo.industry} • {mockCase.clientInfo.size}</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <FaUser className="mr-3 text-gray-400" />
+                      <span className="text-gray-700 font-medium">{mockCase.clientInfo.contact}</span>
+                    </div>
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <FaEnvelope className="mr-3 text-gray-400" />
+                      <a href={`mailto:${mockCase.clientInfo.email}`} className="text-indigo-600 hover:text-indigo-800 font-medium">
+                        {mockCase.clientInfo.email}
+                      </a>
+                    </div>
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <FaPhone className="mr-3 text-gray-400" />
+                      <a href={`tel:${mockCase.clientInfo.phone}`} className="text-gray-700 font-medium">
+                        {mockCase.clientInfo.phone}
+                      </a>
+                    </div>
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <FaMapMarkerAlt className="mr-3 text-gray-400" />
+                      <span className="text-gray-700 font-medium">{mockCase.clientInfo.address}</span>
+                    </div>
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <FaGlobe className="mr-3 text-gray-400" />
+                      <a href={`https://${mockCase.clientInfo.website}`} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 font-medium">
+                        {mockCase.clientInfo.website}
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-3 pt-4">
+                    <button className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors flex items-center justify-center">
+                      <FaEnvelope className="mr-2" />
+                      이메일
+                    </button>
+                    <button className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors flex items-center justify-center">
+                      <FaPhone className="mr-2" />
+                      전화
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Enhanced Timeline */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="px-8 py-6 border-b border-gray-200">
+                <h3 className="text-xl font-bold text-gray-900 flex items-center">
+                  <FaHistory className="mr-3 text-purple-600" />
+                  타임라인
+                </h3>
+              </div>
+              <div className="p-8">
+                <div className="space-y-6">
+                  {mockCase.timeline.map((item, index) => (
+                    <div key={index} className="flex items-start space-x-4">
+                      <div className={`w-3 h-3 rounded-full mt-2 ${
+                        item.status === 'completed' ? 'bg-green-500' : 'bg-gray-300'
+                      }`}></div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-gray-900 mb-1">{item.action}</p>
+                        <div className="flex items-center space-x-3 text-xs text-gray-500">
+                          <span className="flex items-center">
+                            <FaCalendarAlt className="mr-1" />
+                            {item.date}
+                          </span>
+                          <span className="flex items-center">
+                            <FaUser className="mr-1" />
+                            {item.by}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Enhanced Comments Section */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="px-8 py-6 border-b border-gray-200">
+                <h3 className="text-xl font-bold text-gray-900 flex items-center">
+                  <FaComments className="mr-3 text-green-600" />
+                  메시지 & 댓글
+                </h3>
+              </div>
+              <div className="p-8">
                 {notification && (
-                  <div className="mb-4 px-4 py-2 bg-green-100 text-green-800 rounded text-sm font-semibold">
+                  <div className="mb-6 px-6 py-4 bg-green-100 text-green-800 rounded-lg text-sm font-semibold">
                     {notification}
                   </div>
                 )}
-                <div className="mb-4">
-                  <div className="flex space-x-2">
+                <div className="mb-6">
+                  <div className="flex space-x-3">
                     <input
                       type="text"
-                      className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                       placeholder={replyTo ? "답글을 입력하세요..." : "댓글을 입력하세요..."}
                       value={comment}
                       onChange={e => setComment(e.target.value)}
@@ -680,165 +986,102 @@ export default function AdminContractDetail() {
                       }}
                     />
                     <button 
-                      className="px-4 py-2 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700"
+                      className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
                       onClick={handleAddComment}
                     >
                       {replyTo ? '답글 등록' : '등록'}
                     </button>
                   </div>
-                  {/* Mention dropdown (mock) */}
+                  {/* Enhanced Mention dropdown */}
                   {showMentions && (
-                    <div className="absolute bg-white border border-gray-300 rounded shadow mt-1 z-10">
+                    <div className="absolute bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-10 w-64">
                       {['Beta LLC', 'Admin', '오성헌', '김용범', '엄태섭', '조진석'].map(user => (
-                        <div key={user} className="px-3 py-1 hover:bg-indigo-100 cursor-pointer" onClick={() => handleMention(user)}>
-                          @{user}
+                        <div key={user} className="px-4 py-3 hover:bg-indigo-50 cursor-pointer border-b border-gray-100 last:border-b-0" onClick={() => handleMention(user)}>
+                          <div className="flex items-center">
+                            <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                              <FaUser className="h-4 w-4 text-indigo-600" />
+                            </div>
+                            <span className="font-medium text-gray-900">@{user}</span>
+                          </div>
                         </div>
                       ))}
                     </div>
                   )}
                   {replyTo && (
-                    <div className="mt-1 text-xs text-gray-500">답글 대상: #{replyTo} <button className="ml-2 text-red-500 underline" onClick={() => setReplyTo(null)}>취소</button></div>
+                    <div className="mt-3 px-4 py-2 bg-indigo-50 text-indigo-800 rounded-lg text-sm">
+                      답글 대상: #{replyTo} 
+                      <button className="ml-3 text-red-500 underline font-medium" onClick={() => setReplyTo(null)}>
+                        취소
+                      </button>
+                    </div>
                   )}
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {comments.filter(c => !c.parentId).map((comment) => (
-                    <div key={comment.id} className={`p-4 rounded-lg border-l-4 ${
+                    <div key={comment.id} className={`p-6 rounded-xl border-l-4 ${
                       comment.type === 'client' ? 'border-blue-400 bg-blue-50' :
                       comment.type === 'internal' ? 'border-green-400 bg-green-50' :
                       'border-gray-400 bg-gray-50'
                     } ${comment.resolved ? 'opacity-60' : ''}`}>
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center space-x-2">
-                          <div className={`p-1 rounded-full ${
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-full ${
                             comment.type === 'client' ? 'bg-blue-100' :
                             comment.type === 'internal' ? 'bg-green-100' :
                             'bg-gray-100'
                           }`}>
-                            <FaUser className={`h-3 w-3 ${
+                            <FaUser className={`h-4 w-4 ${
                               comment.type === 'client' ? 'text-blue-600' :
                               comment.type === 'internal' ? 'text-green-600' :
                               'text-gray-600'
                             }`} />
                           </div>
                           <div>
-                            <span className="font-medium text-gray-900">{comment.author}</span>
+                            <span className="font-semibold text-gray-900">{comment.author}</span>
                             <span className="text-sm text-gray-500 ml-2">({comment.role})</span>
                           </div>
                         </div>
                         <span className="text-sm text-gray-500">{comment.date}</span>
                       </div>
-                      <p className="mt-2 text-gray-700">{comment.text}</p>
-                      {/* Threaded replies */}
-                      <div className="mt-2 flex gap-2 flex-wrap">
-                        <button className="text-xs text-blue-600 underline" onClick={() => handleReply(comment.id)}>답글</button>
-                        {!comment.resolved && <button className="text-xs text-green-600 underline" onClick={() => handleResolveComment(comment.id)}>해결</button>}
-                        <button className="text-xs text-gray-500 underline" onClick={() => handleArchiveComment(comment.id)}>보관</button>
+                      <p className="text-gray-700 leading-relaxed mb-4">{comment.text}</p>
+                      {/* Enhanced action buttons */}
+                      <div className="flex gap-4 flex-wrap">
+                        <button className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center" onClick={() => handleReply(comment.id)}>
+                          <FaReply className="mr-1" />
+                          답글
+                        </button>
+                        {!comment.resolved && (
+                          <button className="text-sm text-green-600 hover:text-green-800 font-medium flex items-center" onClick={() => handleResolveComment(comment.id)}>
+                            <FaCheck className="mr-1" />
+                            해결
+                          </button>
+                        )}
+                        <button className="text-sm text-gray-500 hover:text-gray-700 font-medium flex items-center" onClick={() => handleArchiveComment(comment.id)}>
+                          <FaArchive className="mr-1" />
+                          보관
+                        </button>
                       </div>
-                      {/* Replies */}
-                      <div className="ml-6 mt-2 space-y-2">
+                      {/* Enhanced Replies */}
+                      <div className="ml-8 mt-4 space-y-3">
                         {comments.filter(r => r.parentId === comment.id).map(reply => (
-                          <div key={reply.id} className="p-2 rounded bg-gray-100 border-l-2 border-indigo-300">
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium text-gray-800 text-xs">{reply.author}</span>
+                          <div key={reply.id} className="p-4 rounded-lg bg-white border-l-2 border-indigo-300 shadow-sm">
+                            <div className="flex items-center gap-3 mb-2">
+                              <span className="font-semibold text-gray-800 text-sm">{reply.author}</span>
                               <span className="text-xs text-gray-500">{reply.date}</span>
                             </div>
-                            <div className="text-xs text-gray-700 mt-1">{reply.text}</div>
-                            <div className="flex gap-2 mt-1">
-                              {!reply.resolved && <button className="text-xs text-green-600 underline" onClick={() => handleResolveComment(reply.id)}>해결</button>}
-                              <button className="text-xs text-gray-500 underline" onClick={() => handleArchiveComment(reply.id)}>보관</button>
+                            <div className="text-sm text-gray-700 mb-3 leading-relaxed">{reply.text}</div>
+                            <div className="flex gap-3">
+                              {!reply.resolved && (
+                                <button className="text-xs text-green-600 hover:text-green-800 font-medium" onClick={() => handleResolveComment(reply.id)}>
+                                  해결
+                                </button>
+                              )}
+                              <button className="text-xs text-gray-500 hover:text-gray-700 font-medium" onClick={() => handleArchiveComment(reply.id)}>
+                                보관
+                              </button>
                             </div>
                           </div>
                         ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Sidebar */}
-          <div className="space-y-6">
-            {/* Client Information */}
-            <div className="bg-white rounded-lg border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                  <FaBuilding className="mr-2 text-blue-600" />
-                  클라이언트 정보
-                </h3>
-              </div>
-              <div className="p-6">
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-medium text-gray-900">{mockCase.clientInfo.name}</h4>
-                    <p className="text-sm text-gray-500">{mockCase.clientInfo.industry} • {mockCase.clientInfo.size}</p>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-center text-sm">
-                      <FaUser className="mr-2 text-gray-400" />
-                      <span className="text-gray-700">{mockCase.clientInfo.contact}</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <FaEnvelope className="mr-2 text-gray-400" />
-                      <a href={`mailto:${mockCase.clientInfo.email}`} className="text-indigo-600 hover:text-indigo-800">
-                        {mockCase.clientInfo.email}
-                      </a>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <FaPhone className="mr-2 text-gray-400" />
-                      <a href={`tel:${mockCase.clientInfo.phone}`} className="text-gray-700">
-                        {mockCase.clientInfo.phone}
-                      </a>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <FaMapMarkerAlt className="mr-2 text-gray-400" />
-                      <span className="text-gray-700">{mockCase.clientInfo.address}</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <FaGlobe className="mr-2 text-gray-400" />
-                      <a href={`https://${mockCase.clientInfo.website}`} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800">
-                        {mockCase.clientInfo.website}
-                      </a>
-                    </div>
-                  </div>
-                  
-                  <div className="flex space-x-2 pt-2">
-                    <button className="flex-1 px-2 py-1 bg-indigo-600 text-white rounded text-xs font-medium hover:bg-indigo-700 flex items-center justify-center" style={{minWidth:'0'}}>
-                      <FaEnvelope className="mr-1" />
-                      이메일
-                    </button>
-                    <button className="flex-1 px-2 py-1 bg-green-600 text-white rounded text-xs font-medium hover:bg-green-700 flex items-center justify-center" style={{minWidth:'0'}}>
-                      <FaPhone className="mr-1" />
-                      전화
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Timeline */}
-            <div className="bg-white rounded-lg border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                  <FaHistory className="mr-2 text-purple-600" />
-                  타임라인
-                </h3>
-              </div>
-              <div className="p-6">
-                <div className="space-y-4">
-                  {mockCase.timeline.map((item, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <div className={`w-2 h-2 rounded-full mt-2 ${
-                        item.status === 'completed' ? 'bg-green-500' : 'bg-gray-300'
-                      }`}></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">{item.action}</p>
-                        <div className="flex items-center space-x-2 text-xs text-gray-500">
-                          <span>{item.date}</span>
-                          <span>•</span>
-                          <span>{item.by}</span>
-                        </div>
                       </div>
                     </div>
                   ))}
