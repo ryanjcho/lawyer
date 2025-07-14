@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ClockIcon, EyeIcon, CalendarIcon, UserIcon, BookOpenIcon, StarIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 // Example blog data (to be replaced with real data or CMS integration)
 const blogPosts = [
@@ -26,7 +27,7 @@ const blogPosts = [
   {
     id: 2,
     title: '2024년 계약 리스크 관리 완벽 가이드',
-    summary: 'LawKit의 AI와 전문 변호사가 제공하는 효과적인 계약 리스크 관리 방법과 전략을 단계별로 소개합니다. 실무에서 바로 적용할 수 있는 팁들을 포함했습니다.',
+    summary: '로킷의 AI와 전문 변호사가 제공하는 효과적인 계약 리스크 관리 방법과 전략을 단계별로 소개합니다. 실무에서 바로 적용할 수 있는 팁들을 포함했습니다.',
     date: '2024.03.10',
     tags: ['가이드', '리스크 관리', '2024'],
     author: '오성헌 변호사',
@@ -42,7 +43,7 @@ const blogPosts = [
   {
     id: 3,
     title: '디지털 전환 시대의 계약 관리 트렌드 분석',
-    summary: '디지털 전환 시대의 계약 관리 트렌드와 LawKit의 대응 방안을 살펴봅니다. AI, 블록체인, 클라우드 기술이 계약 관리에 미치는 영향을 분석합니다.',
+    summary: '디지털 전환 시대의 계약 관리 트렌드와 로킷의 대응 방안을 살펴봅니다. AI, 블록체인, 클라우드 기술이 계약 관리에 미치는 영향을 분석합니다.',
     date: '2024.03.05',
     tags: ['인사이트', '디지털', '트렌드'],
     author: '엄태섭 변호사',
@@ -74,7 +75,7 @@ const blogPosts = [
   {
     id: 5,
     title: 'AI 기반 계약 검토의 정확도와 한계점',
-    summary: 'LawKit의 AI 기술이 계약 검토에서 어떤 역할을 하는지, 그리고 인간 전문가와의 협업이 왜 중요한지에 대해 심층 분석합니다.',
+    summary: '로킷의 AI 기술이 계약 검토에서 어떤 역할을 하는지, 그리고 인간 전문가와의 협업이 왜 중요한지에 대해 심층 분석합니다.',
     date: '2024.02.20',
     tags: ['AI', '기술', '정확도'],
     author: '엄태섭 변호사',
@@ -137,8 +138,8 @@ const blogPosts = [
   },
   {
     id: 9,
-    title: '법무법인에서 LawKit 도입 후 변화된 업무 프로세스',
-    summary: '실제 법무법인에서 LawKit을 도입한 후 계약 검토 업무가 어떻게 변화했는지, 그리고 어떤 성과를 거두었는지 사례를 통해 소개합니다.',
+    title: '법무법인에서 로킷 도입 후 변화된 업무 프로세스',
+    summary: '실제 법무법인에서 로킷을 도입한 후 계약 검토 업무가 어떻게 변화했는지, 그리고 어떤 성과를 거두었는지 사례를 통해 소개합니다.',
     date: '2024.01.30',
     tags: ['도입사례', '업무프로세스', '성과'],
     author: '김용범 변호사',
@@ -321,7 +322,7 @@ export default function Blog() {
             <div className="space-y-4">
               {featuredAuthors.map((author) => (
                 <div key={author.name} className="flex items-center gap-3 p-3 rounded-lg bg-indigo-50">
-                  <img src={author.avatar} alt={author.name} className="w-12 h-12 rounded-full object-cover" />
+                  <Image src={author.avatar} alt={author.name} width={48} height={48} className="rounded-full object-cover" />
                   <div className="flex-1">
                     <h4 className="text-sm font-semibold text-gray-900">{author.name}</h4>
                     <p className="text-xs text-gray-600">{author.title}</p>
@@ -356,7 +357,7 @@ export default function Blog() {
           {featuredPost && (
             <div className="mb-12">
               <div className="flex flex-col md:flex-row gap-8 items-center bg-gradient-to-br from-indigo-100 to-white rounded-2xl shadow-lg border border-indigo-200 p-8">
-                <img src={featuredPost.thumbnail} alt="썸네일" className="w-full md:w-80 h-56 object-cover rounded-xl shadow-md mb-4 md:mb-0" />
+                <Image src={featuredPost.thumbnail} alt="썸네일" width={320} height={224} className="w-full md:w-80 h-56 object-cover rounded-xl shadow-md mb-4 md:mb-0" />
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-sm text-indigo-600 font-medium flex items-center gap-1">
@@ -398,7 +399,7 @@ export default function Blog() {
             )}
             {otherPosts.map((post) => (
               <div key={post.id} className="bg-white rounded-2xl shadow-lg overflow-hidden border border-indigo-100 flex flex-col hover:shadow-xl transition-shadow">
-                <img src={post.thumbnail} alt="썸네일" className="w-full h-48 object-cover" />
+                <Image src={post.thumbnail} alt="썸네일" width={320} height={224} className="w-full h-48 object-cover" />
                 <div className="p-6 flex-1 flex flex-col">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm text-indigo-600 font-medium flex items-center gap-1">
@@ -415,7 +416,7 @@ export default function Blog() {
                   <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">{post.title}</h3>
                   <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">{post.summary}</p>
                   <div className="flex items-center gap-2 mb-3">
-                    <img src={post.authorAvatar} alt={post.author} className="w-6 h-6 rounded-full object-cover" />
+                    <Image src={post.authorAvatar} alt={post.author} width={48} height={48} className="rounded-full object-cover" />
                     <span className="text-xs text-gray-500">{post.author}</span>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -436,7 +437,7 @@ export default function Blog() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">더 많은 법률 인사이트를 받아보세요</h2>
           <p className="text-xl text-indigo-100 mb-8 max-w-3xl mx-auto">
-            LawKit이 정기적으로 업데이트하는 계약 검토 관련 콘텐츠를<br />뉴스레터로 받아보세요.
+            로킷이 정기적으로 업데이트하는 계약 검토 관련 콘텐츠를<br />뉴스레터로 받아보세요.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

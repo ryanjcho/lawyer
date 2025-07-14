@@ -37,7 +37,7 @@ export default function TopLawyersTable() {
       contracts: mockContracts.filter(c => c.lawyer === lawyer.name).length,
     })).sort((a, b) => b.contracts - a.contracts).slice(0, 5);
     setLawyerStats(stats);
-  }, []);
+  }, [mockContracts]);
   if (contracts.length === 0) {
     return <div className="py-12 text-center text-gray-400">로딩 중...</div>;
   }

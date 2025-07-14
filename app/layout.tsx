@@ -1,5 +1,3 @@
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
 import Navbar from './components/Navbar'
 import { Footer } from './components/Footer'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -27,7 +25,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="ko" className="">
       <body className="min-h-screen flex flex-col">
         <Providers>
           <ErrorBoundary>

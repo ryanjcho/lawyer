@@ -38,7 +38,7 @@ const FEATURES = [
 ];
 
 const HOW_IT_WORKS = [
-  { id: "1", title: "서비스신청", description: "LawKit 홈페이지에서 간단한 정보 입력만으로 서비스 신청이 시작됩니다.", icon: "1", status: "current" as const },
+  { id: "1", title: "서비스신청", description: "로킷 홈페이지에서 간단한 정보 입력만으로 서비스 신청이 시작됩니다.", icon: "1", status: "current" as const },
   { id: "2", title: "견적확인", description: "입력하신 정보와 요청사항을 바탕으로 상세 견적을 안내해 드립니다.", icon: "2", status: "upcoming" as const },
   { id: "3", title: "계약서/자료 업로드", description: "견적에 동의하시면, 계약서 및 관련 자료를 안전하게 업로드하실 수 있습니다.", icon: "3", status: "upcoming" as const },
   { id: "4", title: "전문 변호사 배정", description: "업종별·유형별로 최적화된 10년 이상 경력의 전문 변호사가 배정됩니다.", icon: "4", status: "upcoming" as const },
@@ -221,17 +221,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. WHY LAWKIT */}
+      {/* 5. WHY 로킷 */}
       <section className="py-10 bg-gradient-to-br from-blue-50 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Why LawKit?</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Why 로킷?</h2>
           {/* Comparison Table */}
           <div className="overflow-x-auto mb-8">
             <table className="min-w-full bg-white rounded-xl shadow border border-gray-100">
               <thead>
                 <tr>
                   <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700">구분</th>
-                  <th className="py-3 px-6 text-center text-sm font-semibold text-indigo-700">LawKit</th>
+                  <th className="py-3 px-6 text-center text-sm font-semibold text-indigo-700">로킷</th>
                   <th className="py-3 px-6 text-center text-sm font-semibold text-gray-500">AI/일반 서비스</th>
                 </tr>
               </thead>
@@ -264,7 +264,7 @@ export default function Home() {
           <div className="bg-indigo-50 rounded-xl p-6 text-center max-w-2xl mx-auto">
             <h4 className="text-lg font-bold text-indigo-700 mb-2">계약서 종류별 협상가이드 제공</h4>
             <p className="text-gray-700 text-sm mb-2">업계별, 계약서별로 꼭 챙겨야 할 협상 포인트와 체크리스트를 안내합니다.</p>
-            <Link href="/expertise" className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">가이드 미리보기<ArrowRightIcon className="ml-2 w-5 h-5" /></Link>
+            <Link href="/solutions" className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">가이드 미리보기<ArrowRightIcon className="ml-2 w-5 h-5" /></Link>
           </div>
         </div>
       </section>

@@ -13,7 +13,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center mb-6">
-              <span className="text-2xl font-bold text-indigo-400">LawKit</span>
+              <span className="text-2xl font-bold text-indigo-400">로킷</span>
             </div>
             <p className="text-gray-300 mb-4 leading-relaxed">
               데이터 기반, 신속, 전문 변호사 직접 검토<br/>
@@ -38,8 +38,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/expertise" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
-                  전문성/차별점
+                <Link href="/solutions" className="text-gray-300 hover:text-indigo-400 transition-colors duration-200">
+                  솔루션/차별점
                 </Link>
               </li>
               <li>
@@ -141,7 +141,7 @@ export function Footer() {
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-6 text-sm text-gray-400">
-              <span>© {new Date().getFullYear()} LawKit. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} 로킷. All rights reserved.</span>
               <Link href="/terms" className="hover:text-indigo-400 transition-colors">
                 이용약관
               </Link>

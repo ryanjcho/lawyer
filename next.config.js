@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['placehold.co', 'randomuser.me'],
+    domains: ['placehold.co', 'randomuser.me', 'via.placeholder.com'],
   },
   webpack: (config) => {
     // Exclude problematic OpenTelemetry packages

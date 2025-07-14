@@ -382,7 +382,7 @@ export default function Security() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">보안 아키텍처</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              데이터가 LawKit 시스템을 통과하는 모든 단계에서 다층 보안으로 보호됩니다.
+              데이터가 로킷 시스템을 통과하는 모든 단계에서 다층 보안으로 보호됩니다.
             </p>
           </div>
           <div className="relative">

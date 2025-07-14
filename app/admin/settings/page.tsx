@@ -2,6 +2,7 @@
 import Sidebar from '../components/Sidebar';
 import { useState } from 'react';
 import { FaUserCircle, FaCheckCircle, FaExclamationCircle, FaEye, FaEyeSlash, FaCopy, FaSyncAlt, FaGoogle, FaMicrosoft, FaCloud, FaFileSignature, FaTrashAlt, FaRegQuestionCircle, FaMobileAlt, FaDesktop } from 'react-icons/fa';
+import Image from 'next/image';
 
 export default function AdminSettingsPage() {
   // Profile & Security
@@ -93,7 +94,7 @@ export default function AdminSettingsPage() {
             <div className="flex items-center gap-4 mb-6">
               <div className="relative w-20 h-20">
                 {avatarUrl ? (
-                  <img src={avatarUrl} alt="프로필" className="w-20 h-20 rounded-full object-cover border-2 border-blue-200" />
+                  <Image src={avatarUrl} alt="프로필" width={80} height={80} className="w-20 h-20 rounded-full object-cover border-2 border-blue-200" />
                 ) : (
                   <FaUserCircle className="w-20 h-20 text-gray-300" />
                 )}
@@ -232,7 +233,7 @@ export default function AdminSettingsPage() {
                 <label className="block text-gray-700 font-medium mb-1">로고 업로드</label>
                 <div className="flex items-center gap-4">
                   {companyLogoUrl ? (
-                    <img src={companyLogoUrl} alt="로고 미리보기" className="w-16 h-16 rounded bg-gray-100 object-contain border" />
+                    <Image src={companyLogoUrl} alt="로고 미리보기" width={64} height={64} className="w-16 h-16 rounded bg-gray-100 object-contain border" />
                   ) : (
                     <div className="w-16 h-16 rounded bg-gray-100 flex items-center justify-center text-gray-300 border"><FaCloud size={32} /></div>
                   )}

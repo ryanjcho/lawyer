@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion'
+import Image from 'next/image';
 
 export default function AboutPage() {
   return (
@@ -17,7 +18,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">회사소개</h1>
-            <p className="text-xl md:text-2xl text-indigo-100 mb-8">LawKit의 미션과 비전, 그리고 팀을 소개합니다.</p>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-8">로킷의 미션과 비전, 그리고 팀을 소개합니다.</p>
           </motion.div>
         </div>
       </section>
@@ -89,7 +90,7 @@ export default function AboutPage() {
               법무법인 오킴스의 이야기
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              업계 최고 수준의 로펌 변호사들이 모여 만든 한국 최초의 독자 개발 법률 플랫폼 <span className="font-bold text-indigo-600">LawKit</span>
+              업계 최고 수준의 로펌 변호사들이 모여 만든 한국 최초의 독자 개발 법률 플랫폼 <span className="font-bold text-indigo-600">로킷</span>
             </p>
           </div>
 
@@ -133,9 +134,9 @@ export default function AboutPage() {
             <li className="ml-8">
               <div className="flex items-center gap-4 mb-1">
                 <span className="w-40 text-left text-2xl font-extrabold text-indigo-700">2025년 7월</span>
-                <span className="text-xl font-semibold text-gray-900" id="timeline-title-2025-7">계약서 검토 서비스 &apos;LawKit&apos; 오픈</span>
+                <span className="text-xl font-semibold text-gray-900" id="timeline-title-2025-7">계약서 검토 서비스 &#39;로킷&#39; 오픈</span>
               </div>
-              <div className="ml-40 pl-4 text-gray-700 text-base">AI 기반 계약서 검토 서비스 LawKit 공식 출시</div>
+              <div className="ml-40 pl-4 text-gray-700 text-base">AI 기반 계약서 검토 서비스 로킷 공식 출시</div>
             </li>
           </ol>
         </div>
@@ -158,7 +159,7 @@ export default function AboutPage() {
             {/* 오성헌 */}
             <div className="bg-white border border-indigo-100 rounded-2xl shadow p-8 flex flex-col md:flex-row gap-8">
               <div className="flex-shrink-0 w-full md:w-56 mb-4 md:mb-0 flex flex-col items-center">
-                <img src="https://via.placeholder.com/120" alt="오성헌 사진" className="w-28 h-28 rounded-full border-2 border-indigo-200 mb-3 object-cover" />
+                <Image src="https://via.placeholder.com/120" alt="오성헌 사진" width={120} height={120} className="w-28 h-28 rounded-full border-2 border-indigo-200 mb-3 object-cover" />
                 <div className="text-2xl font-bold text-indigo-800 mb-1">오성헌</div>
                 <div className="text-indigo-600 font-semibold">파트너변호사</div>
               </div>
@@ -180,7 +181,7 @@ export default function AboutPage() {
             {/* 김용범 */}
             <div className="bg-white border border-indigo-100 rounded-2xl shadow p-8 flex flex-col md:flex-row gap-8">
               <div className="flex-shrink-0 w-full md:w-56 mb-4 md:mb-0 flex flex-col items-center">
-                <img src="https://via.placeholder.com/120" alt="김용범 사진" className="w-28 h-28 rounded-full border-2 border-indigo-200 mb-3 object-cover" />
+                <Image src="https://via.placeholder.com/120" alt="김용범 사진" width={120} height={120} className="w-28 h-28 rounded-full border-2 border-indigo-200 mb-3 object-cover" />
                 <div className="text-2xl font-bold text-indigo-800 mb-1">김용범</div>
                 <div className="text-indigo-600 font-semibold">파트너변호사/경영총괄</div>
               </div>
@@ -202,7 +203,7 @@ export default function AboutPage() {
             {/* 엄태섭 */}
             <div className="bg-white border border-indigo-100 rounded-2xl shadow p-8 flex flex-col md:flex-row gap-8">
               <div className="flex-shrink-0 w-full md:w-56 mb-4 md:mb-0 flex flex-col items-center">
-                <img src="https://via.placeholder.com/120" alt="엄태섭 사진" className="w-28 h-28 rounded-full border-2 border-indigo-200 mb-3 object-cover" />
+                <Image src="https://via.placeholder.com/120" alt="엄태섭 사진" width={120} height={120} className="w-28 h-28 rounded-full border-2 border-indigo-200 mb-3 object-cover" />
                 <div className="text-2xl font-bold text-indigo-800 mb-1">엄태섭</div>
                 <div className="text-indigo-600 font-semibold">파트너변호사</div>
               </div>
@@ -224,7 +225,7 @@ export default function AboutPage() {
             {/* 조진석 */}
             <div className="bg-white border border-indigo-100 rounded-2xl shadow p-8 flex flex-col md:flex-row gap-8">
               <div className="flex-shrink-0 w-full md:w-56 mb-4 md:mb-0 flex flex-col items-center">
-                <img src="https://via.placeholder.com/120" alt="조진석 사진" className="w-28 h-28 rounded-full border-2 border-indigo-200 mb-3 object-cover" />
+                <Image src="https://via.placeholder.com/120" alt="조진석 사진" width={120} height={120} className="w-28 h-28 rounded-full border-2 border-indigo-200 mb-3 object-cover" />
                 <div className="text-2xl font-bold text-indigo-800 mb-1">조진석</div>
                 <div className="text-indigo-600 font-semibold">파트너변호사</div>
               </div>
@@ -402,7 +403,7 @@ export default function AboutPage() {
                 <h3 className="text-xl font-bold text-gray-900">연구개발팀</h3>
               </div>
               <p className="text-gray-700 mb-4 text-sm">
-                법률 기술의 최신 트렌드와 혁신적인 솔루션을 연구합니다. 새로운 서비스 모델과 기술적 접근법을 개발하여 LawKit의 경쟁력을 지속적으로 향상시킵니다.
+                법률 기술의 최신 트렌드와 혁신적인 솔루션을 연구합니다. 새로운 서비스 모델과 기술적 접근법을 개발하여 로킷의 경쟁력을 지속적으로 향상시킵니다.
               </p>
               <ul className="space-y-2 text-gray-600 text-sm flex-1">
                 <li className="flex items-start">

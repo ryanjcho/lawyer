@@ -37,6 +37,7 @@ import {
 } from 'react-icons/fa';
 import { HiOutlineDocumentText, HiOutlinePencilAlt, HiOutlineCurrencyDollar } from 'react-icons/hi';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const statusMap = {
   'awaiting_ai': { label: 'AI 검토 대기', color: 'bg-yellow-100 text-yellow-800', icon: <FaClock className="text-yellow-600" /> },
@@ -688,7 +689,7 @@ export default function AdminContractDetail() {
                       {previewFile.name.endsWith('.pdf') ? (
                         <iframe src={previewFile.url} width="100%" height="500px" title="PDF Preview" />
                       ) : previewFile.name.match(/\.(jpg|jpeg|png|gif)$/i) ? (
-                        <img src={previewFile.url} alt="미리보기" className="max-w-full max-h-[60vh]" />
+                        <Image src={previewFile.url} alt="미리보기" width={240} height={240} />
                       ) : (
                         <div className="text-gray-500">미리보기를 지원하지 않는 파일 형식입니다.</div>
                       )}
