@@ -12,15 +12,15 @@ export function getRedisClient(): Redis {
     });
 
     redis.on('error', (error) => {
-      console.error('Redis connection error:', error);
+      // console.error('Redis connection error:', error);
     });
 
     redis.on('connect', () => {
-      console.log('✅ Redis connected successfully');
+      // console.log('✅ Redis connected successfully');
     });
 
     redis.on('ready', () => {
-      console.log('✅ Redis is ready');
+      // console.log('✅ Redis is ready');
     });
   }
 

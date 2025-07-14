@@ -12,6 +12,7 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
+  const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,13 +24,12 @@ function LoginForm() {
         email,
         password,
         redirect: false,
+        callbackUrl,
       })
-      console.log('signIn result:', result)
-      
       if (result?.error) {
         setError(result.error)
       } else {
-        router.push('/dashboard')
+        router.push(callbackUrl)
       }
     } catch (error) {
       setError('로그인 중 오류가 발생했습니다.')
@@ -44,7 +44,7 @@ function LoginForm() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h1 className="text-2xl font-bold text-center mb-6 text-gray-900">로그인</h1>
 
-          {searchParams.get('registered') && (
+          {searchParams?.get('registered') && (
             <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
               회원가입이 완료되었습니다. 로그인해주세요.
             </div>

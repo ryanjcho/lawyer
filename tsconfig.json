@@ -22,6 +22,13 @@
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": false,
     "noUncheckedIndexedAccess": false,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "node",
+      "jest",
+      "react",
+      "react-dom"
+    ],
     "plugins": [
       {
         "name": "next"
@@ -31,7 +38,8 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
@@ -52,7 +60,6 @@
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx",
-    "jest.config.js",
     "playwright.config.ts",
     "scripts/**/*.ts",
     "prisma/**/*.ts",

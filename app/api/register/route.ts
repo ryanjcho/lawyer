@@ -1,18 +1,40 @@
 import { NextResponse } from 'next/server'
-import { hash } from 'bcrypt'
+import { hash } from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
 
-const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-})
+// Simple validation function to replace zod temporarily
+function validateRegistration(data: any) {
+  const errors: string[] = []
+  
+  if (!data.name || data.name.length < 2) {
+    errors.push('Name must be at least 2 characters')
+  }
+  
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    errors.push('Invalid email address')
+  }
+  
+  if (!data.password || data.password.length < 8) {
+    errors.push('Password must be at least 8 characters')
+  }
+  
+  return errors
+}
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { name, email, password } = registerSchema.parse(body)
+    
+    // Validate input
+    const validationErrors = validateRegistration(body)
+    if (validationErrors.length > 0) {
+      return NextResponse.json(
+        { error: validationErrors[0] },
+        { status: 400 }
+      )
+    }
+    
+    const { name, email, password } = body
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -44,13 +66,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(userWithoutPassword)
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: error.errors[0].message },
-        { status: 400 }
-      )
-    }
-
     console.error('Registration error:', error)
     return NextResponse.json(
       { error: 'Registration failed' },

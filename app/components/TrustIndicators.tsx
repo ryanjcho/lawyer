@@ -121,7 +121,7 @@ export function SocialProof() {
               </div>
             </div>
             <p className="text-gray-700 mb-4">
-              "계약서 검토부터 분쟁까지, 온라인으로 이렇게 신속하고 믿을 수 있는 서비스는 처음이었습니다."
+              &quot;계약서 검토부터 분쟁까지, 온라인으로 이렇게 신속하고 믿을 수 있는 서비스는 처음이었습니다.&quot;
             </p>
             <div className="flex items-center">
               <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
@@ -145,7 +145,7 @@ export function SocialProof() {
               </div>
             </div>
             <p className="text-gray-700 mb-4">
-              "복잡한 문제일수록 맞춤형 전략이 필요합니다. LawScan이 제공한 분석으로 큰 위험을 피할 수 있었습니다."
+              &quot;복잡한 문제일수록 맞춤형 전략이 필요합니다. LawScan이 제공한 분석으로 큰 위험을 피할 수 있었습니다.&quot;
             </p>
             <div className="flex items-center">
               <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
@@ -169,7 +169,7 @@ export function SocialProof() {
               </div>
             </div>
             <p className="text-gray-700 mb-4">
-              "진심을 담아, 끝까지 책임지는 자문을 약속합니다. 실제로 그 약속을 지켜주셨습니다."
+              &quot;진심을 담아, 끝까지 책임지는 자문을 약속합니다. 실제로 그 약속을 지켜주셨습니다.&quot;
             </p>
             <div className="flex items-center">
               <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">

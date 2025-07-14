@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import pdfParse from 'pdf-parse'
+import { parsePDF } from '@/lib/pdfParser'
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
     
-    const data = await pdfParse(buffer)
+    const data = await parsePDF(buffer)
     
     return NextResponse.json({ text: data.text })
   } catch (error) {

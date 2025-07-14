@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion'
 
 interface FAQItem {
   question: string;
@@ -10,138 +11,135 @@ interface FAQItem {
 }
 
 const faqData: FAQItem[] = [
-  // 서비스 관련
+  // 로킷 소개
   {
-    question: "LawScan은 어떤 서비스를 제공하나요?",
-    answer: "LawScan은 강남 최고급 로펌이 개발한 독자 AI 시스템과 전문 변호사의 이중 검증을 통해 계약 리스크를 분석하고 관리하는 서비스입니다. 계약서 업로드 후 AI가 1차 분석을 수행하고, 전문 변호사가 2차 검증을 거쳐 완벽한 계약 리스크 관리 솔루션을 제공합니다.",
-    category: "서비스"
+    question: "로킷은 무엇인가요?",
+    answer: "로킷은 수천 건의 검증된 계약서와 판례 데이터베이스를 활용한 자동화된 1차 검토와 전문 변호사의 2차 검증을 통해 계약 검토 서비스를 제공합니다. 계약서 업로드 후 우리의 전용 시스템이 1차 분석을 수행하고, 법무법인 오킴스의 전문 변호사가 2차 검증을 거쳐 완벽한 계약 리스크 관리 솔루션을 제공합니다.",
+    category: "로킷 소개"
   },
   {
-    question: "어떤 종류의 계약서를 분석할 수 있나요?",
-    answer: "M&A 계약, 투자 계약, 공급망 계약, 고용 계약, 부동산 계약, 대출 계약, 보험 계약 등 모든 종류의 계약서를 분석할 수 있습니다. 우리의 AI 시스템은 수천 건의 검증된 계약서와 판례를 학습하여 다양한 계약 유형에 대응합니다.",
-    category: "서비스"
+    question: "누가 로킷을 사용할 수 있나요?",
+    answer: "개인, 스타트업, 중소기업, 대기업 등 모든 규모의 고객이 사용할 수 있습니다. 특히 계약서 검토가 필요한 기업, 법무팀, 투자자, 프랜차이즈 업체, 부동산 중개업체 등 다양한 분야의 고객들이 이용하고 있습니다.",
+    category: "로킷 소개"
   },
   {
-    question: "분석 결과는 얼마나 정확한가요?",
-    answer: "우리의 독자 개발 AI 시스템은 98% 이상의 정확도를 달성합니다. 강남 최고급 로펌의 엘리트 변호사들이 직접 훈련하고 검증한 AI로, 전문 변호사의 이중 검증을 거쳐 엔터프라이즈급 품질을 보장합니다.",
-    category: "서비스"
-  },
-  {
-    question: "분석에 얼마나 시간이 걸리나요?",
-    answer: "AI 1차 분석은 수 분 내에 완료되며, 전문 변호사의 2차 검증은 계약의 복잡도에 따라 24-48시간 내에 완료됩니다. 긴급한 경우 우선 처리 서비스도 제공합니다.",
-    category: "서비스"
-  },
-  {
-    question: "LawScan의 AI 분석 결과는 얼마나 빨리 받을 수 있나요?",
-    answer: "계약서 업로드 즉시 AI가 예비 분석 결과를 수 분 내에 제공합니다. 빠른 피드백으로 신속한 의사결정이 가능합니다.",
-    category: "서비스"
-  },
-  {
-    question: "LawScan을 이용하면 어떤 비용/시간 절감 효과가 있나요?",
-    answer: "AI 자동화와 전문 변호사의 효율적 검토로 기존 대비 최대 70% 시간과 60% 비용을 절감할 수 있습니다.",
-    category: "서비스"
-  },
-  {
-    question: "분석 리포트는 이해하기 쉬운가요?",
-    answer: "복잡한 법률 용어도 쉽게 풀어 설명하여, 누구나 이해할 수 있도록 지원합니다.",
-    category: "서비스"
+    question: "다른 계약 검토 서비스와 로킷의 차이점은 무엇인가요?",
+    answer: "로킷은 AI 자동화와 전문 변호사 검토를 모두 제공하는 유일한 서비스입니다. 수천 건의 검증된 데이터베이스 기반 1차 분석과 법무법인 오킴스의 파트너 변호사가 직접 검토하는 2차 검증을 통해 엔터프라이즈급 품질을 보장합니다. 또한 맞춤형 견적 시스템으로 투명하고 합리적인 가격을 제공합니다.",
+    category: "로킷 소개"
   },
 
-  // 기술 및 보안
+  // 서비스 이용 안내
   {
-    question: "업로드한 계약서는 안전한가요?",
-    answer: "네, 완전히 안전합니다. 모든 데이터는 AES-256 암호화를 통해 보호되며, SOC 2 Type II 인증을 받은 클라우드 인프라에서 관리됩니다. 업로드된 문서는 분석 완료 후 자동으로 삭제되며, 고객의 명시적 동의 없이는 제3자와 공유되지 않습니다.",
-    category: "보안"
+    question: "로킷 사용을 어떻게 시작하나요?",
+    answer: "회원가입 후 즉시 1건의 계약 검토를 무료로 체험할 수 있습니다. 계약서를 업로드하면 자동화된 1차 분석 결과를 수 분 내에 받을 수 있으며, 전문 변호사의 2차 검증은 별도로 안내됩니다. 신용카드 정보 없이도 체험이 가능합니다.",
+    category: "서비스 이용 안내"
   },
   {
-    question: "AI 시스템은 어떻게 작동하나요?",
-    answer: "우리의 독자 개발 AI는 수천 건의 검증된 계약서와 판례를 학습하여 계약의 잠재적 리스크를 식별합니다. 자연어 처리 기술을 통해 계약 조항을 분석하고, 법적 구속력, 손해배상, 해지 조건 등을 자동으로 검토합니다.",
-    category: "기술"
+    question: "어떤 종류의 계약서를 검토할 수 있나요?",
+    answer: "M&A 계약, 투자 계약, 공급망 계약, 고용 계약, 부동산 계약, 대출 계약, 보험 계약, 기술 라이센싱 계약, 프랜차이즈 계약, 임대차 계약 등 모든 종류의 계약서를 검토할 수 있습니다. 우리의 전문 변호사들은 수천 건의 검증된 계약서와 판례를 바탕으로 다양한 계약 유형에 대응합니다.",
+    category: "서비스 이용 안내"
   },
   {
-    question: "개인정보는 어떻게 보호되나요?",
-    answer: "GDPR 및 개인정보보호법을 완전히 준수합니다. 모든 개인정보는 암호화되어 저장되며, 고객의 동의 없이는 수집, 사용, 공유되지 않습니다. 데이터 처리 과정은 투명하게 공개되며, 고객은 언제든지 개인정보 삭제를 요청할 수 있습니다.",
-    category: "보안"
+    question: "계약 검토 과정은 어떻게 진행되나요?",
+    answer: "1단계: 계약서 업로드 및 자동화된 1차 분석 (수 분 내 완료)\n2단계: 전문 변호사의 2차 검증 (24-48시간 내 완료)\n3단계: 상세한 리스크 분석 리포트 제공\n4단계: 필요시 추가 상담 및 개선 방안 제시",
+    category: "서비스 이용 안내"
   },
   {
-    question: "대용량 파일도 업로드할 수 있나요?",
-    answer: "현재 최대 50MB까지 업로드 가능하며, 100페이지까지 분석할 수 있습니다. 더 큰 파일이 필요한 경우 고객 지원팀에 문의해 주세요.",
-    category: "기술"
+    question: "검토 결과는 얼마나 빨리 받을 수 있나요?",
+    answer: "자동화된 1차 분석은 수 분 내에 완료되며, 전문 변호사의 2차 검증은 계약의 복잡도에 따라 24-48시간 내에 완료됩니다. 긴급한 경우 우선 처리 서비스도 제공합니다.",
+    category: "서비스 이용 안내"
   },
-
-  // 요금제 및 결제
   {
-    question: "요금제는 어떻게 구성되어 있나요?",
-    answer: "스타터, 프로페셔널, 엔터프라이즈 세 가지 요금제를 제공합니다. 스타터는 월 5건, 프로페셔널은 월 20건, 엔터프라이즈는 무제한 계약 분석을 포함합니다. 연간 결제 시 20% 할인 혜택을 제공합니다.",
-    category: "요금제"
+    question: "기업이나 팀에서 로킷을 사용할 수 있나요?",
+    answer: "네, 기업 고객을 위한 전담 변호사 배정, 맞춤형 API 연동, 전용 온보딩 프로그램, 우선 지원, 전용 협업 공간 등 특별 서비스를 제공합니다. 팀 협업 기능을 통해 여러 사용자가 동시에 계약을 검토하고, 댓글과 수정 사항을 공유할 수 있습니다.",
+    category: "서비스 이용 안내"
   },
   {
     question: "무료 체험은 어떻게 하나요?",
-    answer: "회원가입 후 즉시 2건의 계약 분석을 무료로 체험할 수 있습니다. 신용카드 정보 없이도 체험이 가능하며, 만족하지 않으시면 언제든지 해지할 수 있습니다.",
-    category: "요금제"
+    answer: "회원가입 후 즉시 1건의 계약 검토를 무료로 체험할 수 있습니다. 신용카드 정보 없이도 체험이 가능하며, 만족하지 않으시면 언제든지 서비스를 중단할 수 있습니다.",
+    category: "서비스 이용 안내"
+  },
+
+  // 보안 및 개인정보
+  {
+    question: "업로드한 계약서는 안전한가요?",
+    answer: "네, 완전히 안전합니다. 모든 데이터는 AES-256 암호화를 통해 보호되며, SOC 2 Type II 인증을 받은 클라우드 인프라에서 관리됩니다. 업로드된 문서는 검토 완료 후 자동으로 삭제되며, 고객의 명시적 동의 없이는 제3자와 공유되지 않습니다.",
+    category: "보안 및 개인정보"
   },
   {
-    question: "결제는 언제 이루어지나요?",
-    answer: "무료 체험 기간(14일) 후 자동으로 유료 요금제로 전환됩니다. 월간 요금제는 매월 1일에, 연간 요금제는 매년 1월 1일에 결제됩니다. 언제든지 요금제 변경이나 해지가 가능합니다.",
-    category: "요금제"
+    question: "내 정보는 기밀로 유지되나요?",
+    answer: "GDPR 및 개인정보보호법을 완전히 준수합니다. 모든 개인정보는 암호화되어 저장되며, 고객의 동의 없이는 수집, 사용, 공유되지 않습니다. 데이터 처리 과정은 투명하게 공개되며, 고객은 언제든지 개인정보 삭제를 요청할 수 있습니다.",
+    category: "보안 및 개인정보"
+  },
+  {
+    question: "내 데이터를 어떻게 업데이트하거나 삭제할 수 있나요?",
+    answer: "고객센터를 통해 언제든지 개인정보 수정, 삭제를 요청할 수 있습니다. 계약서 데이터는 검토 완료 후 자동으로 삭제되며, 계정 삭제 시 모든 관련 데이터가 영구적으로 삭제됩니다.",
+    category: "보안 및 개인정보"
+  },
+
+  // 요금 및 결제
+  {
+    question: "로킷 비용은 얼마인가요?",
+    answer: "로킷은 구독형 요금제가 아닌 맞춤형 견적 시스템을 운영합니다. 계약서의 복잡도, 서비스 유형(작성/검토), 업종별 특수성, 긴급성 등을 종합적으로 고려하여 투명하고 합리적인 견적을 제공합니다. 평균 견적은 약 45만원이며, 12,000건 이상의 검토 경험을 바탕으로 정확한 견적을 산출합니다.",
+    category: "요금 및 결제"
+  },
+  {
+    question: "숨겨진 비용이 있나요?",
+    answer: "아니요, 숨겨진 비용은 없습니다. 견적서에 명시된 금액만 청구되며, 서비스 완료 후 추가 비용이 발생하는 경우에만 별도 청구됩니다. 모든 비용은 투명하게 공개됩니다.",
+    category: "요금 및 결제"
   },
   {
     question: "환불 정책은 어떻게 되나요?",
-    answer: "서비스 시작 후 30일 이내에는 100% 환불을 보장합니다. 단, 이미 분석이 완료된 계약 건수에 대해서는 환불이 제한될 수 있습니다. 자세한 환불 정책은 고객센터를 통해 문의해 주세요.",
-    category: "요금제"
+    answer: "서비스 시작 전에는 100% 환불을 보장합니다. 서비스 진행 중인 경우 진행 상황에 따라 부분 환불이 가능하며, 검토가 완료된 경우에는 환불이 제한될 수 있습니다. 자세한 환불 정책은 고객센터를 통해 문의해 주세요.",
+    category: "요금 및 결제"
   },
   {
-    question: "구독을 취소하려면 어떻게 해야 하나요?",
-    answer: "대시보드의 설정 탭에서 언제든지 구독을 취소할 수 있습니다. 취소 시 현재 결제 기간이 끝날 때까지 서비스를 계속 이용할 수 있으며, 환불 정책에 따라 부분 환불이 가능합니다.",
-    category: "요금제"
+    question: "결제는 언제 이루어지나요?",
+    answer: "견적 확인 후 서비스 시작 전에 결제가 진행됩니다. 결제는 견적서 전달 후 고객님의 확인을 받은 후 이루어지며, 서비스 완료 후 추가 비용이 발생하는 경우에만 별도 청구됩니다.",
+    category: "요금 및 결제"
   },
 
   // 고객 지원
   {
     question: "고객 지원은 어떻게 받을 수 있나요?",
-    answer: "24/7 고객 지원을 제공합니다. 실시간 채팅, 이메일, 전화를 통해 언제든지 문의하실 수 있습니다. 또한 전담 고객 성공 매니저가 배정되어 개별 맞춤 지원을 제공합니다.",
-    category: "지원"
+    answer: "평일 9:00-18:00 고객 지원을 제공합니다. 전화(02-538-5886), 이메일(support@lawkit.kr)을 통해 문의하실 수 있습니다. 또한 엔터프라이즈 고객을 위한 전담 고객 성공 매니저가 배정됩니다.",
+    category: "고객 지원"
   },
   {
-    question: "기업 고객을 위한 특별 서비스가 있나요?",
-    answer: "네, 엔터프라이즈 고객을 위한 전담 법무팀 배정, 맞춤형 API 연동, 전용 온보딩 프로그램, 우선 지원 등 특별 서비스를 제공합니다. 기업 규모와 요구사항에 맞는 맞춤형 솔루션을 제안드립니다.",
-    category: "지원"
-  },
-  {
-    question: "팀 협업 기능이 있나요?",
-    answer: "프로페셔널 이상 요금제에서는 팀 협업 기능을 제공합니다. 여러 사용자가 동시에 계약을 검토하고, 댓글과 수정 사항을 공유할 수 있으며, 승인 워크플로우도 설정할 수 있습니다.",
-    category: "지원"
-  },
-  {
-    question: "LawScan의 변호사는 업계별로 특화되어 있나요?",
-    answer: "네, 업계/계약 유형별로 특화된 변호사가 맞춤형 리스크 진단과 개선 의견을 제공합니다.",
-    category: "지원"
-  },
-  {
-    question: "분석 결과를 팀원들과 공유할 수 있나요?",
-    answer: "네, 분석 결과는 PDF 형태로 다운로드하여 팀원들과 공유할 수 있습니다. 또한 대시보드에서 직접 링크를 통해 공유할 수도 있습니다.",
-    category: "지원"
+    question: "특별한 요구사항이나 맞춤형 솔루션이 필요한 경우 어떻게 하나요?",
+    answer: "기업 규모와 요구사항에 맞는 맞춤형 솔루션을 제안드립니다. 전담 변호사 배정, 맞춤형 API 연동, 전용 온보딩 프로그램, 우선 지원, 전용 협업 공간 등 특별 서비스를 제공합니다. 고객센터를 통해 상담을 요청해 주세요.",
+    category: "고객 지원"
   },
 
-  // 법적 관련
+  // 법적 안내
   {
-    question: "분석 결과에 대한 법적 책임은 어떻게 되나요?",
-    answer: "우리의 분석 결과는 참고 자료이며, 최종 법적 판단은 전문 변호사와 상담하시기 바랍니다. 다만, 우리의 전문 변호사가 검증한 결과이므로 높은 신뢰성을 보장합니다. 보험 가입을 통해 추가 보호도 제공합니다.",
-    category: "법적"
+    question: "누가 내 계약서를 검토하나요?",
+    answer: "1차 검토는 수천 건의 검증된 데이터베이스를 활용한 자동화 시스템이 수행하고, 2차 검토는 법무법인 오킴스의 파트너 변호사가 직접 담당합니다. 각 전문 분야(기업법무, M&A, 위기관리, 의료법 등)에 특화된 변호사들이 검토합니다.",
+    category: "법적 안내"
   },
   {
-    question: "분석 결과를 법정에서 증거로 사용할 수 있나요?",
-    answer: "분석 결과는 법정 증거로 직접 사용할 수는 없지만, 계약 검토 과정의 전문적 의견서로 활용할 수 있습니다. 필요시 전문 변호사의 법정 증언도 지원합니다.",
-    category: "법적"
+    question: "로킷의 법적 책임은 어떻게 되나요?",
+    answer: "우리의 검토 결과는 참고 자료이며, 최종 법적 판단은 전문 변호사와 상담하시기 바랍니다. 다만, 법무법인 오킴스의 전문 변호사가 검증한 결과이므로 높은 신뢰성을 보장합니다.",
+    category: "법적 안내"
   },
   {
-    question: "국제 계약도 분석 가능한가요?",
-    answer: "네, 영어 계약서와 주요 국가의 계약서도 분석 가능합니다. 다만, 특정 국가의 법률 해석이 필요한 경우 해당 국가의 전문 변호사와 협력하여 분석을 제공합니다.",
-    category: "법적"
+    question: "검토 결과를 법정에서 증거로 사용할 수 있나요?",
+    answer: "검토 결과는 법정 증거로 직접 사용할 수는 없지만, 계약 검토 과정의 전문적 의견서로 활용할 수 있습니다. 필요시 전문 변호사의 법정 증언도 지원합니다.",
+    category: "법적 안내"
+  },
+  {
+    question: "국제 계약도 검토 가능한가요?",
+    answer: "네, 영어 계약서와 주요 국가의 계약서도 검토 가능합니다. 다만, 특정 국가의 법률 해석이 필요한 경우 해당 국가의 전문 변호사와 협력하여 검토를 제공합니다.",
+    category: "법적 안내"
+  },
+  {
+    question: "어떤 언어를 지원하나요?",
+    answer: "현재 한국어와 영어 계약서를 지원합니다. 다른 언어의 계약서 검토가 필요한 경우 해당 언어권의 전문 변호사와 협력하여 검토를 제공합니다.",
+    category: "법적 안내"
   }
 ];
 
-const categories = ["서비스", "보안", "기술", "요금제", "지원", "법적"];
+const categories = ["로킷 소개", "서비스 이용 안내", "보안 및 개인정보", "요금 및 결제", "고객 지원", "법적 안내"];
 
 export default function FAQPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체");
@@ -173,7 +171,6 @@ export default function FAQPage() {
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle contact form submission
-    console.log('Contact form submitted:', contactForm);
     alert('문의가 성공적으로 전송되었습니다. 24시간 내에 답변드리겠습니다.');
     setContactForm({
       name: '',
@@ -187,19 +184,18 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white">
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              <span className="block">고객 지원 &</span>
-              <span className="block text-indigo-200">자주 묻는 질문</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-4xl mx-auto">
-              LawScan 서비스에 대한 궁금한 점들을<br/>
-              <span className="font-semibold">한눈에 확인하고 전문가와 상담하세요</span>
-            </p>
-          </div>
+      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white overflow-hidden flex items-center justify-center min-h-[320px]">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/20 to-transparent" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">FAQ & 지원</h1>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-8">자주 묻는 질문과 고객 지원 정보를 확인하세요.</p>
+          </motion.div>
         </div>
       </section>
 
@@ -327,7 +323,7 @@ export default function FAQPage() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900">전화 문의</p>
-                      <p className="text-sm text-gray-600">02-1234-5678</p>
+                      <p className="text-sm text-gray-600">02-538-5886</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -338,7 +334,7 @@ export default function FAQPage() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900">이메일</p>
-                      <p className="text-sm text-gray-600">support@lawscan.kr</p>
+                      <p className="text-sm text-gray-600">support@lawkit.kr</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -435,36 +431,6 @@ export default function FAQPage() {
                     문의 보내기
                   </button>
                 </form>
-              </div>
-
-              {/* Live Chat */}
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">실시간 채팅</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  즉시 답변이 필요한 경우 실시간 채팅을 이용해 주세요.
-                </p>
-                <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">
-                  채팅 시작하기
-                </button>
-              </div>
-
-              {/* Resources */}
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">추가 자료</h3>
-                <div className="space-y-3">
-                  <Link href="/services" className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="text-sm">서비스 프로세스</span>
-                  </Link>
-                  <Link href="/pricing" className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                    </svg>
-                    <span className="text-sm">요금제 안내</span>
-                  </Link>
-                </div>
               </div>
             </div>
           </div>

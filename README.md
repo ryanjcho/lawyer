@@ -1,278 +1,109 @@
-# AI Contract Review Service
+# 로킷 (Rokit): AI Legal Solutions Platform
 
 ## 🚀 Quick Start
 
-1. **Setup Environment Variables:**
+1. **Install Dependencies:**
    ```bash
-   npm run setup-env
+   pnpm install
    ```
 
-2. **Install Dependencies:**
+2. **Setup Environment Variables:**
    ```bash
-   npm install
+   pnpm run setup-env
+   # Then edit your .env file with actual values
    ```
 
-3. **Configure your .env file** with actual values
-
-4. **Start Redis server** (required for rate limiting):
+3. **Start Redis server** (for rate limiting):
    ```bash
-   # macOS with Homebrew
+   # macOS
    brew install redis
    brew services start redis
-   
    # Ubuntu/Debian
    sudo apt-get install redis-server
    sudo systemctl start redis
-   
-   # Windows
-   # Download Redis from https://redis.io/download
    ```
 
-5. **Setup Database:**
+4. **Setup Database:**
    ```bash
-   npm run prisma:migrate
-   npm run prisma:generate
+   pnpm run prisma:migrate
+   pnpm run prisma:generate
    ```
 
-6. **Run the development server:**
+5. **Run the development server:**
    ```bash
-   npm run dev
+   pnpm dev
    ```
 
-## Environment Setup
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-To run this application, you need to set up the following environment variables:
+---
 
-### Database
-```bash
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/lawyer"
-```
+## 주요 페이지 및 기능
 
-### NextAuth
-```bash
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-nextauth-secret"
-```
+- **솔루션 (Solutions):** 업계별 맞춤 법률 솔루션, 실제 사례, 클라이언트 로고, 오킴스와의 협업 강조
+- **서비스 (Services):** 서비스 프로세스, 차별점(경쟁사 비교), 주요 기능, 검토 결과 예시, 이용방법
+- **About:** 로킷/오킴스 소개, 팀, 미션, 신뢰성
+- **Pricing:** 투명한 가격 정책, 서비스별 요금제
+- **FAQ:** 자주 묻는 질문, 서비스 안내
+- **기타:** 회원가입, 로그인, 결제, 프로필, 업로드 등
 
-### OAuth Providers
+---
 
-#### Google
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create a new project or select an existing one
-3. Enable the Google+ API
-4. Go to Credentials
-5. Create OAuth 2.0 Client ID
-6. Add authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
-7. Copy the client ID and secret
+## 핵심 기능
 
-```bash
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
-```
+- **업계별 맞춤 법률 솔루션** (제조, IT, 금융, 바이오, 유통, 부동산 등)
+- **10년 이상 경력 변호사 직접 검토**
+- **실시간 진행상황 안내 및 온라인 소통**
+- **AES-256 암호화, ISO 인증 등 강력한 보안**
+- **클린하고 현대적인 UI/UX (모바일 완벽 지원)**
+- **100% 한국어 로컬라이제이션**
+- **오킴스 법무법인과의 공식 파트너십**
+- **경쟁사 대비 차별화된 서비스 비교표 제공**
+- **SEO 최적화 및 접근성 개선**
 
-#### Kakao
-1. Go to [Kakao Developers](https://developers.kakao.com)
-2. Create a new application
-3. Add platform: Web
-4. Set redirect URI: `http://localhost:3000/api/auth/callback/kakao`
-5. Copy the client ID and secret
-
-```bash
-KAKAO_CLIENT_ID="your-kakao-client-id"
-KAKAO_CLIENT_SECRET="your-kakao-client-secret"
-```
-
-#### Naver
-1. Go to [Naver Developers](https://developers.naver.com)
-2. Create a new application
-3. Set callback URL: `http://localhost:3000/api/auth/callback/naver`
-4. Copy the client ID and secret
-
-```bash
-NAVER_CLIENT_ID="your-naver-client-id"
-NAVER_CLIENT_SECRET="your-naver-client-secret"
-```
-
-### Email (SMTP)
-For Gmail:
-1. Enable 2-factor authentication
-2. Generate an app-specific password
-3. Use the following settings:
-
-```bash
-SMTP_HOST="smtp.gmail.com"
-SMTP_PORT="587"
-SMTP_USER="your-email@gmail.com"
-SMTP_PASSWORD="your-app-specific-password"
-SMTP_FROM="your-email@gmail.com"
-```
-
-### Application
-```bash
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-```
-
-### AWS S3 (Required for file uploads)
-```bash
-AWS_REGION="ap-northeast-2"
-AWS_ACCESS_KEY_ID="your-aws-access-key"
-AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
-AWS_S3_BUCKET="your-s3-bucket-name"
-```
-
-### OpenAI (Required for AI analysis)
-```bash
-OPENAI_API_KEY="your-openai-api-key"
-```
-
-### Sentry (Error Monitoring)
-```bash
-SENTRY_DSN="your-sentry-dsn"
-```
-
-### Payment (I'mport - Korean payment gateway)
-```bash
-IMP_KEY="your-imp-key"
-IMP_SECRET="your-imp-secret"
-IMP_USER_CODE="your-imp-user-code"
-```
-
-### Security
-```bash
-RATE_LIMIT_WINDOW_MS="60000"
-RATE_LIMIT_MAX_REQUESTS="30"
-VIRUS_SCAN_ENABLED="true"
-VIRUS_SCAN_API_KEY="your-virus-scan-api-key"
-VIRUS_SCAN_API_URL="https://api.virustotal.com/v3/files"
-```
-
-### Redis (for rate limiting)
-```bash
-REDIS_URL="redis://localhost:6379"
-```
-
-## Development Setup
-
-1. Install dependencies:
-```bash
-npm install
-```
-
-2. Set up the database:
-```bash
-npx prisma migrate dev
-```
-
-3. Run the development server:
-```bash
-npm run dev
-```
-
-## Features
-
-### ✅ Implemented (Priority 2 - Security & Infrastructure)
-- **Environment Variables Setup** - Comprehensive configuration with validation
-- **Email Verification System** - Required for user registration and login
-- **Virus/Malware Scanning** - File upload security with VirusTotal integration
-- **Production Rate Limiting** - Redis-based rate limiting for API endpoints
-- User authentication with email/password
-- Social authentication (Google, Kakao, Naver)
-- Password reset
-- Subscription management
-- Contract review with AI (placeholder)
-- Payment processing (partial)
-
-### 🔄 In Progress (Priority 1 - Core Business Logic)
-- **AI Analysis Implementation** - Core contract analysis functionality
-- **File Upload to S3** - Real file storage implementation
-- **Contract Assignment System** - Lawyer assignment workflow
+---
 
 ## Tech Stack
 
-- Next.js 14
+- Next.js 14 (App Router)
 - TypeScript
-- Prisma
-- PostgreSQL
-- NextAuth.js
 - Tailwind CSS
-- Nodemailer
-- Redis (for rate limiting)
-- AWS S3 (for file storage)
-- VirusTotal API (for virus scanning)
+- Prisma + PostgreSQL
+- NextAuth.js (소셜 로그인 포함)
+- AWS S3 (파일 업로드)
+- Redis (rate limiting)
+- Nodemailer (이메일 인증)
+- framer-motion (애니메이션)
+- VirusTotal API (파일 보안)
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+---
 
-## Getting Started
+## SEO & 접근성
 
-First, run the development server:
+- 모든 주요 페이지에 SEO 메타데이터, Open Graph, 구조화 데이터 적용
+- 시맨틱 마크업, 키보드 내비게이션, 명확한 대비 등 접근성 강화
+- 모바일/PC 완벽 대응, 반응형 디자인
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 개발/운영 참고
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 환경 변수, DB, Redis, S3, OpenAI, Sentry 등은 실제 서비스 환경에 맞게 설정 필요
+- 모든 주요 기능은 한국어 기준으로 설계/구현됨
+- 오킴스 법무법인과의 협업을 통해 실제 법률 자문 및 검토 품질 보장
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Getting Started (for Contributors)
 
-To learn more about Next.js, take a look at the following resources:
+- Fork/clone this repo
+- Install dependencies with `pnpm install`
+- Set up your `.env` file (see above)
+- Run `pnpm dev` to start local development
+- See `app/services/page.tsx`, `app/solutions/page.tsx`, etc. for main UI
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Production Launch Checklist
-
-- Set `SENTRY_DSN` in your environment for error monitoring (see Sentry docs).
-- Use Redis for rate limiting in `middleware.ts` (✅ Implemented).
-- Review and complete all items in `SECURITY_REVIEW.md`.
-- Run all tests: `npm test` and `npx playwright test`.
-- Complete manual QA in `QA_ERROR_PAGES.md`.
-
-## Mobile & Accessibility QA Checklist
-- [ ] Test all pages on mobile (iOS/Android) and major browsers
-- [ ] Check all forms and buttons are accessible via keyboard
-- [ ] Use Lighthouse (Chrome DevTools) to check a11y and performance
-- [ ] All images have alt text
-- [ ] Sufficient color contrast
-
-## Automated a11y/mobile check
-You can run Lighthouse CI or use Chrome DevTools > Lighthouse tab for automated checks.
-
-## Priority Implementation Status
-
-### ✅ Priority 2: Security & Infrastructure (COMPLETED)
-- Environment Variables Setup
-- Email Verification System  
-- Virus/Malware Scanning
-- Production Rate Limiting
-
-### 🔄 Priority 1: Core Business Logic (IN PROGRESS)
-- AI Analysis Implementation
-- File Upload to S3
-- Contract Assignment System
-
-### 📋 Priority 3-7: Future Enhancements
-- Payment & Subscription Management
-- User Experience Improvements
-- Analytics & Monitoring
-- Mobile & Accessibility
-- Testing & Quality
-
-For detailed implementation information, see [PRIORITY_2_IMPLEMENTATION.md](./PRIORITY_2_IMPLEMENTATION.md).
+This project is proprietary and not for commercial redistribution without permission.

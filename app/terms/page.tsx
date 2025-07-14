@@ -1,23 +1,24 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white">
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              <span className="block">이용약관</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-indigo-100 mb-8 max-w-4xl mx-auto">
-              LawScan 서비스 이용에 관한 약관입니다<br/>
-              <span className="font-semibold">마지막 업데이트: 2024년 1월 1일</span>
-            </p>
-          </div>
+      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white overflow-hidden flex items-center justify-center min-h-[320px]">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/20 to-transparent" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">이용약관</h1>
+            <p className="text-xl md:text-2xl text-indigo-100 mb-8">LawScan 서비스 이용에 관한 약관입니다<br/><span className='font-semibold'>마지막 업데이트: 2024년 1월 1일</span></p>
+          </motion.div>
         </div>
       </section>
 
@@ -28,17 +29,17 @@ export default function TermsPage() {
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">제1조 (목적)</h2>
               <p className="text-gray-600 leading-relaxed">
-                이 약관은 LawScan(이하 "회사")이 제공하는 AI 기반 계약 리스크 관리 서비스(이하 "서비스")의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+                이 약관은 LawScan(이하 &quot;회사&quot;)이 제공하는 AI 기반 계약 리스크 관리 서비스(이하 &quot;서비스&quot;)의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
               </p>
             </div>
 
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">제2조 (정의)</h2>
               <div className="space-y-4 text-gray-600">
-                <p>1. "서비스"란 회사가 제공하는 AI 기반 계약 리스크 분석 및 관리 서비스를 의미합니다.</p>
-                <p>2. "이용자"란 이 약관에 따라 회사와 이용계약을 체결하고 회사가 제공하는 서비스를 이용하는 자를 의미합니다.</p>
-                <p>3. "계약서"란 이용자가 서비스에 업로드하여 분석을 요청하는 모든 종류의 계약 문서를 의미합니다.</p>
-                <p>4. "분석 결과"란 회사의 AI 시스템과 전문 변호사가 계약서를 분석하여 제공하는 리스크 평가 및 개선 제안을 의미합니다.</p>
+                <p>1. &quot;서비스&quot;란 회사가 제공하는 AI 기반 계약 리스크 분석 및 관리 서비스를 의미합니다.</p>
+                <p>2. &quot;이용자&quot;란 이 약관에 따라 회사와 이용계약을 체결하고 회사가 제공하는 서비스를 이용하는 자를 의미합니다.</p>
+                <p>3. &quot;계약서&quot;란 이용자가 서비스에 업로드하여 분석을 요청하는 모든 종류의 계약 문서를 의미합니다.</p>
+                <p>4. &quot;분석 결과&quot;란 회사의 AI 시스템과 전문 변호사가 계약서를 분석하여 제공하는 리스크 평가 및 개선 제안을 의미합니다.</p>
               </div>
             </div>
 

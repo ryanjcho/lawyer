@@ -8,17 +8,32 @@ import { envConfig } from '@/config/env.config'
 
 export const dynamic = "force-dynamic";
 
+type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+// Map riskLevel to string union value
+function toRiskLevelEnum(val: any): RiskLevel {
+  if (!val) return 'MEDIUM';
+  if (typeof val !== 'string') return 'MEDIUM';
+  const map: Record<string, RiskLevel> = {
+    low: 'LOW',
+    medium: 'MEDIUM',
+    high: 'HIGH',
+    critical: 'CRITICAL',
+    LOW: 'LOW',
+    MEDIUM: 'MEDIUM',
+    HIGH: 'HIGH',
+    CRITICAL: 'CRITICAL',
+  };
+  return map[val] || 'MEDIUM';
+}
+
 export async function POST(request: NextRequest) {
   try {
-    console.log('Payment creation started')
     const session = await getServerSession(authOptions)
     
     if (!session?.user) {
-      console.log('No session found')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
-    console.log('Session found for user:', session.user.id)
 
     // Verify user exists in database
     const user = await prisma.user.findUnique({
@@ -26,21 +41,15 @@ export async function POST(request: NextRequest) {
     })
 
     if (!user) {
-      console.log('User not found in database')
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    console.log('User verified in database')
-
     const { amount, files, analysis } = await request.json()
-    console.log('Request data:', { amount, filesCount: files?.length, hasAnalysis: !!analysis })
 
     if (!amount || !files) {
-      console.log('Missing required fields')
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    console.log('Creating contract record...')
     // Create contract record with the analysis from upload page
     const contract = await prisma.contract.create({
       data: {
@@ -49,12 +58,10 @@ export async function POST(request: NextRequest) {
         fileUrl: '', // Will be updated when files are actually uploaded
         status: 'UPLOADED',
         analysisResult: analysis || {},
-        riskLevel: analysis?.riskLevel || 'MEDIUM'
+        riskLevel: toRiskLevelEnum(analysis?.riskLevel)
       }
     });
-    console.log('Contract created:', contract.id)
 
-    console.log('Creating payment record...')
     // Create payment record directly with the quoted amount
     const payment = await prisma.payment.create({
       data: {
@@ -63,9 +70,7 @@ export async function POST(request: NextRequest) {
         status: 'PENDING'
       }
     });
-    console.log('Payment created:', payment.id)
 
-    console.log('Creating notification...')
     // Create notification
     await prisma.notification.create({
       data: {
@@ -77,9 +82,25 @@ export async function POST(request: NextRequest) {
         actionText: '계약서 보기'
       }
     });
-    console.log('Notification created')
 
-    console.log('Payment creation completed successfully')
+    // Create audit log for contract upload
+    await prisma.auditLog.create({
+      data: {
+        userId: session.user.id,
+        action: 'UPLOAD_CONTRACT',
+        details: `Uploaded contract(s): ${files.map((f: any) => f.name).join(', ')}`
+      }
+    });
+
+    // Create audit log for payment creation
+    await prisma.auditLog.create({
+      data: {
+        userId: session.user.id,
+        action: 'CREATE_PAYMENT',
+        details: `Created payment (ID: ${payment.id}) for contract (ID: ${contract.id}), amount: ${amount}`
+      }
+    });
+
     return NextResponse.json({
       success: true,
       contractId: contract.id,
@@ -87,7 +108,6 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Contract upload error:', error)
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Internal server error' }, { status: 500 })
   }
 } 
