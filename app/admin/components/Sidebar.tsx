@@ -8,10 +8,10 @@ export default function Sidebar() {
   const navItems = [
     { name: '대시보드', href: '/admin/dashboard' },
     { name: '계약서', href: '/admin/contracts' },
-    { name: '분석', href: '/admin/analytics' },
-    { name: '사용자', href: '/admin/users' },
-    { name: '감사 로그', href: '/admin/auditlog' },
-    { name: '설정', href: '/admin/settings' },
+    // { name: '분석', href: '/admin/analytics' },
+    // { name: '사용자', href: '/admin/users' },
+    // { name: '감사 로그', href: '/admin/auditlog' },
+    // { name: '설정', href: '/admin/settings' },
   ];
 
   const isActive = (href: string) => {

@@ -11,6 +11,7 @@ import AdvancedAnalytics from '../components/AdvancedAnalytics';
 import NotificationCenter from '../components/NotificationCenter';
 import ImportExport from '../components/ImportExport';
 import { useState, useEffect } from 'react';
+import ContractsTable from '../components/ContractsTable'; // Added ContractsTable import
 
 type Stats = {
   totalContracts: number;
@@ -47,9 +48,7 @@ export default function AdminDashboard() {
   }
   
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 p-8 bg-gray-50">
+    <main className="min-h-screen p-8 bg-gray-50">
         {/* Enhanced Top Bar */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 gap-4">
           <div>
@@ -98,91 +97,19 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          {/* Left/Main Column */}
-          <div className="xl:col-span-2 space-y-8">
-            {/* Tabbed Card: Recent Activity / Upcoming Deadlines */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100">
-              <div className="flex border-b border-gray-200">
-                <button 
-                  onClick={() => setMainTab('activity')} 
-                  className={`flex-1 py-4 text-sm font-semibold rounded-tl-lg transition-colors border-b-2 ${
-                    mainTab === 'activity' 
-                      ? 'bg-blue-50 text-blue-700 border-blue-700' 
-                      : 'bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-50 border-transparent'
-                  }`}
-                >
-                  최근 활동
-                </button>
-                <button 
-                  onClick={() => setMainTab('deadlines')} 
-                  className={`flex-1 py-4 text-sm font-semibold transition-colors border-b-2 ${
-                    mainTab === 'deadlines' 
-                      ? 'bg-blue-50 text-blue-700 border-blue-700' 
-                      : 'bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-50 border-transparent'
-                  }`}
-                >
-                  임박 마감
-                </button>
-                <button
-                  onClick={() => setMainTab('critical')}
-                  className={`flex-1 py-4 text-sm font-semibold rounded-tr-lg transition-colors border-b-2 ${
-                    mainTab === 'critical'
-                      ? 'bg-blue-50 text-blue-700 border-blue-700'
-                      : 'bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-50 border-transparent'
-                  }`}
-                >
-                  위험/임박 계약
-                </button>
-              </div>
-              <div className="p-6">
-                {mainTab === 'activity' ? <RecentActivityLog /> : mainTab === 'deadlines' ? <UpcomingDeadlines /> : <CriticalContractsPanel />}
-              </div>
-            </div>
-
-            {/* Enhanced Pending Contracts */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-lg font-bold text-gray-900">검토/조치 필요 계약</h2>
-                <a href="/admin/contracts" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                  전체 보기 →
-                </a>
-              </div>
-              <div className="p-6">
-                <PendingContractsTable limit={3} />
-              </div>
-            </div>
-
-            {/* Notifications Panel moved here */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100">
-              <div className="p-6">
-                <NotificationsPanel limit={4} />
-              </div>
-            </div>
+        {/* Simplified: Show only ContractsTable and related panels below stats */}
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <h1 className="text-2xl font-bold mb-6 text-black">계약 관리</h1>
+          <ContractsTable />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white rounded-lg shadow p-6">
+            <NotificationCenter />
           </div>
-
-          {/* Right Sidebar Column */}
-          <div className="flex flex-col gap-6">
-            {/* Enhanced Team Performance */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-lg font-bold text-gray-900">팀 성과</h2>
-                <a href="/admin/analytics" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                  상세 보기 →
-                </a>
-              </div>
-              <div className="p-6">
-                <AdvancedAnalytics />
-              </div>
-            </div>
-            {/* Simple Export/Import Button */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center p-6">
-              <a href="/admin/contracts" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">데이터 내보내기/가져오기</a>
-            </div>
+          <div className="bg-white rounded-lg shadow p-6">
+            <ImportExport />
           </div>
         </div>
-      </main>
-    </div>
+    </main>
   );
 } 

@@ -19,7 +19,8 @@ function parseClauses(text: string): { number: string; title: string; line: numb
   const lines = text.split(/\n/);
   const clauses: { number: string; title: string; line: number }[] = [];
   lines.forEach((line, idx) => {
-    const match = line.match(/^(\d+)\.\s*(.+)$/);
+    // Only match top-level headers: e.g., 1. 서론 (not 2.1, 3.2, etc.)
+    const match = line.match(/^(\d+)\.\s+(.+)$/);
     if (match) {
       clauses.push({
         number: match[1],
@@ -279,7 +280,11 @@ export default function ContractDiffViewer() {
     if (changes.length === 0) return;
     const idx = changes[selectedChange]?.idx;
     const el = document.getElementById(`edit-line-${idx}`);
-    if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (el && editPane.current) {
+      const parent = editPane.current as HTMLDivElement;
+      const top = el.offsetTop - parent.offsetTop;
+      parent.scrollTo({ top: top - 80, behavior: 'smooth' }); // 80px from top
+    }
   }, [selectedChange, changes]);
 
   // Summary analytics (mocked)
@@ -345,6 +350,54 @@ export default function ContractDiffViewer() {
 
   // --- FILTERED RIGHT LINES FOR CHANGES ONLY ---
   const filteredRightLines = showChanges ? rightLines.filter(line => line.type !== 'removed') : rightLines;
+
+  // --- Synchronized scrolling for side-by-side panes ---
+  useEffect(() => {
+    if (viewMode !== 'side-by-side') return;
+    const orig = origPane.current;
+    const edit = editPane.current;
+    if (!orig || !edit) return;
+    let isSyncing = false;
+    const syncScroll = (source, target) => {
+      if (isSyncing) return;
+      isSyncing = true;
+      target.scrollTop = source.scrollTop;
+      setTimeout(() => { isSyncing = false; }, 1);
+    };
+    const origHandler = () => syncScroll(orig, edit);
+    const editHandler = () => syncScroll(edit, orig);
+    orig.addEventListener('scroll', origHandler);
+    edit.addEventListener('scroll', editHandler);
+    return () => {
+      orig.removeEventListener('scroll', origHandler);
+      edit.removeEventListener('scroll', editHandler);
+    };
+  }, [viewMode]);
+
+  // Build a combined, sorted list of all top-level clause headers (original + added)
+  const sidebarClauses = [
+    ...clauses.map(clause => ({
+      headerText: `${clause.number}. ${clause.title}`,
+      origIdx: clause.line,
+      rightIdx: clauseStatusMap[`${clause.number}. ${clause.title}`]?.rightIdx,
+      status: clauseStatusMap[`${clause.number}. ${clause.title}`]?.status,
+      isAdded: false,
+    })),
+    ...Object.entries(clauseStatusMap)
+      .filter(([headerText, { status, origIdx }]) => status === 'added')
+      .map(([headerText, { rightIdx }]) => ({
+        headerText,
+        origIdx: -1,
+        rightIdx,
+        status: 'added',
+        isAdded: true,
+      }))
+  ].filter(clause => clauseFilter === 'all' || clause.status === clauseFilter)
+   .sort((a, b) => {
+     const numA = parseInt(a.headerText.match(/^(\d+)/)?.[1] || '0', 10);
+     const numB = parseInt(b.headerText.match(/^(\d+)/)?.[1] || '0', 10);
+     return numA - numB;
+   });
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -422,61 +475,55 @@ export default function ContractDiffViewer() {
               
               {/* Enhanced Clause List */}
               <div className="space-y-2 flex-1 overflow-y-auto min-h-0">
-                {Object.entries(clauseStatusMap)
-                  .filter(([_, { status }]) => clauseFilter === 'all' || status === clauseFilter)
-                  .sort((a, b) => {
-                    const numA = parseInt(a[0].match(/^\d+/)?.[0] || '0', 10);
-                    const numB = parseInt(b[0].match(/^\d+/)?.[0] || '0', 10);
-                    return numA - numB;
-                  })
-                  .filter(([headerText, _], index, array) => {
-                    // Remove duplicate headers by keeping only the first occurrence
-                    const firstIndex = array.findIndex(([text, _]) => text === headerText);
-                    return index === firstIndex;
-                  })
-                  .map(([headerText, { status, origIdx, rightIdx }]) => (
-                    <div
-                      key={headerText}
-                      className={`p-2 rounded cursor-pointer transition-colors ${
-                        (selectedClause && typeof selectedClause === 'object' && selectedClause.origIdx === origIdx) 
-                          ? 'bg-indigo-50 border border-indigo-200' 
-                          : 'hover:bg-gray-50'
-                      }`}
-                      onClick={() => {
-                        const clause = clauses.find(c => c.line === origIdx);
-                        if (clause) setSelectedClause(clauseStatusMap[`${clause.number}. ${clause.title}`]);
-                        // Scroll original contract pane
-                        const origEl = document.getElementById(`orig-header-${origIdx}`);
+                {sidebarClauses.map(clause => (
+                  <div
+                    key={clause.headerText}
+                    className={`p-2 rounded cursor-pointer transition-colors ${
+                      (selectedClause && typeof selectedClause === 'object' &&
+                        (clause.isAdded
+                          ? selectedClause.rightIdx === clause.rightIdx
+                          : selectedClause.origIdx === clause.origIdx))
+                        ? 'bg-indigo-50 border border-indigo-200'
+                        : 'hover:bg-gray-50'
+                    }`}
+                    onClick={() => {
+                      setSelectedClause(clauseStatusMap[clause.headerText]);
+                      // Scroll original contract pane (if not added)
+                      if (!clause.isAdded) {
+                        const origEl = document.getElementById(`orig-header-${clause.origIdx}`);
                         if (origEl && origPane.current) {
                           const parent = origPane.current as HTMLDivElement;
                           const top = origEl.offsetTop - parent.offsetTop;
-                          parent.scrollTo({ top: top - parent.clientHeight / 2 + origEl.clientHeight / 2, behavior: 'smooth' });
+                          parent.scrollTo({ top: top - 80, behavior: 'smooth' });
                         }
-                        // Scroll edited contract pane (use filtered index)
-                        let editIdx = rightIdx;
-                        if (showChanges) {
-                          // Find the index in filteredRightLines that matches the rightIdx in rightLines
-                          editIdx = filteredRightLines.findIndex(l => rightLines.indexOf(l) === rightIdx);
-                        }
-                        const editEl = document.getElementById(`clause-header-${editIdx}`);
-                        if (editEl && editPane.current) {
-                          const parent = editPane.current as HTMLDivElement;
-                          const top = editEl.offsetTop - parent.offsetTop;
-                          parent.scrollTo({ top: top - parent.clientHeight / 2 + editEl.clientHeight / 2, behavior: 'smooth' });
-                        }
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className={`text-xs font-medium ${
-                          (selectedClause && typeof selectedClause === 'object' && selectedClause.origIdx === origIdx)
-                            ? 'text-indigo-700'
-                            : 'text-gray-700'
-                        }`}>
-                          {headerText}
-                        </span>
-                      </div>
+                      }
+                      // Scroll edited contract pane
+                      let editIdx = clause.rightIdx;
+                      if (!showChanges) {
+                        editIdx = filteredRightLines.findIndex(l => rightLines.indexOf(l) === clause.rightIdx);
+                      }
+                      const editEl = document.getElementById(`clause-header-${editIdx}`);
+                      if (editEl && editPane.current) {
+                        const parent = editPane.current as HTMLDivElement;
+                        const top = editEl.offsetTop - parent.offsetTop;
+                        parent.scrollTo({ top: top - 80, behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className={`text-xs font-medium ${
+                        (selectedClause && typeof selectedClause === 'object' &&
+                          (clause.isAdded
+                            ? selectedClause.rightIdx === clause.rightIdx
+                            : selectedClause.origIdx === clause.origIdx))
+                          ? 'text-indigo-700'
+                          : 'text-gray-700'
+                      }`}>
+                        {clause.headerText}
+                      </span>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
               
 
@@ -632,10 +679,10 @@ export default function ContractDiffViewer() {
                         const origLine = origLines[i];
                         const isSectionHeader = origLine && /^\d+\.\s/.test(origLine);
                         return (
-                          <div key={i} className="flex items-start py-1 px-1 rounded">
+                          <div key={i} className={`flex items-start py-1 px-1 rounded ${isSectionHeader ? 'bg-blue-50 border-l-2 border-blue-500' : ''}`}>
                             <span className="w-8 text-right text-xs text-gray-400 select-none font-mono flex-shrink-0 mr-2">{i + 1}</span>
                             <span
-                              className="flex-1 text-sm leading-relaxed text-gray-700"
+                              className={`flex-1 text-sm leading-relaxed ${isSectionHeader ? 'text-blue-800 font-semibold' : 'text-gray-700'}`}
                               {...(isSectionHeader ? { id: `orig-header-${i}` } : {})}
                             >
                               {origLine || '\u00A0'}
@@ -653,8 +700,7 @@ export default function ContractDiffViewer() {
                       <h4 className="text-sm font-semibold text-gray-900">수정/초안 계약서</h4>
                     </div>
                     <div className="space-y-0">
-                      {Array.from({ length: Math.max(origLines.length, filteredRightLines.length) }).map((_, i) => {
-                        const line = filteredRightLines[i];
+                      {(showChanges ? rightLines : rightLines.filter(line => line.type !== 'removed')).map((line, i) => {
                         const isSectionHeader = line && /^\d+\.\s/.test(line.value);
                         let lineContent = line && (line.value || '\u00A0');
                         if (line && line.type === 'changed' && line.value) {
@@ -664,41 +710,48 @@ export default function ContractDiffViewer() {
                         const hasComments = lineComments.length > 0;
                         const originalIndex = line ? rightLines.indexOf(line) : i;
                         return (
-                          <div 
-                            key={i} 
+                          <div
+                            key={i}
                             id={line && isSectionHeader ? `clause-header-${i}` : undefined}
                             className={`flex items-start py-1 px-1 rounded group hover:bg-gray-50 ${
-                              line ? (
-                                showChanges ? (
-                                  line.type === 'added' ? 'bg-green-50 border-l-2 border-green-500' :
-                                  line.type === 'changed' ? 'bg-yellow-50 border-l-2 border-yellow-500' :
-                                  isSectionHeader ? 'bg-blue-50 border-l-2 border-blue-500' : ''
-                                ) : (
-                                  isSectionHeader ? 'bg-blue-50 border-l-2 border-blue-500' : ''
-                                )
-                              ) : ''
+                              showChanges ? (
+                                line.type === 'added' ? 'bg-green-50 border-l-2 border-green-500' :
+                                line.type === 'removed' ? 'bg-red-50 border-l-2 border-red-500' :
+                                line.type === 'changed' ? 'bg-yellow-50 border-l-2 border-yellow-500' :
+                                isSectionHeader ? 'bg-blue-50 border-l-2 border-blue-500' : ''
+                              ) : (
+                                isSectionHeader ? 'bg-blue-50 border-l-2 border-blue-500' : ''
+                              )
                             }`}
                           >
                             <span className="w-8 text-right text-xs text-gray-400 select-none font-mono flex-shrink-0 mr-2">{i + 1}</span>
                             <div className="flex-1 flex items-start justify-between">
                               {line ? (
-                                <span
-                                  className={`text-sm leading-relaxed ${
-                                    showChanges ? (
-                                      line.type === 'added' ? 'text-green-800' :
-                                      line.type === 'changed' ? 'text-yellow-800' : 'text-gray-700'
-                                    ) : 'text-gray-700'
-                                  }`}
-                                  onClick={() => {
-                                    if (isSectionHeader) {
+                                isSectionHeader ? (
+                                  <span
+                                    className="text-sm leading-relaxed text-blue-800 font-semibold"
+                                    id={`clause-header-${originalIndex}`}
+                                    onClick={() => {
                                       const clause = clauses.find(c => c.line === originalIndex);
                                       if (clause) setSelectedClause(clauseStatusMap[`${clause.number}. ${clause.title}`]);
-                                    }
-                                  }}
-                                  style={isSectionHeader ? { cursor: 'pointer', textDecoration: 'underline' } : {}}
-                                >
-                                  {lineContent}
-                                </span>
+                                    }}
+                                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                                  >
+                                    {lineContent}
+                                  </span>
+                                ) : (
+                                  <span
+                                    className={`text-sm leading-relaxed ${
+                                      showChanges ? (
+                                        line.type === 'added' ? 'text-green-800' :
+                                        line.type === 'removed' ? 'text-red-800 line-through' :
+                                        line.type === 'changed' ? 'text-yellow-800' : 'text-gray-700'
+                                      ) : 'text-gray-700'
+                                    }`}
+                                  >
+                                    {lineContent}
+                                  </span>
+                                )
                               ) : (
                                 <span className="text-sm leading-relaxed text-gray-300">\u00A0</span>
                               )}
